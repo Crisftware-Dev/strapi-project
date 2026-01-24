@@ -2,6 +2,11 @@
 
 import Link from "next/link";
 import { actions } from "@/actions";
+import { useActionState } from "react";
+import { type FormState } from "@/validations/auth";
+import { FormError } from "./form-error";
+import { usePasswordToggle } from "@/hooks/usePasswordToggle";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 import {
   CardTitle,
@@ -11,13 +16,9 @@ import {
   CardFooter,
   Card,
 } from "@/components/ui/card";
-
+import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { useActionState } from "react";
-import { type FormState } from "@/validations/auth";
-import { FormError } from "./form-error";
 
 const styles = {
   container: "w-full max-w-md",
@@ -46,8 +47,10 @@ const INITIAL_STATE: FormState = {
 export function SignupForm() {
   const [formState, formAction] = useActionState(
     actions.auth.registerUserAction,
-    INITIAL_STATE
+    INITIAL_STATE,
   );
+
+  const { showPassword, togglePassword, inputType } = usePasswordToggle();
 
   return (
     <div className={styles.container}>
@@ -84,14 +87,35 @@ export function SignupForm() {
             </div>
             <div className={styles.fieldGroup}>
               <Label htmlFor="password">Password</Label>
+              <div className="relative">
+                <Input
+                  id="password"
+                  name="password"
+                  type={inputType}
+                  placeholder="password"
+                  defaultValue={formState.data?.password ?? ""}
+                  className="pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={togglePassword}
+                  className="absolute right-3 top-1/2 -translate-y-1/2"
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
+              </div>
+              <FormError error={formState.zodErrors?.password} />
+            </div>
+            <div className={styles.fieldGroup}>
+              <Label htmlFor="confirmPassword">Confirm Password</Label>
               <Input
-                id="password"
-                name="password"
+                id="confirmPassword"
+                name="confirmPassword"
                 type="password"
-                placeholder="password"
+                placeholder="confirm password"
                 defaultValue={formState.data?.password ?? ""}
               />
-              <FormError error={formState.zodErrors?.password} />
+              <FormError error={formState.zodErrors?.confirmPassword} />
             </div>
           </CardContent>
           <CardFooter className={styles.footer}>

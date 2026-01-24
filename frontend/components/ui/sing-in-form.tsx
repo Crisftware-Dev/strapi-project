@@ -18,6 +18,8 @@ import { FormState } from "@/validations/auth";
 import { useActionState } from "react";
 import { actions } from "@/actions";
 import { FormError } from "./form-error";
+import { usePasswordToggle } from "@/hooks/usePasswordToggle";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const styles = {
   container: "w-full max-w-md",
@@ -45,8 +47,10 @@ const INITIAL_STATE: FormState = {
 export function SigninForm() {
   const [formState, formAction] = useActionState(
     actions.auth.loginUserAction,
-    INITIAL_STATE
+    INITIAL_STATE,
   );
+  const { showPassword, togglePassword, inputType } = usePasswordToggle();
+
   return (
     <div className={styles.container}>
       <form action={formAction}>
@@ -71,13 +75,23 @@ export function SigninForm() {
             </div>
             <div className={styles.fieldGroup}>
               <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                name="password"
-                type="password"
-                placeholder="password"
-                defaultValue={formState.data?.password ?? ""}
-              />
+              <div className="relative">
+                <Input
+                  id="password"
+                  name="password"
+                  type={inputType}
+                  placeholder="password"
+                  defaultValue={formState.data?.password ?? ""}
+                  className="pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={togglePassword}
+                  className="absolute right-3 top-1/2 -translate-y-1/2"
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
+              </div>
               <FormError error={formState.zodErrors?.password} />
             </div>
           </CardContent>

@@ -24,6 +24,7 @@ export async function registerUserAction(
     username: formdData.get("username") as string,
     email: formdData.get("email") as string,
     password: formdData.get("password") as string,
+    confirmPassword: formdData.get("confirmPassword") as string,
   };
 
   const validateFields = SignupFormSchema.safeParse(fields);
@@ -43,7 +44,11 @@ export async function registerUserAction(
     };
   }
 
-  const response = await registerUserService(validateFields.data);
+  const response = await registerUserService({
+    username: validateFields.data.username,
+    email: validateFields.data.email,
+    password: validateFields.data.password,
+  });
 
   if (!response || response.error) {
     return {
