@@ -22,14 +22,11 @@ import { Input } from "@/components/ui/input";
 
 const styles = {
   container: "w-full max-w-md",
-  header: "space-y-1",
-  title: "text-3xl font-bold text-pink-500",
-  content: "space-y-4",
-  fieldGroup: "space-y-2",
-  footer: "flex flex-col",
-  button: "w-full",
-  prompt: "mt-4 text-center text-sm",
-  link: "ml-2 text-pink-500",
+  togglePassword: "absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors",
+  strapiError: "text-pink-600 dark:text-pink-400 text-xs italic text-center",
+  button: "w-full bg-indigo-600 hover:bg-indigo-700 text-white transition-colors",
+  prompt: "mt-6 text-center text-sm text-gray-600 dark:text-gray-400",
+  link: "ml-1 text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 font-medium transition-colors",
 };
 
 const INITIAL_STATE: FormState = {
@@ -56,14 +53,14 @@ export function SignupForm() {
     <div className={styles.container}>
       <form action={formAction}>
         <Card>
-          <CardHeader className={styles.header}>
-            <CardTitle className={styles.title}>Sign Up</CardTitle>
+          <CardHeader>
+            <CardTitle>Sign Up</CardTitle>
             <CardDescription>
               Enter your details to create a new account
             </CardDescription>
           </CardHeader>
-          <CardContent className={styles.content}>
-            <div className={styles.fieldGroup}>
+          <CardContent>
+            <div className="space-y-2">
               <Label htmlFor="username">Username</Label>
               <Input
                 id="username"
@@ -74,7 +71,7 @@ export function SignupForm() {
               />
               <FormError error={formState.zodErrors?.username} />
             </div>
-            <div className={styles.fieldGroup}>
+            <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
@@ -85,7 +82,7 @@ export function SignupForm() {
               />
               <FormError error={formState.zodErrors?.email} />
             </div>
-            <div className={styles.fieldGroup}>
+            <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
               <div className="relative">
                 <Input
@@ -99,14 +96,14 @@ export function SignupForm() {
                 <button
                   type="button"
                   onClick={togglePassword}
-                  className="absolute right-3 top-1/2 -translate-y-1/2"
+                  className={styles.togglePassword}
                 >
                   {showPassword ? <FaEyeSlash /> : <FaEye />}
                 </button>
               </div>
               <FormError error={formState.zodErrors?.password} />
             </div>
-            <div className={styles.fieldGroup}>
+            <div className="space-y-2">
               <Label htmlFor="confirmPassword">Confirm Password</Label>
               <Input
                 id="confirmPassword"
@@ -118,10 +115,12 @@ export function SignupForm() {
               <FormError error={formState.zodErrors?.confirmPassword} />
             </div>
           </CardContent>
-          <CardFooter className={styles.footer}>
-            <Button className={styles.button}>Sign Up</Button>
+          <CardFooter>
+            <Button className={styles.button}>
+              Sign Up
+            </Button>
             {formState.strapiErrors && (
-              <p className="text-pink-500 text-xs italic mt-1 py-2">
+              <p className={styles.strapiError}>
                 {formState.strapiErrors.message}
               </p>
             )}
@@ -129,7 +128,10 @@ export function SignupForm() {
         </Card>
         <div className={styles.prompt}>
           Have an account?
-          <Link className={styles.link} href="signin">
+          <Link
+            className={styles.link}
+            href="signin"
+          >
             Sign In
           </Link>
         </div>
