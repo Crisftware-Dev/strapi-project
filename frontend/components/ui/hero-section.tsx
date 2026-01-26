@@ -1,4 +1,5 @@
 import { STRAPI_BASE_URL } from "@/lib/strapi";
+import Image from "next/image";
 import Link from "next/link";
 
 const styles = {
@@ -32,7 +33,7 @@ export function HeroSection({
 
   return (
     <header className={styles.header}>
-      <img
+      <Image
         alt="Background"
         className={styles.backgroundImage}
         height={1080}
