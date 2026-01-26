@@ -1,0 +1,50 @@
+{
+  "kind": "collectionType",
+  "collectionName": "clientes",
+  "info": {
+    "singularName": "cliente",
+    "pluralName": "clientes",
+    "displayName": "clientes"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "nombres": {
+      "type": "string"
+    },
+    "apellidos": {
+      "type": "string"
+    },
+    "identificacion": {
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 13
+    },
+    "contrato": {
+      "type": "biginteger"
+    },
+    "ciudad": {
+      "type": "string"
+    },
+    "email": {
+      "type": "email"
+    },
+    "telefono": {
+      "type": "biginteger"
+    },
+    "estado": {
+      "type": "enumeration",
+      "enum": [
+        "ACTIVO",
+        "CORTADO",
+        "SUSPENDIDO",
+        "TERMINADO"
+      ]
+    },
+    "valores": {
+      "type": "decimal"
+    }
+  }
+}
