@@ -55,6 +55,6 @@ export default function LiControlHeader({
   );
 }
 
-function Li({ children }: { children: React.ReactNode }) {
+export function Li({ children }: { children: React.ReactNode }) {
   return <li className={styles.li + " hover:bg-gray-300"}>{children}</li>;
 }
