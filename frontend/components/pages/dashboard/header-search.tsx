@@ -29,17 +29,23 @@ export default function HeaderSearch() {
         <div className={styles.container}>
           <div className={styles.searchRow}>
             <SearchInput
+              ariaLabel="Buscar por identificación"
               type="text"
               id="identifier"
               placeholder="Identificación"
             />
             <SearchInput
+              ariaLabel="Buscar por nombres y apellidos"
               type="text"
               id="nombres-apellidos"
               placeholder="Nombres y apellidos"
             />
-
-            <SearchInput type="text" id="contrato" placeholder="Contrato" />
+            <SearchInput
+              ariaLabel="Buscar por contrato"
+              type="text"
+              id="contrato"
+              placeholder="Contrato"
+            />
           </div>
         </div>
       </header>

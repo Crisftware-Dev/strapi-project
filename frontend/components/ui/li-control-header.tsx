@@ -13,7 +13,7 @@ interface LiControlHeaderProps {
 }
 
 const styles = {
-  ul: "absolute left-initial top-8 z-2000 w-auto min-w-45 bg-gray-200 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg py-1 text-xs text-gray-700 dark:text-gray-300 transition-all duration-300 ease-out",
+  ul: "absolute left-auto right-0 top-8 z-2000 w-auto min-w-45 bg-gray-200 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg py-1 text-xs text-gray-700 dark:text-gray-300 transition-all duration-300 ease-out",
   li: "relative flex items-center gap-1 px-2 py-1.5 hover:bg-gray-300 dark:hover:bg-gray-800 rounded transition-colors cursor-pointer whitespace-nowrap",
 };
 

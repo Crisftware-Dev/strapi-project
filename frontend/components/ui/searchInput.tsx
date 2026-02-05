@@ -5,6 +5,7 @@ interface SearchInputProps {
   type: string;
   id: string;
   placeholder: string;
+  ariaLabel: string;
 }
 
 const styles = {
@@ -20,12 +21,13 @@ export default function SearchInput({
   type,
   id,
   placeholder,
+  ariaLabel
 }: SearchInputProps) {
   return (
     <div
       className={`${styles.searchField}`}
     >
-      <button className={styles.searchButton} type="button">
+      <button aria-label={ariaLabel} className={styles.searchButton} type="button">
         <FaSearch className={styles.icon} />
       </button>
       <Input

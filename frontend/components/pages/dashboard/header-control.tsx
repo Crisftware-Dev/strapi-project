@@ -8,6 +8,8 @@ import {
   FaSliders,
   FaCaretRight,
   FaGenderless,
+  FaKey,
+  FaPowerOff,
 } from "react-icons/fa6";
 
 const styles = {
@@ -18,8 +20,6 @@ const styles = {
 
 export default function HeaderControl() {
   const [active, setActive] = useState("");
-
-  
 
   return (
     <header className="flex justify-between w-full bg-gray-100 dark:bg-gray-950 border-b border-gray-200 dark:border-gray-800 px-3 py-0.5 sticky top-0 z-20 shadow-sm">
@@ -33,7 +33,7 @@ export default function HeaderControl() {
             <span className="text-xs font-medium text-gray-900 dark:text-gray-100">
               Nombre Empresa
             </span>
-            <span className="text-[10px] text-gray-500 dark:text-gray-400">
+            <span className="text-[10px] text-gray-600 dark:text-gray-300">
               Santo Domingo, Ecuador
             </span>
           </div>
@@ -94,7 +94,20 @@ export default function HeaderControl() {
               e.stopPropagation();
               setActive((prev) => (prev === "usuario" ? "" : "usuario"));
             }}
-          ></LiControlHeader>
+          >
+            <Li>
+              <FaUser className={styles.icon} />
+              <span>Aquí pronto irá el nombre de usuario</span>
+            </Li>
+            <Li>
+              <FaKey className={styles.icon} />
+              <span>Cambiar Clave</span>
+            </Li>
+            <Li>
+              <FaPowerOff className={styles.icon} />
+              <span>Cerrar Sesión</span>
+            </Li>
+          </LiControlHeader>
         </ul>
       </nav>
     </header>
