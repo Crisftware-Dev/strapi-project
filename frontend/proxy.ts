@@ -32,6 +32,16 @@ export async function proxy(req: NextRequest) {
 
     const userResponse = await response.json();
 
+    cookies().then((cookieStore) => {
+      cookieStore.set("jwt", jwt, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 60 * 60,
+        path: "/",
+      });
+    });
+
     if (!userResponse) {
       return NextResponse.redirect(new URL("/signin", req.url));
     }
