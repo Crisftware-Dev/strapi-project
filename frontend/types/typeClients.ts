@@ -10,3 +10,8 @@ export interface Client {
     estado: string;
     valores: number;
 }
+
+export interface User {
+  username: string;
+  email: string;
+}

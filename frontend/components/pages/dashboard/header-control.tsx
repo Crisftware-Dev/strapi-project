@@ -1,7 +1,12 @@
+"use client";
+
 import { logoutUserAction } from "@/actions/auth";
-import { Li } from "@/components/ui/li";
+
 import LiControlHeader from "@/components/ui/li-control-header";
+import { Li } from "@/components/ui/li";
+
 import { useState } from "react";
+
 import {
   FaUser,
   FaMagnifyingGlass,
@@ -13,13 +18,17 @@ import {
   FaPowerOff,
 } from "react-icons/fa6";
 
+interface HeaderControlProps {
+  initialUser: { username: string } | null;
+}
+
 const styles = {
   ul: "flex items-center gap-1 text-xs font-medium text-gray-600 dark:text-gray-300",
   icon: "text-indigo-400 text-xs",
   caret: "text-indigo-400 text-xs transition-all duration-300 rotate-0",
 };
 
-export default function HeaderControl() {
+export default function HeaderControl({ initialUser }: HeaderControlProps) {
   const [active, setActive] = useState("");
 
   const handleLogout = () => {
@@ -84,37 +93,37 @@ export default function HeaderControl() {
       </div>
       <nav className="flex items-center justify-end">
         <ul className="flex items-center gap-1 text-xs font-medium text-gray-600 dark:text-gray-300">
-          <LiControlHeader
-            setActive={setActive}
-            id="usuario"
-            text="User"
-            icon={<FaUser className="text-indigo-400 text-xs" />}
-            caret={
-              <FaCaretRight
-                className={`${styles.caret} ${active === "usuario" ? "rotate-90" : "rotate-0"}`}
-              />
-            }
-            isActive={active === "usuario"}
-            onClick={(e) => {
-              e.stopPropagation();
-              setActive((prev) => (prev === "usuario" ? "" : "usuario"));
-            }}
-          >
-            <Li>
-              <FaUser className={styles.icon} />
-              <span>Aquí pronto irá el nombre de usuario</span>
-            </Li>
-            <Li>
-              <FaKey className={styles.icon} />
-              <span>Cambiar Clave</span>
-            </Li>
-            <button className="w-full" onClick={handleLogout}>
+            <LiControlHeader
+              setActive={setActive}
+              id="usuario"
+              text="User"
+              icon={<FaUser className="text-indigo-400 text-xs" />}
+              caret={
+                <FaCaretRight
+                  className={`${styles.caret} ${active === "usuario" ? "rotate-90" : "rotate-0"}`}
+                />
+              }
+              isActive={active === "usuario"}
+              onClick={(e) => {
+                e.stopPropagation();
+                setActive((prev) => (prev === "usuario" ? "" : "usuario"));
+              }}
+            >
               <Li>
-                <FaPowerOff className={styles.icon} />
-                <span>Cerrar Sesión</span>
+                <FaUser className={styles.icon} />
+                  <span>{initialUser?.username}</span>
               </Li>
-            </button>
-          </LiControlHeader>
+              <Li>
+                <FaKey className={styles.icon} />
+                <span>Cambiar Clave</span>
+              </Li>
+              <button className="w-full" onClick={handleLogout}>
+                <Li>
+                  <FaPowerOff className={styles.icon} />
+                  <span>Cerrar Sesión</span>
+                </Li>
+              </button>
+            </LiControlHeader>
         </ul>
       </nav>
     </header>
