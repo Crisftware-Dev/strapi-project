@@ -62,3 +62,5 @@ export async function fetchUser(): Promise<User> {
     throw new Error("Error fetching user data");
   }
 }
+
+// Mañana quitar el error por el suspense

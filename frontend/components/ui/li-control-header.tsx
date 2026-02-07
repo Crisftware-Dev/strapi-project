@@ -32,22 +32,27 @@ export default function LiControlHeader({
   });
 
   return (
-    <li key={id} ref={menuRef} onClick={onClick} className={styles.li}>
-      {icon}
-      <span>{text}</span>
-      {caret}
-      {isActive && children && (
-        <ul
-          className={
-            styles.ul +
-            (isActive
-              ? " opacity-100 scale-100 translate-y-0 pointer-events-auto"
-              : " opacity-0 scale-95 -translate-y-2 pointer-events-none")
-          }
-        >
-          {children}
-        </ul>
-      )}
-    </li>
+    <button
+      aria-controls={id + "-dropdown"}
+      className="w-full focus:outline-none"
+    >
+      <li key={id} ref={menuRef} onClick={onClick} className={styles.li}>
+        {icon}
+        <span>{text}</span>
+        {caret}
+        {isActive && children && (
+          <ul
+            className={
+              styles.ul +
+              (isActive
+                ? " opacity-100 scale-100 translate-y-0 pointer-events-auto"
+                : " opacity-0 scale-95 -translate-y-2 pointer-events-none")
+            }
+          >
+            {children}
+          </ul>
+        )}
+      </li>
+    </button>
   );
 }

@@ -14,7 +14,7 @@ export default async function DashboardLayout({ children }: { children: ReactNod
   return (
     <>
       <HeaderControl initialUser={user} />
-      <main className="...">{children}</main> {/* o tu estructura de dashboard */}
+      <main>{children}</main>
     </>
   );
 }
