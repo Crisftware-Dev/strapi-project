@@ -40,6 +40,7 @@ export async function fetchClients(): Promise<{ data: Client[] }> {
 export async function fetchUser(): Promise<User> {
   try {
     const token = await getToken();
+
     const headers: Record<string, string> = {
       "Content-Type": "application/json",
     };
@@ -50,16 +51,22 @@ export async function fetchUser(): Promise<User> {
 
     const getUser = await fetch(`${STRAPI_BASE_URL}/api/users/me`, {
       headers,
+      cache: "no-store"
     });
 
     const resultFetchUser = await getUser.json();
 
     const { username, email } = resultFetchUser;
 
-    return { username, email };
+    console.log(resultFetchUser.username);
+
+    return {
+      username: String(username),
+      email: String(email),
+    };
   } catch (error) {
     console.error("Error fetching user data:", error);
-    throw new Error("Error fetching user data");
+    return { username: "", email: "" };
   }
 }
 

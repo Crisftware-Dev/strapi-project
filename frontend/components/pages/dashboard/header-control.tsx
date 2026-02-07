@@ -27,7 +27,7 @@ const styles = {
 export default function HeaderControl({ initialUser }: HeaderControlProps) {
   const [active, setActive] = useState("");
 
-  const data = initialUser?.username.slice(0, 2).toUpperCase();
+  const data = initialUser?.username?.slice(0, 2)?.toUpperCase();
 
   const handleLogout = () => {
     logoutUserAction();
