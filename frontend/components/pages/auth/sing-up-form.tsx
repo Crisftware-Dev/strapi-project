@@ -35,6 +35,8 @@ const INITIAL_STATE: FormState = {
   strapiErrors: null,
   zodErrors: null,
   data: {
+    fullname: "",
+    lastname: "",
     username: "",
     password: "",
     email: "",
@@ -61,12 +63,34 @@ export function SignupForm() {
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
+              <Label htmlFor="fullname">Full Name</Label>
+              <Input
+                id="fullname"
+                name="fullname"
+                type="text"
+                placeholder="Cristhian Jair"
+                defaultValue={formState.data?.fullname ?? ""}
+              />
+              <FormError error={formState.zodErrors?.fullname} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="lastname">Last Name</Label>
+              <Input
+                id="lastname"
+                name="lastname"
+                type="text"
+                placeholder="Zambrano Nuñez"
+                defaultValue={formState.data?.lastname ?? ""}
+              />
+              <FormError error={formState.zodErrors?.lastname} />
+            </div>
+            <div className="space-y-2">
               <Label htmlFor="username">Username</Label>
               <Input
                 id="username"
                 name="username"
                 type="text"
-                placeholder="username"
+                placeholder="czambrano"
                 defaultValue={formState.data?.username ?? ""}
               />
               <FormError error={formState.zodErrors?.username} />

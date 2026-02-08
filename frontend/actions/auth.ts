@@ -24,6 +24,8 @@ export async function registerUserAction(
   formdData: FormData,
 ): Promise<FormState> {
   const fields = {
+    fullname: formdData.get("fullname") as string,
+    lastname: formdData.get("lastname") as string,
     username: formdData.get("username") as string,
     email: formdData.get("email") as string,
     password: formdData.get("password") as string,
@@ -48,6 +50,8 @@ export async function registerUserAction(
   }
 
   const response = await registerUserService({
+    fullname: validateFields.data.fullname,
+    lastname: validateFields.data.lastname,
     username: validateFields.data.username,
     email: validateFields.data.email,
     password: validateFields.data.password,

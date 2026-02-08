@@ -14,6 +14,14 @@ const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$/;
 
 export const SignupFormSchema = z
   .object({
+    fullname: z
+      .string()
+      .min(2, "Full name must be at least 2 characters")
+      .max(50, "Full name must be less than 50 characters"),
+    lastname: z
+      .string()
+      .min(2, "Last name must be at least 2 characters")
+      .max(50, "Last name must be less than 50 characters"),
     username: z
       .string()
       .min(3, "Username must be at least 3 characters")
@@ -34,6 +42,8 @@ export const SignupFormSchema = z
     path: ["confirmPassword"],
   })
   .transform((data) => ({
+    fullname: data.fullname,
+    lastname: data.lastname,
     username: data.username,
     email: data.email,
     password: data.password,
@@ -48,6 +58,8 @@ export type FormState = {
   message?: string;
   data?: {
     identifier?: string;
+    fullname?: string;
+    lastname?: string;
     username?: string;
     email?: string;
     password?: string;
@@ -60,6 +72,8 @@ export type FormState = {
     details?: Record<string, string[]>;
   } | null;
   zodErrors?: {
+    fullname?: string[];
+    lastname?: string[];
     identifier?: string[];
     username?: string[];
     email?: string[];

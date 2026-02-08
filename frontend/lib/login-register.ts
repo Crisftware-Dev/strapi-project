@@ -7,6 +7,8 @@ interface LoginData {
 }
 
 interface RegisterData {
+  fullname: string;
+  lastname: string;
   username: string;
   email: string;
   password: string;

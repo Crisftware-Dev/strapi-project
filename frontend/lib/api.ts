@@ -51,14 +51,12 @@ export async function fetchUser(): Promise<User> {
 
     const getUser = await fetch(`${STRAPI_BASE_URL}/api/users/me`, {
       headers,
-      cache: "no-store"
+      cache: "no-store" // para evitar que el navegador almacene la información en caché antigua
     });
 
     const resultFetchUser = await getUser.json();
 
     const { username, email } = resultFetchUser;
-
-    console.log(resultFetchUser.username);
 
     return {
       username: String(username),
@@ -69,5 +67,3 @@ export async function fetchUser(): Promise<User> {
     return { username: "", email: "" };
   }
 }
-
-// Mañana quitar el error por el suspense
