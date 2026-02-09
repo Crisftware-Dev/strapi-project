@@ -2,15 +2,15 @@
 
 import { logoutUserAction } from "@/actions/auth";
 
+import { ArrowRigthI, CircleI, KeyI, PencilModifYI, PowerOffI, SearchI, SupportI, UserI } from "@/components/icons/Icons";
 import LiControlHeader from "@/components/ui/li-control-header";
 import { Li } from "@/components/ui/li";
-
-import { useState } from "react";
-import { ArrowRigthI, CircleI, KeyI, PencilModifYI, PowerOffI, SearchI, SupportI, UserI } from "@/components/icons/Icons";
 import { Ul } from "@/components/ui/ul";
 
+import { useState } from "react";
+
 interface HeaderControlProps {
-  initialUser: { username: string } | null;
+  initialUser: { fullname: string, lastname: string } | null;
 }
 
 const styles = {
@@ -19,15 +19,17 @@ const styles = {
   section: "max-w-auto flex items-center justify-start h-8 gap-4",
   a: "flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 rounded",
   logo: "w-5 h-5 bg-indigo-600 rounded flex items-center justify-center text-white text-[10px] font-bold shrink-0",
-  ul: "flex items-center gap-1 text-xs font-medium text-gray-600 dark:text-gray-300",
+  ul: "flex items-center gap-1 text-xs font-medium text-gray-600 dark:text-gray-300 ",
   icon: "text-indigo-400 text-xs w-[14px] h-[14px]",
-  caret: "text-indigo-400 text-xs transition-all duration-300 rotate-0 w-3 h-4",
+  caret: "text-indigo-400 text-xs transition-all duration-300 w-3 h-4",
 };
 
 export default function HeaderControl({ initialUser }: HeaderControlProps) {
   const [active, setActive] = useState("");
 
-  const data = initialUser?.username?.slice(0, 2)?.toUpperCase();
+  const nameAndLastname = initialUser?.fullname?.split(" ")[0].concat(" ", initialUser?.lastname?.split(" ")[0])?.toUpperCase();
+
+  const data = nameAndLastname?.split(" ").map((n) => n[0]).join("").toUpperCase();
 
   const handleLogout = () => {
     logoutUserAction();
@@ -105,7 +107,7 @@ export default function HeaderControl({ initialUser }: HeaderControlProps) {
           >
             <Li>
               <UserI className={styles.icon} />
-              <span>{initialUser?.username}</span>
+              <span>{nameAndLastname}</span>
             </Li>
             <Li>
               <KeyI className={styles.icon} />

@@ -40,18 +40,16 @@ export default function LiControlHeader({
         {icon}
         <span>{text}</span>
         {caret}
-        {isActive && children && (
-          <ul
-            className={
-              styles.ul +
-              (isActive
-                ? " opacity-100 scale-100 translate-y-0 pointer-events-auto"
-                : " opacity-0 scale-95 -translate-y-2 pointer-events-none")
-            }
-          >
-            {children}
-          </ul>
-        )}
+        <ul
+          className={
+            styles.ul +
+            (isActive && children
+              ? " opacity-100 scale-100 translate-y-0 pointer-events-auto"
+              : " opacity-0 scale-95 -translate-y-2 pointer-events-none")
+          }
+        >
+          {children}
+        </ul>
       </li>
     </button>
   );

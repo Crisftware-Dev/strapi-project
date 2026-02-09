@@ -32,19 +32,19 @@ export default function HeaderSearch() {
               ariaLabel="Buscar por identificación"
               type="text"
               id="identifier"
-              placeholder="Identificación"
+              placeholder="RUC, Cédula o Pasaporte del cliente"
             />
             <SearchInput
               ariaLabel="Buscar por nombres y apellidos"
               type="text"
               id="nombres-apellidos"
-              placeholder="Nombres y apellidos"
+              placeholder="Nombres y apellidos completos del cliente"
             />
             <SearchInput
               ariaLabel="Buscar por contrato"
               type="text"
               id="contrato"
-              placeholder="Contrato"
+              placeholder="Número de contrato del cliente"
             />
           </div>
         </div>
