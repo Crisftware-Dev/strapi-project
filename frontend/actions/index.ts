@@ -1,8 +1,9 @@
-import { loginUserAction, registerUserAction } from "./auth";
+import { changePasswordAction, loginUserAction, registerUserAction } from "./auth";
 
 export const actions = {
   auth: {
     registerUserAction,
     loginUserAction,
+    changePasswordAction,
   }
 }

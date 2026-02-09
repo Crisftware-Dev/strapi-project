@@ -12,6 +12,6 @@ export interface Client {
 }
 
 export interface User {
-  username: string;
-  email: string;
+  fullname: string;
+  lastname: string;
 }

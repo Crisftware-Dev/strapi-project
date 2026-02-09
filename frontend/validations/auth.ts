@@ -49,6 +49,25 @@ export const SignupFormSchema = z
     password: data.password,
   }));
 
+export const ChangePasswordFormSchema = z
+  .object({
+    oldPassword: z.string().min(1, "Enter your current password"),
+    password: z
+      .string()
+      .min(6, "Enter your new password")
+      .regex(
+        strongPasswordRegex,
+        "The password must include at least one uppercase letter, one lowercase letter, and one number.",
+      ),
+    confirmPassword: z.string().min(6, "Confirm your new password"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "The passwords do not match",
+    path: ["confirmPassword"],
+  });
+
+export type ChangePasswordFormValues = z.infer<typeof ChangePasswordFormSchema>;
+
 export type SigninFormValues = z.infer<typeof SigninFormSchema>;
 
 export type SignupFormValues = z.infer<typeof SignupFormSchema>;
@@ -62,6 +81,7 @@ export type FormState = {
     lastname?: string;
     username?: string;
     email?: string;
+    oldPassword?: string;
     password?: string;
     confirmPassword?: string;
   };
@@ -77,6 +97,7 @@ export type FormState = {
     identifier?: string[];
     username?: string[];
     email?: string[];
+    oldPassword?: string[];
     password?: string[];
     confirmPassword?: string[];
   } | null;
