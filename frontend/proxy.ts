@@ -1,6 +1,5 @@
-import { cookies } from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
-import { STRAPI_BASE_URL } from "./lib/login-register";
+import { strapiJson } from "./lib/api";
 
 const protectedRoutes = ["/dashboard"];
 
@@ -16,37 +15,15 @@ export async function proxy(req: NextRequest) {
   if (!isProtectedRoute) return NextResponse.next();
 
   try {
-    const cookieStore = await cookies();
-    const jwt = cookieStore.get("jwt")?.value;
-
-    if (!jwt) {
+    const user = await strapiJson('/api/users/me');
+    
+    if(!user) {
       return NextResponse.redirect(new URL("/signin", req.url));
     }
 
-    const response = await fetch(`${STRAPI_BASE_URL}/api/users/me`, {
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-        "Content-Type": "application/json",
-      },
-    });
+    const userResponse = NextResponse.next();
 
-    const userResponse = await response.json();
-
-    cookies().then((cookieStore) => {
-      cookieStore.set("jwt", jwt, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        maxAge: 60 * 60,
-        path: "/",
-      });
-    });
-
-    if (!userResponse) {
-      return NextResponse.redirect(new URL("/signin", req.url));
-    }
-
-    return NextResponse.next();
+    return userResponse;
   } catch (error) {
     console.error("Error verifying user authentication:", error);
     return NextResponse.redirect(new URL("/signin", req.url));
