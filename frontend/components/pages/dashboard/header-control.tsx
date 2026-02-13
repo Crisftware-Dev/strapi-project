@@ -2,15 +2,25 @@
 
 import { logoutUserAction } from "@/actions/auth";
 
-import { ArrowRigthI, CircleI, KeyI, PencilModifYI, PowerOffI, SearchI, SupportI, UserI } from "@/components/icons/Icons";
+import {
+  ArrowRigthI,
+  CircleI,
+  KeyI,
+  PencilModifYI,
+  PowerOffI,
+  SearchI,
+  SupportI,
+  UserI,
+} from "@/components/icons/Icons";
 import LiControlHeader from "@/components/ui/li-control-header";
 import { Li } from "@/components/ui/li";
 import { Ul } from "@/components/ui/ul";
 
 import { useState } from "react";
+import ChangePass from "@/components/ui/change-pass";
 
 interface HeaderControlProps {
-  initialUser: { fullname: string, lastname: string } | null;
+  initialUser: { fullname: string; lastname: string } | null;
 }
 
 const styles = {
@@ -26,10 +36,18 @@ const styles = {
 
 export default function HeaderControl({ initialUser }: HeaderControlProps) {
   const [active, setActive] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
 
-  const nameAndLastname = initialUser?.fullname?.split(" ")[0].concat(" ", initialUser?.lastname?.split(" ")[0])?.toUpperCase();
+  const nameAndLastname = initialUser?.fullname
+    ?.split(" ")[0]
+    .concat(" ", initialUser?.lastname?.split(" ")[0])
+    ?.toUpperCase();
 
-  const data = nameAndLastname?.split(" ").map((n) => n[0]).join("").toUpperCase();
+  const data = nameAndLastname
+    ?.split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase();
 
   const handleLogout = () => {
     logoutUserAction();
@@ -109,10 +127,12 @@ export default function HeaderControl({ initialUser }: HeaderControlProps) {
               <UserI className={styles.icon} />
               <span>{nameAndLastname}</span>
             </Li>
-            <Li>
-              <KeyI className={styles.icon} />
-              <span>Cambiar Clave</span>
-            </Li>
+            <div className="w-full" onClick={() => setIsOpen(true)}>
+              <Li>
+                <KeyI className={styles.icon} />
+                <span>Cambiar Clave</span>
+              </Li>
+            </div>
             <div className="w-full" onClick={handleLogout}>
               <Li>
                 <PowerOffI className={styles.icon} />
@@ -122,6 +142,7 @@ export default function HeaderControl({ initialUser }: HeaderControlProps) {
           </LiControlHeader>
         </Ul>
       </nav>
+      <ChangePass isOpen={isOpen} setIsOpen={setIsOpen} />
     </header>
   );
 }
