@@ -1,4 +1,6 @@
 import { Client } from "@/types/typeClients";
+import { Li } from "./li";
+import { Ul } from "./ul";
 
 interface SearchNamesProps {
   showError: boolean;
@@ -16,7 +18,7 @@ export default function SearchNames({
   handleClientSelect,
 }: SearchNamesProps) {
   return (
-    <div>
+    <div className="absolute left-72 w-82 top-15">
       {showError && (
         <div className="mt-3 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-center animate-in fade-in">
           <p className="text-sm text-red-800 dark:text-red-200">
@@ -27,14 +29,14 @@ export default function SearchNames({
 
       {nameResults.length > 0 && (
         <div className="mt-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg shadow-sm max-h-64 overflow-y-auto">
-          <ul className="divide-y divide-gray-200 dark:divide-gray-800">
+          <Ul className="divide-y divide-gray-200 dark:divide-gray-800">
             {nameResults.map((client) => (
-              <li
+              <Li
                 key={client.documentId}
                 onClick={() => handleClientSelect(client)}
-                className="px-4 py-3 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 cursor-pointer transition-colors"
+                className="px-3 py-3 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 cursor-pointer transition-colors"
               >
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between gap-3">
                   <div>
                     <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
                       {client.apellidos} {client.nombres}
@@ -47,9 +49,9 @@ export default function SearchNames({
                     {client.ciudad}
                   </div>
                 </div>
-              </li>
+              </Li>
             ))}
-          </ul>
+          </Ul>
         </div>
       )}
 
