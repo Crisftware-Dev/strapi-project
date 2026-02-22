@@ -9,11 +9,17 @@ import { ClientDataRow } from "@/components/ui/client-data-row";
 import { cn } from "@/lib/utils";
 import Separator from "../ui/separator";
 import Select from "../ui/select";
-import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import SearchInput from "../ui/searchInput";
 import { Button } from "../ui/button";
 import { CompactTable } from "../ui/compact-table";
+import {
+  DataInput,
+  DataSelect,
+  DataToggle,
+  DataRadioGroup,
+} from "../ui/client-data-fields";
+import { Input } from "../ui/input";
 
 const styles = {
   container:
@@ -66,9 +72,24 @@ export default function ClientDataDisplay() {
     error,
   } = useClientById(selectedClientId || "");
 
-  const [selectedMedia, setSelectedMedia] = useState("FIBRA ÓPTICA");
+  const [toggles, setToggles] = useState({
+    corteAutomatico: false,
+    facturaAutomatica: false,
+    descuentoDiscapacidad: false,
+    descuentoTerceraEdad: false,
+    agenteRetencion: false,
+    principal: false,
+  });
 
+  const [selectedMedia, setSelectedMedia] = useState("FIBRA ÓPTICA");
   const prevClientId = useRef(selectedClientId);
+
+  const handleToggle = (key: keyof typeof toggles) => {
+    setToggles((prev) => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
+  };
 
   useEffect(() => {
     if (selectedClientId !== prevClientId.current) {
@@ -98,7 +119,7 @@ export default function ClientDataDisplay() {
   return (
     <article className={styles.container} key={selectedClientId}>
       <main className={styles.mainGrid}>
-        <div className={styles.leftColumn}>
+        <section className={styles.leftColumn}>
           <ClientDataRow label="Venta">
             <div className="flex w-full items-center">
               <p className={styles.select}>Venta Tradicional</p>
@@ -126,6 +147,7 @@ export default function ClientDataDisplay() {
               </Select>
             </div>
           </ClientDataRow>
+
           <ClientDataRow label="Identificación">
             <div className="flex gap-2 w-full items-center">
               <Select className="w-auto text-xs border-r dark:border-indigo-900/30 font-medium">
@@ -145,33 +167,29 @@ export default function ClientDataDisplay() {
               />
             </div>
           </ClientDataRow>
-          <ClientDataRow label="Razón Social">
-            <Input
-              type="text"
-              className={styles.input}
-              placeholder="Nombre de empresa"
-            />
-          </ClientDataRow>
-          <ClientDataRow label="Cédula Rep.Legal">
-            <Input
-              type="text"
-              className={styles.input}
-              value={client.identificacion}
-              readOnly
-            />
-          </ClientDataRow>
-          <ClientDataRow
+
+          <DataInput label="Razón Social" placeholder="Nombre de empresa" />
+
+          <DataInput
+            label="Cédula Rep.Legal"
+            value={client.identificacion}
+            readOnly
+          />
+
+          <DataInput
             label="Apellidos"
             value={client.apellidos}
             readOnly
             className="uppercase font-medium"
           />
-          <ClientDataRow
+
+          <DataInput
             label="Nombres"
             value={client.nombres}
             readOnly
             className="uppercase font-medium"
           />
+
           <ClientDataRow label="Contacto">
             <section className="flex flex-1 justify-between items-center gap-2">
               <div className="flex flex-1 items-center gap-2">
@@ -203,15 +221,16 @@ export default function ClientDataDisplay() {
               </div>
             </section>
           </ClientDataRow>
-          <ClientDataRow label="Email" value={client.email} readOnly />
-          <ClientDataRow label="Dirección Fac.">
-            <input
-              type="text"
-              className={`uppercase w-full ${styles.input}`}
-              value={`${client.ciudad} - DIRECCION REFERENCIAL`}
-              readOnly
-            />
-          </ClientDataRow>
+
+          <DataInput label="Email" value={client.email} readOnly />
+
+          <DataInput
+            label="Dirección Fac."
+            className="uppercase"
+            value={`${client.ciudad} - DIRECCION REFERENCIAL`}
+            readOnly
+          />
+
           <ClientDataRow label="Fecha Nacimiento">
             <div className="flex items-center gap-4">
               <input
@@ -225,67 +244,19 @@ export default function ClientDataDisplay() {
               </div>
             </div>
           </ClientDataRow>
-          <ClientDataRow label="Medio Plan">
-            <section className={styles.radioGroup}>
-              <label className={styles.radioLabel}>
-                <input
-                  type="radio"
-                  name="media"
-                  className={styles.radio}
-                  checked={selectedMedia === "COBRE"}
-                  onChange={() => setSelectedMedia("COBRE")}
-                />
-                <span
-                  className={cn(
-                    "text-[11px] transition-colors",
-                    selectedMedia === "COBRE"
-                      ? "font-semibold text-indigo-600"
-                      : "text-gray-400 group-hover:text-gray-500",
-                  )}
-                >
-                  COBRE
-                </span>
-              </label>
-              <label className={styles.radioLabel}>
-                <input
-                  type="radio"
-                  name="media"
-                  className={styles.radio}
-                  checked={selectedMedia === "MEDIO INALÁMBRICO"}
-                  onChange={() => setSelectedMedia("MEDIO INALÁMBRICO")}
-                />
-                <span
-                  className={cn(
-                    "text-[11px] transition-colors",
-                    selectedMedia === "MEDIO INALÁMBRICO"
-                      ? "font-semibold text-indigo-600"
-                      : "text-gray-400 group-hover:text-gray-500",
-                  )}
-                >
-                  MEDIO INALÁMBRICO
-                </span>
-              </label>
-              <label className={styles.radioLabel}>
-                <input
-                  type="radio"
-                  name="media"
-                  className={styles.radio}
-                  checked={selectedMedia === "FIBRA ÓPTICA"}
-                  onChange={() => setSelectedMedia("FIBRA ÓPTICA")}
-                />
-                <span
-                  className={cn(
-                    "text-[11px] transition-colors",
-                    selectedMedia === "FIBRA ÓPTICA"
-                      ? "font-semibold text-indigo-600"
-                      : "text-gray-400 group-hover:text-gray-500",
-                  )}
-                >
-                  FIBRA ÓPTICA
-                </span>
-              </label>
-            </section>
-          </ClientDataRow>
+
+          <DataRadioGroup
+            label="Medio Plan"
+            name="media"
+            value={selectedMedia}
+            onChange={setSelectedMedia}
+            options={[
+              { label: "COBRE", value: "COBRE" },
+              { label: "MEDIO INALÁMBRICO", value: "MEDIO INALÁMBRICO" },
+              { label: "FIBRA ÓPTICA", value: "FIBRA ÓPTICA" },
+            ]}
+          />
+
           <ClientDataRow label="Planes Mensuales">
             <CompactTable
               leftHeaderElement={
@@ -317,14 +288,12 @@ export default function ClientDataDisplay() {
                     <span key="valor" className="font-mono">
                       20.54
                     </span>,
-                    <div
+                    <DataToggle
                       key="principal"
-                      className={cn(styles.toggle, styles.toggleOn)}
-                    >
-                      <span
-                        className={cn(styles.toggleThumb, styles.toggleThumbOn)}
-                      />
-                    </div>,
+                      label=""
+                      onToggle={() => handleToggle("principal")}
+                      isOn={toggles.principal}
+                    />,
                     <span key="dscto" className="text-gray-400">
                       .00
                     </span>,
@@ -354,21 +323,21 @@ export default function ClientDataDisplay() {
               ]}
             />
           </ClientDataRow>
-          <ClientDataRow label="Es una entidad">
-            <select className={styles.select}>
-              <option>PRIVADA</option>
-            </select>
-          </ClientDataRow>
-          <ClientDataRow label="Rubro Instalación">
-            <select className={styles.select}>
-              <option>INSTALACION RESIDENCIAL F.O | 178.2522</option>
-            </select>
-          </ClientDataRow>
+
+          <DataSelect label="Es una entidad">
+            <option>PRIVADA</option>
+            <option>PUBLICA</option>
+          </DataSelect>
+
+          <DataSelect label="Rubro Instalación">
+            <option>INSTALACION RESIDENCIAL F.O | 178.2522</option>
+          </DataSelect>
+
           <ClientDataRow label="Descuento Aplicado">
             <div className="flex-1 flex items-center">
-              <select className={cn(styles.select, "flex-1")}>
+              <Select className={cn("flex-1")}>
                 <option>Ninguno</option>
-              </select>
+              </Select>
               <div className="flex items-center px-4 border-l border-indigo-100 dark:border-indigo-900/30 text-[11px] text-gray-500 bg-indigo-50/20 h-full">
                 A Cancelar:{" "}
                 <span className="ml-2 font-bold text-indigo-700 dark:text-indigo-300 font-mono text-xs">
@@ -377,77 +346,63 @@ export default function ClientDataDisplay() {
               </div>
             </div>
           </ClientDataRow>
-          <ClientDataRow label="Corte Automático">
-            <div className="flex items-center gap-3">
-              <span className="text-[10px] bg-green-100/80 text-green-700 px-2.5 py-0.5 rounded-full font-bold shadow-sm border border-green-200">
-                SI
-              </span>
-              <div className={`${styles.toggle} ${styles.toggleOn}`}>
-                <span
-                  className={`${styles.toggleThumb} ${styles.toggleThumbOn}`}
-                />
-              </div>
-            </div>
-          </ClientDataRow>
+
+          <DataToggle
+            label="Corte Automático"
+            onToggle={() => handleToggle("corteAutomatico")}
+            isOn={toggles.corteAutomatico}
+          />
+
           <ClientDataRow label="Aplica Dscto.">
             <div className="flex items-center gap-6">
               <div className="flex items-center gap-2">
                 <span className="text-gray-600 text-[11px]">
                   Por Discapacidad:
                 </span>
-                <div
-                  className={`${styles.toggle} ${styles.toggleOff} scale-75 origin-left`}
-                >
-                  <span
-                    className={`${styles.toggleThumb} ${styles.toggleThumbOff}`}
-                  />
-                </div>
-                <span className="font-bold text-[10px] text-gray-400">NO</span>
+                <DataToggle
+                  label=""
+                  onToggle={() => handleToggle("descuentoDiscapacidad")}
+                  isOn={toggles.descuentoDiscapacidad}
+                  size="sm"
+                  rowClassName="border-none bg-transparent hover:bg-transparent min-h-0 p-0"
+                />
               </div>
-              <div className="w-px h-4 bg-indigo-100 dark:bg-indigo-900/30" />
+              <Separator />
               <div className="flex items-center gap-2">
                 <span className="text-gray-600 text-[11px]">
                   Por Tercera Edad:
                 </span>
-                <div
-                  className={`${styles.toggle} ${styles.toggleOff} scale-75 origin-left`}
-                >
-                  <span
-                    className={`${styles.toggleThumb} ${styles.toggleThumbOff}`}
-                  />
-                </div>
-                <span className="font-bold text-[10px] text-gray-400">NO</span>
+                <DataToggle
+                  label=""
+                  onToggle={() => handleToggle("descuentoTerceraEdad")}
+                  isOn={toggles.descuentoTerceraEdad}
+                  size="sm"
+                  rowClassName="border-none bg-transparent hover:bg-transparent min-h-0 p-0"
+                />
               </div>
             </div>
           </ClientDataRow>
-        </div>
+        </section>
 
-        <div className={styles.rightColumn}>
-          {/* Status Header */}
+        <section className={styles.rightColumn}>
           <div className="p-4 border-b border-indigo-100 dark:border-indigo-900/30 bg-white dark:bg-gray-950">
-            <div className="flex items-center gap-3 py-1 px-1">
-              <div className={`${styles.toggle} ${styles.toggleOff} scale-90`}>
-                <span
-                  className={`${styles.toggleThumb} ${styles.toggleThumbOff}`}
-                />
-              </div>
-              <span className="text-xs font-medium text-gray-600">
-                ¿Es agente de retención?
-              </span>
-            </div>
+            <DataToggle
+              label="¿Es agente de retención?"
+              onToggle={() => handleToggle("agenteRetencion")}
+              isOn={toggles.agenteRetencion}
+              rowClassName="border-none bg-transparent hover:bg-transparent min-h-0 p-0"
+            />
           </div>
-
-          {/* Files Upload Section */}
           <div className="p-4 flex flex-col gap-3 h-[calc(100%-250px)]">
             <div className="flex flex-col gap-2">
               <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">
                 Subir Archivos
               </label>
               <div className="flex gap-2">
-                <select className="flex-1 border border-indigo-100 rounded text-xs px-2 py-1.5 text-gray-600 bg-white shadow-sm focus:ring-1 focus:ring-indigo-500">
+                <Select>
                   <option>Seleccione tipo de archivo</option>
-                </select>
-                <button className={styles.uploadButton}>CARGAR</button>
+                </Select>
+                <Button className={styles.uploadButton}>CARGAR</Button>
               </div>
             </div>
 
@@ -474,14 +429,11 @@ export default function ClientDataDisplay() {
             </div>
           </div>
 
-          {/* Right Column Bottom Fields */}
           <div className="border-t border-indigo-100 dark:border-indigo-900/30 bg-white dark:bg-gray-950">
-            <ClientDataRow label="Cliente">
-              <select className={styles.select} defaultValue="RESIDENCIAL">
-                <option>RESIDENCIAL</option>
-                <option>CORPORATIVO</option>
-              </select>
-            </ClientDataRow>
+            <DataSelect label="Cliente" defaultValue="RESIDENCIAL">
+              <option>RESIDENCIAL</option>
+              <option>CORPORATIVO</option>
+            </DataSelect>
 
             <ClientDataRow label="Promoción" />
 
@@ -498,18 +450,11 @@ export default function ClientDataDisplay() {
 
             <ClientDataRow label="Motivo" />
 
-            <ClientDataRow label="Factura auto.">
-              <div className="flex items-center gap-2">
-                <div
-                  className={`${styles.toggle} ${styles.toggleOff} scale-75 origin-left`}
-                >
-                  <span
-                    className={`${styles.toggleThumb} ${styles.toggleThumbOff}`}
-                  />
-                </div>
-                <span className="font-bold text-[10px] text-gray-400">NO</span>
-              </div>
-            </ClientDataRow>
+            <DataToggle
+              label="Factura auto."
+              onToggle={() => handleToggle("facturaAutomatica")}
+              isOn={toggles.facturaAutomatica}
+            />
 
             <ClientDataRow label="Referencia">
               <span className="text-gray-400 italic text-[10px]">
@@ -517,7 +462,7 @@ export default function ClientDataDisplay() {
               </span>
             </ClientDataRow>
           </div>
-        </div>
+        </section>
       </main>
     </article>
   );
