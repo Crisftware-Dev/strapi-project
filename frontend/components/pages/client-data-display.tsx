@@ -11,6 +11,9 @@ import Separator from "../ui/separator";
 import Select from "../ui/select";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import SearchInput from "../ui/searchInput";
+import { Button } from "../ui/button";
+import { CompactTable } from "../ui/compact-table";
 
 const styles = {
   container:
@@ -38,10 +41,10 @@ const styles = {
   uploadButton:
     "px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded text-[11px] font-medium transition-all shadow-sm flex items-center gap-1.5",
   actionButton:
-    "px-3 py-1 bg-white dark:bg-gray-800 border border-indigo-100 dark:border-indigo-900/30 rounded text-[10px] hover:bg-indigo-50 dark:hover:bg-indigo-900/30 text-gray-600 dark:text-gray-300 transition-colors",
+    "h-auto px-3 py-1 bg-white dark:bg-gray-800 border border-indigo-100 dark:border-indigo-900/30 rounded text-[10px] hover:bg-indigo-50 dark:hover:bg-indigo-900/30 text-gray-600 dark:text-gray-300 transition-colors",
 
   tableHeader:
-    "px-3 py-2.5 text-left text-[10px] font-bold text-indigo-900/60 dark:text-indigo-300/60 tracking-wider uppercase border-b border-indigo-100 dark:border-indigo-900/30 bg-indigo-50/30 dark:bg-indigo-950/20",
+    "h-auto px-3 py-1 text-left text-[10px] font-bold text-indigo-900/60 dark:text-indigo-300/60 tracking-wider uppercase border-b border-indigo-100 dark:border-indigo-900/30 bg-indigo-50/30 dark:bg-indigo-950/20",
   tableCell:
     "px-3 py-2 border-b border-indigo-50 dark:border-indigo-900/20 text-gray-600 dark:text-gray-300 text-xs",
 
@@ -123,7 +126,6 @@ export default function ClientDataDisplay() {
               </Select>
             </div>
           </ClientDataRow>
-
           <ClientDataRow label="Identificación">
             <div className="flex gap-2 w-full items-center">
               <Select className="w-auto text-xs border-r dark:border-indigo-900/30 font-medium">
@@ -143,7 +145,6 @@ export default function ClientDataDisplay() {
               />
             </div>
           </ClientDataRow>
-
           <ClientDataRow label="Razón Social">
             <Input
               type="text"
@@ -151,7 +152,6 @@ export default function ClientDataDisplay() {
               placeholder="Nombre de empresa"
             />
           </ClientDataRow>
-
           <ClientDataRow label="Cédula Rep.Legal">
             <Input
               type="text"
@@ -160,7 +160,6 @@ export default function ClientDataDisplay() {
               readOnly
             />
           </ClientDataRow>
-
           <ClientDataRow
             label="Apellidos"
             value={client.apellidos}
@@ -173,7 +172,6 @@ export default function ClientDataDisplay() {
             readOnly
             className="uppercase font-medium"
           />
-
           <ClientDataRow label="Contacto">
             <section className="flex flex-1 justify-between items-center gap-2">
               <div className="flex flex-1 items-center gap-2">
@@ -205,9 +203,7 @@ export default function ClientDataDisplay() {
               </div>
             </section>
           </ClientDataRow>
-
           <ClientDataRow label="Email" value={client.email} readOnly />
-
           <ClientDataRow label="Dirección Fac.">
             <input
               type="text"
@@ -216,7 +212,6 @@ export default function ClientDataDisplay() {
               readOnly
             />
           </ClientDataRow>
-
           <ClientDataRow label="Fecha Nacimiento">
             <div className="flex items-center gap-4">
               <input
@@ -230,9 +225,8 @@ export default function ClientDataDisplay() {
               </div>
             </div>
           </ClientDataRow>
-
           <ClientDataRow label="Medio Plan">
-            <div className={styles.radioGroup}>
+            <section className={styles.radioGroup}>
               <label className={styles.radioLabel}>
                 <input
                   type="radio"
@@ -290,98 +284,86 @@ export default function ClientDataDisplay() {
                   FIBRA ÓPTICA
                 </span>
               </label>
-            </div>
+            </section>
           </ClientDataRow>
-
-          {/* Planes Table Section */}
-          <div className="border-b border-indigo-100 dark:border-indigo-900/30 bg-white dark:bg-gray-950">
-            <div className="flex items-center p-3 gap-3 bg-indigo-50/20 dark:bg-indigo-900/10">
-              <div className="flex-1 relative group">
-                <SearchI className="absolute left-2.5 top-2 w-3.5 h-3.5 text-indigo-400 group-focus-within:text-indigo-600 transition-colors" />
-                <input
-                  type="text"
-                  className={styles.searchInput}
-                  placeholder="BUSQUE AQUI EL PLAN"
-                />
-              </div>
-              <button className={styles.actionButton}>
-                + Añadir (Principal)
-              </button>
-            </div>
-
-            <table className="w-full text-left">
-              <thead>
-                <tr>
-                  <th className={`w-[45%] ${styles.tableHeader}`}>
-                    Planes Mensuales
-                  </th>
-                  <th className={styles.tableHeader}>Valor</th>
-                  <th className={styles.tableHeader}>Principal</th>
-                  <th className={styles.tableHeader}>$Dscto.</th>
-                  <th className={styles.tableHeader}>Meses</th>
-                  <th className={`${styles.tableHeader} w-[120px]`}>Opción</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr className="hover:bg-indigo-50/20 transition-colors">
-                  <td
-                    className={cn(
-                      styles.tableCell,
-                      "font-medium text-xs text-indigo-900 dark:text-indigo-200",
-                    )}
-                  >
-                    RESIDENCIAL ONE SOCIAL (200 MBPS){" "}
-                    <span className="text-gray-400 font-normal">
-                      / corte 25
-                    </span>
-                  </td>
-                  <td className={cn(styles.tableCell, "font-mono")}>20.54</td>
-                  <td className={styles.tableCell}>
-                    <div className={`${styles.toggle} ${styles.toggleOn}`}>
+          <ClientDataRow label="Planes Mensuales">
+            <CompactTable
+              leftHeaderElement={
+                <div className="flex gap-1 p-1 w-full items-center">
+                  <SearchInput
+                    ariaLabel="Planes Disponibles"
+                    type="text"
+                    id="planes"
+                    placeholder="Busque aquí el plan"
+                    className="flex-1"
+                  />
+                  <Button className={cn(styles.actionButton, "shrink-0")}>
+                    + Añadir (Principal)
+                  </Button>
+                </div>
+              }
+              headers={["Valor", "Principal", "$Dscto.", "Meses", "Opción"]}
+              rows={[
+                {
+                  title: (
+                    <>
+                      RESIDENCIAL ONE SOCIAL (200 MBPS){" "}
+                      <span className="text-gray-400 font-normal">
+                        / corte 25
+                      </span>
+                    </>
+                  ),
+                  cells: [
+                    <span key="valor" className="font-mono">
+                      20.54
+                    </span>,
+                    <div
+                      key="principal"
+                      className={cn(styles.toggle, styles.toggleOn)}
+                    >
                       <span
-                        className={`${styles.toggleThumb} ${styles.toggleThumbOn}`}
+                        className={cn(styles.toggleThumb, styles.toggleThumbOn)}
                       />
-                    </div>
-                  </td>
-                  <td className={cn(styles.tableCell, "text-gray-400")}>.00</td>
-                  <td className={cn(styles.tableCell, "text-gray-400")}>-1</td>
-                  <td className={styles.tableCell}>
-                    <div className="flex gap-1.5 justify-end">
-                      <button
+                    </div>,
+                    <span key="dscto" className="text-gray-400">
+                      .00
+                    </span>,
+                    <span key="meses" className="text-gray-400">
+                      -1
+                    </span>,
+                    <div key="opcion" className="flex gap-1.5 justify-center">
+                      <Button
                         className={cn(
                           styles.actionButton,
                           "px-2 text-red-500 hover:bg-red-50 border-red-100",
                         )}
                       >
                         Elim.
-                      </button>
-                      <button
+                      </Button>
+                      <Button
                         className={cn(
                           styles.actionButton,
                           "px-2 text-indigo-600 hover:bg-indigo-50 border-indigo-100",
                         )}
                       >
                         $ Desc.
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
+                      </Button>
+                    </div>,
+                  ],
+                },
+              ]}
+            />
+          </ClientDataRow>
           <ClientDataRow label="Es una entidad">
             <select className={styles.select}>
               <option>PRIVADA</option>
             </select>
           </ClientDataRow>
-
           <ClientDataRow label="Rubro Instalación">
             <select className={styles.select}>
               <option>INSTALACION RESIDENCIAL F.O | 178.2522</option>
             </select>
           </ClientDataRow>
-
           <ClientDataRow label="Descuento Aplicado">
             <div className="flex-1 flex items-center">
               <select className={cn(styles.select, "flex-1")}>
@@ -395,7 +377,6 @@ export default function ClientDataDisplay() {
               </div>
             </div>
           </ClientDataRow>
-
           <ClientDataRow label="Corte Automático">
             <div className="flex items-center gap-3">
               <span className="text-[10px] bg-green-100/80 text-green-700 px-2.5 py-0.5 rounded-full font-bold shadow-sm border border-green-200">
@@ -408,7 +389,6 @@ export default function ClientDataDisplay() {
               </div>
             </div>
           </ClientDataRow>
-
           <ClientDataRow label="Aplica Dscto.">
             <div className="flex items-center gap-6">
               <div className="flex items-center gap-2">
