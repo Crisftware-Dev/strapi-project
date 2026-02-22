@@ -23,9 +23,11 @@ export const ClientDataRow: React.FC<ClientDataRowProps> = ({
         className,
       )}
     >
-      <div className="w-32 px-3 py-1.5 text-[11px] font-semibold text-indigo-900/70 dark:text-indigo-300/70 flex items-center bg-indigo-50/50 dark:bg-indigo-950/30 border-r border-indigo-100 dark:border-indigo-900/30 shrink-0 uppercase tracking-wide">
-        {label}
-      </div>
+      {label && label.trim() !== "" && (
+        <div className="w-32 px-3 py-1.5 text-[11px] font-semibold text-indigo-900/70 dark:text-indigo-300/70 flex items-center bg-indigo-50/50 dark:bg-indigo-950/30 border-r border-indigo-100 dark:border-indigo-900/30 shrink-0 uppercase tracking-wide">
+          {label}
+        </div>
+      )}
       <div className="flex-1 px-3 py-1.5 flex items-center relative text-xs">
         {children ? (
           children
