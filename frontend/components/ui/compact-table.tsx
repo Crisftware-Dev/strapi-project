@@ -77,7 +77,7 @@ export function TableSearchHeader({
 
 export function Headers({ headers }: { headers: React.ReactNode[] }) {
   return (
-    <div className="w-1/2 flex items-center">
+    <div className="w-full flex items-center">
       {headers.map((header, index) => (
         <div
           key={index}

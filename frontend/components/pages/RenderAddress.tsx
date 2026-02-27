@@ -7,8 +7,8 @@ import { cn } from "@/lib/utils";
 import { Input } from "../ui/input";
 import Select from "../ui/select";
 import StarRating from "../ui/stars";
-import { CompactTable, Headers } from "../ui/compact-table";
-import { Rows } from "lucide-react";
+import { CompactTable } from "../ui/compact-table";
+import FormFamily from "../ui/formFamily";
 
 export default function RenderAddress() {
   const { selectedClientId } = useClientContext();
@@ -39,7 +39,7 @@ export default function RenderAddress() {
   return (
     <article className={styles.container} key={selectedClientId}>
       <main className={styles.mainGrid}>
-        <section className={cn(styles.leftColumn, "w-2/4")}>
+        <section className={cn(styles.leftColumn, "w-3/5")}>
           <ClientDataRow label="Fecha de instalación">
             <p className={styles.select}>11-01-2026</p>
           </ClientDataRow>
@@ -89,19 +89,39 @@ export default function RenderAddress() {
             </span>
           </ClientDataRow>
           <ClientDataRow label="Referencias">
-            <CompactTable >
-              <Headers headers={["Cédula", "Nombre", "Teléfono", "Dirección"]} />
-              <Rows
-                rows={[
-                  {
-                    
-                  }
-                ]}
-              />
+            <CompactTable>
+              <section
+                className={cn(
+                  "w-full flex flex-col bg-indigo-50/20 dark:bg-indigo-900/10 border-b border-indigo-100 dark:border-indigo-900/30",
+                )}
+              >
+                <FormFamily />
+              </section>
             </CompactTable>
           </ClientDataRow>
+          <ClientDataRow label="Observación">
+            <Input
+              type="text"
+              className={styles.input}
+              value={""}
+            />
+          </ClientDataRow>
+          <ClientDataRow label="Vendido por:">
+            <Input
+              type="text"
+              className={styles.input}
+              value={""}
+            />
+          </ClientDataRow>
+          <ClientDataRow label="Instalador Asignado">
+            <Input
+              type="text"
+              className={styles.input}
+              value={""}
+            />
+          </ClientDataRow>
         </section>
-        <section className={cn(styles.rightColumn, "w-2/4")}>
+        <section className={cn(styles.rightColumn, "w-2/5")}>
           <ClientDataRow label="Fecha de creación">
             <p className={styles.select}>10-01-2026</p>
           </ClientDataRow>
