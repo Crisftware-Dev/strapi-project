@@ -1,6 +1,6 @@
 export const styles = {
   container:
-    "w-full bg-white dark:bg-gray-950 text-xs shadow-sm border border-indigo-100 dark:border-indigo-900/30 rounded-lg overflow-hidden",
+    "w-full h-auto bg-white dark:bg-gray-950 text-xs shadow-sm border border-indigo-100 dark:border-indigo-900/30 rounded-lg overflow-x-hidden",
   mainGrid: "w-full flex gap-0",
   leftColumn: "border-r border-indigo-300 dark:border-indigo-900/30",
   rightColumn: "bg-gray-50/50 dark:bg-gray-900/20",

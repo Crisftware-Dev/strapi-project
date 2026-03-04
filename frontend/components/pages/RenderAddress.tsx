@@ -9,6 +9,8 @@ import Select from "../ui/select";
 import StarRating from "../ui/stars";
 import { CompactTable } from "../ui/compact-table";
 import FormFamily from "../ui/formFamily";
+import { DataToggle } from "../ui/client-data-fields";
+import { useState } from "react";
 
 export default function RenderAddress() {
   const { selectedClientId } = useClientContext();
@@ -18,9 +20,23 @@ export default function RenderAddress() {
     error,
   } = useClientById(selectedClientId || "");
 
+  const [toggles, setToggles] = useState({
+    clienteRelacionado: false,
+    buroCrediticio: true,
+    descartarBuro: false,
+    poseeDuctos: false,
+  });
+
+  const handleToggle = (key: keyof typeof toggles) => {
+    setToggles((prev) => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
+  };
+
   if (!selectedClientId) {
     return (
-      <div className="flex flex-col items-center justify-center h-full min-h-[600px] text-gray-400 dark:text-gray-600">
+      <div className="flex flex-col items-center justify-center h-full min-h-150 text-gray-400 dark:text-gray-600">
         <UserI className="text-6xl mb-4 opacity-20" />
         <p className="text-sm">Seleccione un cliente para ver su información</p>
       </div>
@@ -100,28 +116,13 @@ export default function RenderAddress() {
             </CompactTable>
           </ClientDataRow>
           <ClientDataRow label="Observación">
-            <Input
-              type="text"
-              className={styles.input}
-              value={""}
-              readOnly
-            />
+            <Input type="text" className={styles.input} value={""} readOnly />
           </ClientDataRow>
           <ClientDataRow label="Vendido por:">
-            <Input
-              type="text"
-              className={styles.input}
-              value={""}
-              readOnly
-            />
+            <Input type="text" className={styles.input} value={""} readOnly />
           </ClientDataRow>
           <ClientDataRow label="Instalador Asignado">
-            <Input
-              type="text"
-              className={styles.input}
-              value={""}
-              readOnly
-            />
+            <Input type="text" className={styles.input} value={""} readOnly />
           </ClientDataRow>
         </section>
         <section className={cn(styles.rightColumn, "w-2/5")}>
@@ -130,6 +131,63 @@ export default function RenderAddress() {
           </ClientDataRow>
           <ClientDataRow label="Fecha de Terminado">
             <p className={styles.select}>00-00-0000</p>
+          </ClientDataRow>
+          <ClientDataRow label="" />
+          <ClientDataRow label="Sector">
+            <Input
+              type="text"
+              className={styles.input}
+              value={client.ciudad}
+              readOnly
+            />
+          </ClientDataRow>
+          <ClientDataRow label="Ubicación GPS">
+            <Input
+              type="text"
+              className={styles.input}
+              value="0.00000, 79.11111"
+              readOnly
+            />
+          </ClientDataRow>
+          <ClientDataRow label="" />
+          <ClientDataRow label="Actividad Económica">
+            <Input
+              type="text"
+              className={styles.input}
+              value="TRABAJADOR"
+              readOnly
+            />
+          </ClientDataRow>
+          <ClientDataRow label="Extensión">
+            <Input type="text" className={styles.input} value="" readOnly />
+          </ClientDataRow>
+          <ClientDataRow label="" />
+          <DataToggle
+            label="Cliente Relacionado"
+            onToggle={() => handleToggle("clienteRelacionado")}
+            isOn={toggles.clienteRelacionado}
+          />
+          <DataToggle
+            label="A buró crediticio"
+            onToggle={() => handleToggle("buroCrediticio")}
+            isOn={toggles.buroCrediticio}
+          />
+          <DataToggle
+            label="Descartar Buro"
+            onToggle={() => handleToggle("descartarBuro")}
+            isOn={toggles.descartarBuro}
+          />
+          <ClientDataRow label="" />
+          <ClientDataRow label="Pisos de la Edificación">
+            <Input type="text" className={styles.input} value={1} readOnly />
+          </ClientDataRow>
+          <DataToggle
+            label="Posee Ductos"
+            onToggle={() => handleToggle("poseeDuctos")}
+            isOn={toggles.poseeDuctos}
+          />
+          <ClientDataRow label="Ejecutivo de Cuenta:">
+            <Input type="text" className={styles.input} value={""} readOnly />
           </ClientDataRow>
         </section>
       </main>
