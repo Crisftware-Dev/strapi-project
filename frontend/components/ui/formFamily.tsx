@@ -64,7 +64,7 @@ export default function FormFamily() {
   };
 
   const eliminarFila = (index: number) => {
-    if (familiares.length <= 1) return; // mínimo 1 fila (opcional)
+    if (familiares.length <= 1) return;
     setFamiliares((prev) => prev.filter((_, i) => i !== index));
   };
 

@@ -1,0 +1,40 @@
+{
+  "kind": "collectionType",
+  "collectionName": "plans",
+  "info": {
+    "singularName": "plan",
+    "pluralName": "plans",
+    "displayName": "plan"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "type": {
+      "type": "string",
+      "private": true,
+      "required": true
+    },
+    "plan": {
+      "type": "string",
+      "required": true
+    },
+    "cut": {
+      "type": "integer",
+      "required": true,
+      "default": 0,
+      "unique": false
+    },
+    "valor": {
+      "type": "decimal",
+      "required": true
+    },
+    "descuento": {
+      "type": "decimal"
+    },
+    "meses": {
+      "type": "integer"
+    }
+  }
+}
