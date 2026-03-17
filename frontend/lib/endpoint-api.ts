@@ -57,3 +57,23 @@ export async function fetchPlans() {
     return { data: [] };
   }
 }
+
+export async function updateClientById(
+  documentId: string,
+  data: Partial<Omit<Client, "documentId">>
+): Promise<{ data: Client }> {
+  try {
+    const response = await strapiJson<{
+      data: Client;
+      meta: Record<string, unknown>;
+    }>(`/api/clientes/${documentId}`, {
+      method: "PUT",
+      body: JSON.stringify({ data }),
+    });
+
+    return { data: response.data };
+  } catch (error) {
+    console.error("Error updating client by ID:", error);
+    throw new Error("Error updating client by ID");
+  }
+}
