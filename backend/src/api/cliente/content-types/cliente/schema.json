@@ -45,6 +45,11 @@
     },
     "valores": {
       "type": "decimal"
+    },
+    "plans": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::plan.plan"
     }
   }
 }

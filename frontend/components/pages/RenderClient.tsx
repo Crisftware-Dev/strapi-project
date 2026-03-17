@@ -1,8 +1,8 @@
 "use client";
 
-import { useClientContext } from "@/contexts/client-context";
+import { useClientContext, EditableClientData } from "@/contexts/client-context";
 import { useClientById } from "@/hooks/useClientById";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { SearchI, UserI } from "@/components/icons/Icons";
 import { ClientDataRow } from "@/components/ui/client-data-row";
 import { cn } from "@/lib/utils";
@@ -29,12 +29,19 @@ import { Plan } from "@/types/typeClients";
 import { SearchPlans } from "../ui/searchParams";
 
 export default function RenderClient() {
-  const { selectedClientId } = useClientContext();
+  const { selectedClientId, isEditing, formData, setFormData } = useClientContext();
   const {
     data: client,
     isLoading,
     error,
   } = useClientById(selectedClientId || "");
+
+  const handleField = useCallback(
+    (field: keyof EditableClientData, value: string | number) => {
+      setFormData((prev) => ({ ...prev, [field]: value }));
+    },
+    [setFormData],
+  );
 
   const [toggles, setToggles] = useState({
     corteAutomatico: false,
@@ -122,7 +129,11 @@ export default function RenderClient() {
             </div>
             <Separator />
             <div className="flex w-md gap-2">
-              <Select defaultValue={client.estado}>
+              <Select
+                value={isEditing ? formData.estado : client.estado}
+                disabled={!isEditing}
+                onChange={(e) => handleField("estado", e.target.value)}
+              >
                 <option value="PROSPECTO">PROSPECTO</option>
                 <option value="ACTIVO" className="text-green-500">
                   ACTIVO
@@ -143,9 +154,9 @@ export default function RenderClient() {
           <ClientDataRow label="Identificación">
             <div className="flex gap-2 w-full items-center">
               <Select className="w-auto text-xs border-r dark:border-indigo-900/30 font-medium">
-                {client.identificacion.length === 10 ? (
+                {(isEditing ? formData.identificacion : client.identificacion)?.length === 10 ? (
                   <option>CEDULA</option>
-                ) : client.identificacion.length === 13 ? (
+                ) : (isEditing ? formData.identificacion : client.identificacion)?.length === 13 ? (
                   <option>RUC</option>
                 ) : (
                   <option>PASAPORTE</option>
@@ -154,9 +165,14 @@ export default function RenderClient() {
               <Input
                 type="text"
                 className={cn(styles.input, "font-mono font-medium")}
-                value={client.identificacion}
-                readOnly
+                value={isEditing ? formData.identificacion ?? "" : client.identificacion}
+                readOnly={!isEditing}
+                maxLength={13}
+                onChange={(e) => handleField("identificacion", e.target.value)}
               />
+              {isEditing && formData.identificacion && ![8, 10, 13].includes(formData.identificacion.length) && (
+                <span className="text-[10px] text-amber-600 whitespace-nowrap">⚠ 8, 10 o 13 caracteres</span>
+              )}
             </div>
           </ClientDataRow>
 
@@ -164,22 +180,24 @@ export default function RenderClient() {
 
           <DataInput
             label="Cédula Rep.Legal"
-            value={client.identificacion}
+            value={isEditing ? formData.identificacion ?? "" : client.identificacion}
             readOnly
           />
 
           <DataInput
             label="Apellidos"
-            value={client.apellidos}
-            readOnly
+            value={isEditing ? formData.apellidos ?? "" : client.apellidos}
+            readOnly={!isEditing}
             className="uppercase font-medium"
+            onChange={(e) => handleField("apellidos", e.target.value)}
           />
 
           <DataInput
             label="Nombres"
-            value={client.nombres}
-            readOnly
+            value={isEditing ? formData.nombres ?? "" : client.nombres}
+            readOnly={!isEditing}
             className="uppercase font-medium"
+            onChange={(e) => handleField("nombres", e.target.value)}
           />
 
           <ClientDataRow label="Contacto">
@@ -189,8 +207,9 @@ export default function RenderClient() {
                 <Input
                   type="text"
                   className={cn(styles.input, "font-mono")}
-                  value={"0" + client.telefono.toString()}
-                  readOnly
+                  value={isEditing ? (formData.telefono?.toString() ?? "") : ("0" + client.telefono.toString())}
+                  readOnly={!isEditing}
+                  onChange={(e) => handleField("telefono", Number(e.target.value) || 0)}
                 />
               </div>
 
@@ -214,13 +233,19 @@ export default function RenderClient() {
             </section>
           </ClientDataRow>
 
-          <DataInput label="Email" value={client.email} readOnly />
+          <DataInput
+            label="Email"
+            value={isEditing ? formData.email ?? "" : client.email}
+            readOnly={!isEditing}
+            onChange={(e) => handleField("email", e.target.value)}
+          />
 
           <DataInput
             label="Dirección Fac."
             className="uppercase"
-            value={`${client.ciudad} - DIRECCION REFERENCIAL`}
-            readOnly
+            value={isEditing ? formData.ciudad ?? "" : `${client.ciudad} - DIRECCION REFERENCIAL`}
+            readOnly={!isEditing}
+            onChange={(e) => handleField("ciudad", e.target.value)}
           />
 
           <ClientDataRow label="Fecha Nacimiento">

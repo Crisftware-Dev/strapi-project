@@ -1,4 +1,4 @@
-import { useClientContext } from "@/contexts/client-context";
+import { useClientContext, EditableClientData } from "@/contexts/client-context";
 import { useClientById } from "@/hooks/useClientById";
 import { UserI } from "../icons/Icons";
 import { styles } from "@/app/styles/styles";
@@ -10,10 +10,10 @@ import StarRating from "../ui/stars";
 import { CompactTable } from "../ui/compact-table";
 import FormFamily from "../ui/formFamily";
 import { DataToggle } from "../ui/client-data-fields";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 
 export default function RenderAddress() {
-  const { selectedClientId } = useClientContext();
+  const { selectedClientId, isEditing, formData, setFormData } = useClientContext();
   const {
     data: client,
     isLoading,
@@ -33,6 +33,13 @@ export default function RenderAddress() {
       [key]: !prev[key],
     }));
   };
+
+  const handleField = useCallback(
+    (field: keyof EditableClientData, value: string | number) => {
+      setFormData((prev) => ({ ...prev, [field]: value }));
+    },
+    [setFormData],
+  );
 
   if (!selectedClientId) {
     return (
@@ -72,16 +79,18 @@ export default function RenderAddress() {
             <Input
               type="text"
               className={styles.input}
-              value={client.ciudad}
-              readOnly
+              value={isEditing ? formData.ciudad ?? "" : client.ciudad}
+              readOnly={!isEditing}
+              onChange={(e) => handleField("ciudad", e.target.value)}
             />
           </ClientDataRow>
           <ClientDataRow label="Dirección de Trabajo">
             <Input
               type="text"
               className={styles.input}
-              value={client.ciudad}
-              readOnly
+              value={isEditing ? formData.ciudad ?? "" : client.ciudad}
+              readOnly={!isEditing}
+              onChange={(e) => handleField("ciudad", e.target.value)}
             />
           </ClientDataRow>
           <ClientDataRow label="La vivienda es_">
@@ -137,8 +146,9 @@ export default function RenderAddress() {
             <Input
               type="text"
               className={styles.input}
-              value={client.ciudad}
-              readOnly
+              value={isEditing ? formData.ciudad ?? "" : client.ciudad}
+              readOnly={!isEditing}
+              onChange={(e) => handleField("ciudad", e.target.value)}
             />
           </ClientDataRow>
           <ClientDataRow label="Ubicación GPS">

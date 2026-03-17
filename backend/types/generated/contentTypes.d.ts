@@ -463,6 +463,7 @@ export interface ApiClienteCliente extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Private;
     nombres: Schema.Attribute.String;
+    plans: Schema.Attribute.Relation<'oneToMany', 'api::plan.plan'>;
     publishedAt: Schema.Attribute.DateTime;
     telefono: Schema.Attribute.BigInteger;
     updatedAt: Schema.Attribute.DateTime;
@@ -513,6 +514,7 @@ export interface ApiPlanPlan extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
+    clientes: Schema.Attribute.Relation<'oneToMany', 'api::cliente.cliente'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;

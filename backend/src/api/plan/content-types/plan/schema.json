@@ -11,11 +11,11 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "type": {
+    "plan": {
       "type": "string",
       "required": true
     },
-    "plan": {
+    "type": {
       "type": "string",
       "required": true
     },
@@ -34,6 +34,11 @@
     },
     "meses": {
       "type": "integer"
+    },
+    "clientes": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::cliente.cliente"
     }
   }
 }
