@@ -466,6 +466,7 @@ export interface ApiClienteCliente extends Struct.CollectionTypeSchema {
     plans: Schema.Attribute.Relation<'oneToMany', 'api::plan.plan'>;
     publishedAt: Schema.Attribute.DateTime;
     telefono: Schema.Attribute.BigInteger;
+    tipoCliente: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;

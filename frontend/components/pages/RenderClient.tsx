@@ -1,6 +1,9 @@
 "use client";
 
-import { useClientContext, EditableClientData } from "@/contexts/client-context";
+import {
+  useClientContext,
+  EditableClientData,
+} from "@/contexts/client-context";
 import { useClientById } from "@/hooks/useClientById";
 import { useState, useCallback } from "react";
 import { SearchI, UserI } from "@/components/icons/Icons";
@@ -29,7 +32,8 @@ import { Plan } from "@/types/typeClients";
 import { SearchPlans } from "../ui/searchParams";
 
 export default function RenderClient() {
-  const { selectedClientId, isEditing, formData, setFormData } = useClientContext();
+  const { selectedClientId, isEditing, formData, setFormData } =
+    useClientContext();
   const {
     data: client,
     isLoading,
@@ -52,7 +56,6 @@ export default function RenderClient() {
     principal: false,
   });
 
-  const [addedPlans, setAddedPlans] = useState<Plan[]>([]);
   const [selectedMedia, setSelectedMedia] = useState("FIBRA ÓPTICA");
   const [searchPlan, setSearchPlan] = useState("");
   const [plansResults, setPlansResults] = useState<Plan[]>([]);
@@ -79,15 +82,27 @@ export default function RenderClient() {
         return plan.plan.toLowerCase().includes(search);
       }
     });
-    
+
     setPlansResults(filtered);
   };
 
-  const handleSelectPlan = (plan: Plan) => {
-    setAddedPlans((prev) => [...prev, plan]);
+  const handleAddPlan = (plan: Plan) => {
+    if (!isEditing) return;
+    setFormData((prev) => {
+      const current = prev.plans || client?.plans || [];
+      return { ...prev, plans: [...current, plan] };
+    });
     setSearchPlan("");
     setPlansResults([]);
     setIsFetchEnabled(false);
+  };
+
+  const handleRemovePlan = (index: number) => {
+    if (!isEditing) return;
+    setFormData((prev) => {
+      const current = prev.plans || client?.plans || [];
+      return { ...prev, plans: current.filter((_, i) => i !== index) };
+    });
   };
 
   const handleToggle = (key: keyof typeof toggles) => {
@@ -154,9 +169,13 @@ export default function RenderClient() {
           <ClientDataRow label="Identificación">
             <div className="flex gap-2 w-full items-center">
               <Select className="w-auto text-xs border-r dark:border-indigo-900/30 font-medium">
-                {(isEditing ? formData.identificacion : client.identificacion)?.length === 10 ? (
+                {(isEditing ? formData.identificacion : client.identificacion)
+                  ?.length === 10 ? (
                   <option>CEDULA</option>
-                ) : (isEditing ? formData.identificacion : client.identificacion)?.length === 13 ? (
+                ) : (isEditing
+                    ? formData.identificacion
+                    : client.identificacion
+                  )?.length === 13 ? (
                   <option>RUC</option>
                 ) : (
                   <option>PASAPORTE</option>
@@ -165,14 +184,22 @@ export default function RenderClient() {
               <Input
                 type="text"
                 className={cn(styles.input, "font-mono font-medium")}
-                value={isEditing ? formData.identificacion ?? "" : client.identificacion}
+                value={
+                  isEditing
+                    ? (formData.identificacion ?? "")
+                    : client.identificacion
+                }
                 readOnly={!isEditing}
                 maxLength={13}
                 onChange={(e) => handleField("identificacion", e.target.value)}
               />
-              {isEditing && formData.identificacion && ![8, 10, 13].includes(formData.identificacion.length) && (
-                <span className="text-[10px] text-amber-600 whitespace-nowrap">⚠ 8, 10 o 13 caracteres</span>
-              )}
+              {isEditing &&
+                formData.identificacion &&
+                ![8, 10, 13].includes(formData.identificacion.length) && (
+                  <span className="text-[10px] text-amber-600 whitespace-nowrap">
+                    ⚠ 8, 10 o 13 caracteres
+                  </span>
+                )}
             </div>
           </ClientDataRow>
 
@@ -180,13 +207,17 @@ export default function RenderClient() {
 
           <DataInput
             label="Cédula Rep.Legal"
-            value={isEditing ? formData.identificacion ?? "" : client.identificacion}
+            value={
+              isEditing
+                ? (formData.identificacion ?? "")
+                : client.identificacion
+            }
             readOnly
           />
 
           <DataInput
             label="Apellidos"
-            value={isEditing ? formData.apellidos ?? "" : client.apellidos}
+            value={isEditing ? (formData.apellidos ?? "") : client.apellidos}
             readOnly={!isEditing}
             className="uppercase font-medium"
             onChange={(e) => handleField("apellidos", e.target.value)}
@@ -194,7 +225,7 @@ export default function RenderClient() {
 
           <DataInput
             label="Nombres"
-            value={isEditing ? formData.nombres ?? "" : client.nombres}
+            value={isEditing ? (formData.nombres ?? "") : client.nombres}
             readOnly={!isEditing}
             className="uppercase font-medium"
             onChange={(e) => handleField("nombres", e.target.value)}
@@ -207,9 +238,15 @@ export default function RenderClient() {
                 <Input
                   type="text"
                   className={cn(styles.input, "font-mono")}
-                  value={isEditing ? (formData.telefono?.toString() ?? "") : ("0" + client.telefono.toString())}
+                  value={
+                    isEditing
+                      ? (formData.telefono?.toString() ?? "")
+                      : "0" + client.telefono.toString()
+                  }
                   readOnly={!isEditing}
-                  onChange={(e) => handleField("telefono", Number(e.target.value) || 0)}
+                  onChange={(e) =>
+                    handleField("telefono", Number(e.target.value) || 0)
+                  }
                 />
               </div>
 
@@ -235,7 +272,7 @@ export default function RenderClient() {
 
           <DataInput
             label="Email"
-            value={isEditing ? formData.email ?? "" : client.email}
+            value={isEditing ? (formData.email ?? "") : client.email}
             readOnly={!isEditing}
             onChange={(e) => handleField("email", e.target.value)}
           />
@@ -243,7 +280,11 @@ export default function RenderClient() {
           <DataInput
             label="Dirección Fac."
             className="uppercase"
-            value={isEditing ? formData.ciudad ?? "" : `${client.ciudad} - DIRECCION REFERENCIAL`}
+            value={
+              isEditing
+                ? (formData.ciudad ?? "")
+                : `${client.ciudad} - DIRECCION REFERENCIAL`
+            }
             readOnly={!isEditing}
             onChange={(e) => handleField("ciudad", e.target.value)}
           />
@@ -283,13 +324,15 @@ export default function RenderClient() {
                   id="planes"
                   placeholder="Busque aquí el plan"
                   value={searchPlan}
-                  onChange={(e) => handlePlansSearch(e.target.value)}
-                  onFocus={() => setIsFetchEnabled(true)}
+                  onChange={(e) =>
+                    isEditing && handlePlansSearch(e.target.value)
+                  }
+                  onFocus={() => isEditing && setIsFetchEnabled(true)}
                   className="col-span-1"
                 >
                   <SearchPlans
                     plansResults={plansResults}
-                    handleSelectPlan={handleSelectPlan}
+                    handleAddPlan={handleAddPlan}
                   />
                   + Añadir (Principal)
                 </TableSearchHeader>
@@ -306,10 +349,16 @@ export default function RenderClient() {
                 </div>
               </div>
 
-              {addedPlans.length > 0 ? (
-                addedPlans.map((plan, index) => (
+              {(isEditing
+                ? formData.plans || client.plans || []
+                : client.plans || []
+              )?.length > 0 ? (
+                (isEditing
+                  ? formData.plans || client.plans || []
+                  : client.plans || []
+                ).map((plan, index) => (
                   <PaymentRow
-                    key={`${plan.documentId}-${index}`}
+                    key={`${plan.documentId || "new"}-${index}`}
                     cells={[
                       `${plan.plan} - corte ${plan.cut}`,
                       plan.valor?.toString() || "0",
@@ -321,14 +370,21 @@ export default function RenderClient() {
                       />,
                       plan.descuento?.toString() || ".00",
                       plan.meses?.toString() || "0",
-                      <div key={`actions-${index}`} className="flex justify-center gap-2">
+                      <div
+                        key={`actions-${index}`}
+                        className="flex justify-center gap-2"
+                      >
                         <Button
-                          onClick={() => setAddedPlans((prev) => prev.filter((_, i) => i !== index))}
-                          className="px-1.5 py-0.5 text-xs bg-white text-red-600 hover:bg-red-50 border border-red-200 rounded"
+                          disabled={!isEditing}
+                          onClick={() => handleRemovePlan(index)}
+                          className="px-1.5 py-0.5 text-xs bg-white text-red-600 hover:bg-red-50 border border-red-200 rounded disabled:opacity-50"
                         >
                           Elim.
                         </Button>
-                        <Button className="px-1.5 py-0.5 text-xs bg-white text-indigo-600 hover:bg-indigo-50 border border-indigo-200 rounded">
+                        <Button
+                          disabled={!isEditing}
+                          className="px-1.5 py-0.5 text-xs bg-white text-indigo-600 hover:bg-indigo-50 border border-indigo-200 rounded disabled:opacity-50"
+                        >
                           $ Desc.
                         </Button>
                       </div>,
@@ -449,9 +505,14 @@ export default function RenderClient() {
           </div>
 
           <div className="border-t border-indigo-100 dark:border-indigo-900/30 bg-white dark:bg-gray-950">
-            <DataSelect label="Cliente" defaultValue="RESIDENCIAL">
-              <option>RESIDENCIAL</option>
-              <option>CORPORATIVO</option>
+            <DataSelect
+              label="Cliente"
+              value={isEditing ? formData.tipoCliente : client.tipoCliente}
+              disabled={!isEditing}
+              onChange={(e) => handleField("tipoCliente", e.target.value)}
+            >
+              <option value="RESIDENCIAL">RESIDENCIAL</option>
+              <option value="CORPORATIVO">CORPORATIVO</option>
             </DataSelect>
 
             <ClientDataRow label="Promoción" />

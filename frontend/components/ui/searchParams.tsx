@@ -12,7 +12,7 @@ interface SearchNamesProps {
 
 interface SearchPlansProps {
   plansResults: Plan[];
-  handleSelectPlan: (plan: Plan) => void;
+  handleAddPlan: (plan: Plan) => void;
 }
 
 export default function SearchNames({
@@ -74,7 +74,7 @@ export default function SearchNames({
 
 export function SearchPlans({
   plansResults,
-  handleSelectPlan,
+  handleAddPlan,
 }: SearchPlansProps) {
   return (
     <div className="absolute left-0 w-auto z-100 top-20">
@@ -83,7 +83,7 @@ export function SearchPlans({
         {plansResults.map((plan) => (
           <Li
             key={plan.documentId}
-            onClick={() => handleSelectPlan(plan)}
+            onClick={() => handleAddPlan(plan)}
             className="px-3 py-3 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 cursor-pointer transition-colors"
           >
             <div>

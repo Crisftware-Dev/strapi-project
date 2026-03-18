@@ -15,7 +15,7 @@ import {
 import SearchNames from "../ui/searchParams";
 
 export default function HeaderSearch() {
-  const { activeTab, setActiveTab, setSelectedClientId } = useClientContext();
+  const { activeTab, setActiveTab, trySelectClient } = useClientContext();
 
   const [identifierInput, setIdentifierInput] = useState("");
   const [nameInput, setNameInput] = useState("");
@@ -37,7 +37,7 @@ export default function HeaderSearch() {
     );
 
     if (client) {
-      setSelectedClientId(client.documentId);
+      trySelectClient(client.documentId);
       setIdentifierInput("");
       setShowError(false);
     } else {
@@ -53,7 +53,7 @@ export default function HeaderSearch() {
     );
 
     if (client) {
-      setSelectedClientId(client.documentId);
+      trySelectClient(client.documentId);
       setContratoInput("");
       setShowError(false);
     } else {
@@ -83,7 +83,7 @@ export default function HeaderSearch() {
   };
 
   const handleClientSelect = (client: Client) => {
-    setSelectedClientId(client.documentId);
+    trySelectClient(client.documentId);
     setNameInput("");
     setNameResults([]);
     setShowError(false);

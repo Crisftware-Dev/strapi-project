@@ -50,6 +50,9 @@
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::plan.plan"
+    },
+    "tipoCliente": {
+      "type": "string"
     }
   }
 }

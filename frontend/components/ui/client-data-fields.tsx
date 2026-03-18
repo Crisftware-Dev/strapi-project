@@ -26,10 +26,10 @@ export const DataInput: React.FC<
 
 export const DataSelect: React.FC<
   DataFieldProps & React.SelectHTMLAttributes<HTMLSelectElement>
-> = ({ label, children, rowClassName, className, ...props }) => (
+> = ({ label, rowClassName, className, ...props }) => (
   <ClientDataRow label={label} className={rowClassName}>
     <Select className={className} {...props}>
-      {children}
+      {props.children}
     </Select>
   </ClientDataRow>
 );
