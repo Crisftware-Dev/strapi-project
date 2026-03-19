@@ -20,7 +20,12 @@ export interface ComponentReferences extends Struct.ComponentSchema {
   info: {
     displayName: 'references';
   };
-  attributes: {};
+  attributes: {
+    fullnames: Schema.Attribute.String;
+    identificacion: Schema.Attribute.String;
+    phone: Schema.Attribute.BigInteger;
+    relationship: Schema.Attribute.String;
+  };
 }
 
 export interface LayoutHeroSection extends Struct.ComponentSchema {

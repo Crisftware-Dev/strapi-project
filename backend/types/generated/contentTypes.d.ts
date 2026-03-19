@@ -538,37 +538,6 @@ export interface ApiPlanPlan extends Struct.CollectionTypeSchema {
   };
 }
 
-export interface ApiReferenceReference extends Struct.CollectionTypeSchema {
-  collectionName: 'references';
-  info: {
-    displayName: 'reference';
-    pluralName: 'references';
-    singularName: 'reference';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    createdAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    fullnames: Schema.Attribute.String;
-    identificacion: Schema.Attribute.String;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
-    localizations: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::reference.reference'
-    > &
-      Schema.Attribute.Private;
-    phone: Schema.Attribute.BigInteger;
-    publishedAt: Schema.Attribute.DateTime;
-    relationship: Schema.Attribute.String;
-    updatedAt: Schema.Attribute.DateTime;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-  };
-}
-
 export interface PluginContentReleasesRelease
   extends Struct.CollectionTypeSchema {
   collectionName: 'strapi_releases';
@@ -1084,7 +1053,6 @@ declare module '@strapi/strapi' {
       'api::cliente.cliente': ApiClienteCliente;
       'api::home-page.home-page': ApiHomePageHomePage;
       'api::plan.plan': ApiPlanPlan;
-      'api::reference.reference': ApiReferenceReference;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;

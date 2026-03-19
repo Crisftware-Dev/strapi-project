@@ -6,13 +6,8 @@ import { useClientById } from "@/hooks/useClientById";
 import { useUpdateClient } from "@/hooks/useUpdateClient";
 
 export default function FooterControl() {
-  const {
-    selectedClientId,
-    isEditing,
-    setIsEditing,
-    formData,
-    resetFormData,
-  } = useClientContext();
+  const { selectedClientId, isEditing, setIsEditing, formData, resetFormData } =
+    useClientContext();
 
   const { data: client } = useClientById(selectedClientId || "");
   const updateClient = useUpdateClient();
@@ -78,22 +73,40 @@ export default function FooterControl() {
             </Button>
           </>
         )}
-        <Button variant={"outline"} className="border-indigo-200 text-indigo-700 hover:bg-indigo-50 dark:border-indigo-800 dark:text-indigo-400 dark:hover:bg-indigo-900/50">
+        <Button
+          variant={"outline"}
+          className="border-indigo-200 text-indigo-700 hover:bg-indigo-50 dark:border-indigo-800 dark:text-indigo-400 dark:hover:bg-indigo-900/50"
+        >
           Nuevo
         </Button>
-        <Button variant={"outline"} className="border-indigo-200 text-indigo-700 hover:bg-indigo-50 dark:border-indigo-800 dark:text-indigo-400 dark:hover:bg-indigo-900/50">
+        <Button
+          variant={"outline"}
+          className="border-indigo-200 text-indigo-700 hover:bg-indigo-50 dark:border-indigo-800 dark:text-indigo-400 dark:hover:bg-indigo-900/50"
+        >
           + Añadir
         </Button>
-        <Button variant={"outline"} className="border-indigo-200 text-indigo-700 hover:bg-indigo-50 dark:border-indigo-800 dark:text-indigo-400 dark:hover:bg-indigo-900/50">
+        <Button
+          variant={"outline"}
+          className="border-indigo-200 text-indigo-700 hover:bg-indigo-50 dark:border-indigo-800 dark:text-indigo-400 dark:hover:bg-indigo-900/50"
+        >
           Liberar
         </Button>
-        <Button variant={"outline"} className="border-indigo-200 text-indigo-700 hover:bg-indigo-50 dark:border-indigo-800 dark:text-indigo-400 dark:hover:bg-indigo-900/50">
+        <Button
+          variant={"outline"}
+          className="border-indigo-200 text-indigo-700 hover:bg-indigo-50 dark:border-indigo-800 dark:text-indigo-400 dark:hover:bg-indigo-900/50"
+        >
           RE-ENVIAR PIN
         </Button>
-        <Button variant={"outline"} className="border-indigo-200 text-indigo-700 hover:bg-indigo-50 dark:border-indigo-800 dark:text-indigo-400 dark:hover:bg-indigo-900/50">
+        <Button
+          variant={"outline"}
+          className="border-indigo-200 text-indigo-700 hover:bg-indigo-50 dark:border-indigo-800 dark:text-indigo-400 dark:hover:bg-indigo-900/50"
+        >
           Hist de Planes
         </Button>
-        <Button variant={"outline"} className="border-indigo-200 text-indigo-700 hover:bg-indigo-50 dark:border-indigo-800 dark:text-indigo-400 dark:hover:bg-indigo-900/50">
+        <Button
+          variant={"outline"}
+          className="border-indigo-200 text-indigo-700 hover:bg-indigo-50 dark:border-indigo-800 dark:text-indigo-400 dark:hover:bg-indigo-900/50"
+        >
           Enviar Contrato
         </Button>
 
@@ -106,4 +119,3 @@ export default function FooterControl() {
     </footer>
   );
 }
-

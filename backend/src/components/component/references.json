@@ -4,6 +4,19 @@
     "displayName": "references"
   },
   "options": {},
-  "attributes": {},
+  "attributes": {
+    "identificacion": {
+      "type": "string"
+    },
+    "fullnames": {
+      "type": "string"
+    },
+    "relationship": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "biginteger"
+    }
+  },
   "config": {}
 }
