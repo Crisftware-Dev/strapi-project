@@ -1,3 +1,5 @@
+
+
 export interface Client {
   documentId: string;
     nombres: string;
@@ -11,6 +13,15 @@ export interface Client {
     valores: number;
     plans: Plan[];
     tipoCliente: string;
+    references: Reference[];
+}
+
+export interface Reference {
+  documentId: string;
+  identificacion: string;
+  fullnames: string;
+  relationship: string;
+  phone: number;
 }
 
 export interface User {

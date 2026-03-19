@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button } from "./button";
+import { Client } from "@/types/typeClients";
 
 interface Familiar {
   cedulaRuc: string;
@@ -30,7 +31,13 @@ const styles = {
   button: "text-red-600 hover:text-red-800 font-medium",
 };
 
-export default function FormFamily() {
+export default function FormFamily({
+  client,
+  isEditing,
+}: {
+  client: Client;
+  isEditing: boolean;
+}) {
   const [familiares, setFamiliares] = useState<Familiar[]>([
     {
       cedulaRuc: "",
@@ -77,79 +84,83 @@ export default function FormFamily() {
             <th className={`${styles.th} w-[42%]`}>Persona</th>
             <th className={`${styles.th} w-[22%]`}>Parentesco</th>
             <th className={`${styles.th} w-[16%]`}>Teléfono</th>
-            <th className={`${styles.th} w-[1%] text-center`}>
-              Acción
-            </th>
+            <th className={`${styles.th} w-[1%] text-center`}>Acción</th>
           </tr>
         </thead>
         <tbody className="bg-indigo-100/20">
-          {familiares.map((familiar, index) => (
-            <tr key={index} className="hover:bg-gray-50">
-              <td className={styles.td}>
-                <input
-                  type="text"
-                  value={familiar.cedulaRuc}
-                  onChange={(e) =>
-                    actualizarFamiliar(index, "cedulaRuc", e.target.value)
-                  }
-                  className={styles.input}
-                  placeholder="cédula/RUC"
-                />
-              </td>
-              <td className={styles.td}>
-                <input
-                  type="text"
-                  value={familiar.nombre}
-                  onChange={(e) =>
-                    actualizarFamiliar(
-                      index,
-                      "nombre",
-                      e.target.value.toUpperCase(),
-                    )
-                  }
-                  className={styles.input}
-                  placeholder="Nombre completo"
-                />
-              </td>
-              <td className={styles.td}>
-                <select
-                  value={familiar.parentesco}
-                  onChange={(e) =>
-                    actualizarFamiliar(index, "parentesco", e.target.value)
-                  }
-                  className={styles.select}
-                >
-                  <option value="">Seleccione...</option>
-                  {parentescos.map((p) => (
-                    <option key={p} value={p}>
-                      {p}
-                    </option>
-                  ))}
-                </select>
-              </td>
-              <td className={styles.td}>
-                <input
-                  type="tel"
-                  value={familiar.telefono}
-                  onChange={(e) =>
-                    actualizarFamiliar(index, "telefono", e.target.value)
-                  }
-                  className={styles.input}
-                  placeholder="Ej: 0991234567"
-                />
-              </td>
-              <td className={`${styles.td} text-center`}>
-                <Button
-                  type="button"
-                  onClick={() => eliminarFila(index)}
-                  className="bg-indigo-600 hover:bg-indigo-700 h-7 p-2 rounded-full"
-                  title="Eliminar fila"
-                >
-                  ×
-                </Button>
-              </td>
-            </tr>
-          ))}
+          {isEditing ? (
+            client.references.map((reference, index) => (
+              <tr key={index} className="hover:bg-gray-50">
+                <td className={styles.td}>
+                  <input
+                    type="text"
+                    value={reference.identificacion}
+                    onChange={(e) =>
+                      actualizarFamiliar(index, "cedulaRuc", e.target.value)
+                    }
+                    className={styles.input}
+                    placeholder="cédula/RUC"
+                  />
+                </td>
+                <td className={styles.td}>
+                  <input
+                    type="text"
+                    value={reference.fullnames}
+                    onChange={(e) =>
+                      actualizarFamiliar(
+                        index,
+                        "nombre",
+                        e.target.value.toUpperCase(),
+                      )
+                    }
+                    className={styles.input}
+                    placeholder="Nombre completo"
+                  />
+                </td>
+                <td className={styles.td}>
+                  <select
+                    value={reference.relationship}
+                    onChange={(e) =>
+                      actualizarFamiliar(index, "parentesco", e.target.value)
+                    }
+                    className={styles.select}
+                  >
+                    <option value="">Seleccione...</option>
+                    {parentescos.map((p) => (
+                      <option key={p} value={p}>
+                        {p}
+                      </option>
+                    ))}
+                  </select>
+                </td>
+                <td className={styles.td}>
+                  <input
+                    type="tel"
+                    value={reference.phone}
+                    onChange={(e) =>
+                      actualizarFamiliar(index, "telefono", e.target.value)
+                    }
+                    className={styles.input}
+                    placeholder="Ej: 0991234567"
+                  />
+                </td>
+                <td className={`${styles.td} text-center`}>
+                  <Button
+                    type="button"
+                    onClick={() => eliminarFila(index)}
+                    className="bg-indigo-600 hover:bg-indigo-700 h-7 p-2 rounded-full"
+                    title="Eliminar fila"
+                  >
+                    ×
+                  </Button>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <div className="p-1 text-left text-xs text-gray-500">
+              No hay referencias familiares.
+            </div>
+          )}
         </tbody>
       </table>
 

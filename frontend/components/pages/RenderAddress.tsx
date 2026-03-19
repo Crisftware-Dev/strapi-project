@@ -120,7 +120,7 @@ export default function RenderAddress() {
                   "w-full flex flex-col bg-indigo-50/20 dark:bg-indigo-900/10 border-b border-indigo-100 dark:border-indigo-900/30",
                 )}
               >
-                <FormFamily />
+                <FormFamily client={client} isEditing={isEditing}  />
               </section>
             </CompactTable>
           </ClientDataRow>
