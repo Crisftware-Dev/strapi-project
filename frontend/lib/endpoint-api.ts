@@ -67,11 +67,17 @@ export async function updateClientById(
     if (payload.plans) {
       payload.plans = payload.plans.map((plan) => plan.documentId) as unknown as Plan[];
     }
+    
+    if (payload.reference) {
+      payload.reference = payload.reference.filter(
+        (ref) => ref.identificacion?.trim() !== "" || ref.fullnames?.trim() !== ""
+      );
+    }
 
     const response = await strapiJson<{
       data: Client;
       meta: Record<string, unknown>;
-    }>(`/api/clientes/${documentId}`, {
+    }>(`/api/clientes/${documentId}?populate=*`, {
       method: "PUT",
       body: JSON.stringify({ data: payload }),
     });

@@ -1,4 +1,7 @@
-import { useClientContext, EditableClientData } from "@/contexts/client-context";
+import {
+  useClientContext,
+  EditableClientData,
+} from "@/contexts/client-context";
 import { useClientById } from "@/hooks/useClientById";
 import { UserI } from "../icons/Icons";
 import { styles } from "@/app/styles/styles";
@@ -11,14 +14,17 @@ import { CompactTable } from "../ui/compact-table";
 import FormFamily from "../ui/formFamily";
 import { DataToggle } from "../ui/client-data-fields";
 import { useState, useCallback } from "react";
+import { Reference } from "@/types/typeClients";
 
 export default function RenderAddress() {
-  const { selectedClientId, isEditing, formData, setFormData } = useClientContext();
+  const { selectedClientId, isEditing, formData, setFormData } =
+    useClientContext();
   const {
     data: client,
     isLoading,
     error,
   } = useClientById(selectedClientId || "");
+
 
   const [toggles, setToggles] = useState({
     clienteRelacionado: false,
@@ -40,6 +46,18 @@ export default function RenderAddress() {
     },
     [setFormData],
   );
+
+  const updateReference = (index: number, field: keyof Reference, value: string) => {
+    if (!isEditing) return;
+    setFormData((prev) => {
+      const current = [...(prev.reference || client?.reference || [])];
+      while (current.length <= index) {
+        current.push({ identificacion: "", fullnames: "", relationship: "", phone: 0 } as unknown as Reference);
+      }
+      current[index] = { ...current[index], [field]: value };
+      return { ...prev, reference: current };
+    });
+  };
 
   if (!selectedClientId) {
     return (
@@ -79,7 +97,7 @@ export default function RenderAddress() {
             <Input
               type="text"
               className={styles.input}
-              value={isEditing ? formData.ciudad ?? "" : client.ciudad}
+              value={isEditing ? (formData.ciudad ?? "") : client.ciudad}
               readOnly={!isEditing}
               onChange={(e) => handleField("ciudad", e.target.value)}
             />
@@ -88,7 +106,7 @@ export default function RenderAddress() {
             <Input
               type="text"
               className={styles.input}
-              value={isEditing ? formData.ciudad ?? "" : client.ciudad}
+              value={isEditing ? (formData.ciudad ?? "") : client.ciudad}
               readOnly={!isEditing}
               onChange={(e) => handleField("ciudad", e.target.value)}
             />
@@ -120,7 +138,7 @@ export default function RenderAddress() {
                   "w-full flex flex-col bg-indigo-50/20 dark:bg-indigo-900/10 border-b border-indigo-100 dark:border-indigo-900/30",
                 )}
               >
-                <FormFamily client={client} isEditing={isEditing}  />
+                <FormFamily references={isEditing ? (formData.reference || client?.reference || []) : (client?.reference || [])} isEditing={isEditing} updateReference={updateReference} />
               </section>
             </CompactTable>
           </ClientDataRow>
@@ -146,7 +164,7 @@ export default function RenderAddress() {
             <Input
               type="text"
               className={styles.input}
-              value={isEditing ? formData.ciudad ?? "" : client.ciudad}
+              value={isEditing ? (formData.ciudad ?? "") : client.ciudad}
               readOnly={!isEditing}
               onChange={(e) => handleField("ciudad", e.target.value)}
             />

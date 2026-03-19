@@ -46,6 +46,7 @@ export function ClientProvider({ children }: { children: ReactNode }) {
         valores: client.valores,
         plans: client.plans,
         tipoCliente: client.tipoCliente,
+        reference: client.reference,
       };
       setFormData(data);
       setOriginalData(data);

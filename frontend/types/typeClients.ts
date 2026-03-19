@@ -13,7 +13,7 @@ export interface Client {
     valores: number;
     plans: Plan[];
     tipoCliente: string;
-    references: Reference[];
+    reference: Reference[];
 }
 
 export interface Reference {

@@ -1,13 +1,4 @@
-import { useState } from "react";
-import { Button } from "./button";
-import { Client } from "@/types/typeClients";
-
-interface Familiar {
-  cedulaRuc: string;
-  nombre: string;
-  parentesco: string;
-  telefono: string;
-}
+import { Reference } from "@/types/typeClients";
 
 const parentescos = [
   "HIJO/A",
@@ -32,48 +23,18 @@ const styles = {
 };
 
 export default function FormFamily({
-  client,
+  references,
   isEditing,
+  updateReference,
 }: {
-  client: Client;
+  references: Reference[];
   isEditing: boolean;
-}) {
-  const [familiares, setFamiliares] = useState<Familiar[]>([
-    {
-      cedulaRuc: "",
-      nombre: "CRISTHIAN JAIR ZAMBRANO NUÑEZ",
-      parentesco: "HIJO/A",
-      telefono: "0999999999",
-    },
-    {
-      cedulaRuc: "",
-      nombre: "CRISTHIAN JAIR ZAMBRANO NUÑEZ",
-      parentesco: "HIJO/A",
-      telefono: "0999999999",
-    },
-  ]);
-
-  const agregarFila = () => {
-    setFamiliares((prev) => [
-      ...prev,
-      { cedulaRuc: "", nombre: "", parentesco: "", telefono: "" },
-    ]);
-  };
-
-  const actualizarFamiliar = (
+  updateReference: (
     index: number,
-    campo: keyof Familiar,
-    valor: string,
-  ) => {
-    setFamiliares((prev) =>
-      prev.map((item, i) => (i === index ? { ...item, [campo]: valor } : item)),
-    );
-  };
-
-  const eliminarFila = (index: number) => {
-    if (familiares.length <= 1) return;
-    setFamiliares((prev) => prev.filter((_, i) => i !== index));
-  };
+    field: keyof Reference,
+    value: string,
+  ) => void;
+}) {
 
   return (
     <div className={styles.container}>
@@ -88,15 +49,23 @@ export default function FormFamily({
           </tr>
         </thead>
         <tbody className="bg-indigo-100/20">
-          {isEditing ? (
-            client.references.map((reference, index) => (
+          {[0, 1, 2].map((index) => {
+            const reference = references?.[index] || {
+              identificacion: "",
+              fullnames: "",
+              relationship: "",
+              phone: 0,
+            };
+
+            return (
               <tr key={index} className="hover:bg-gray-50">
                 <td className={styles.td}>
                   <input
                     type="text"
-                    value={reference.identificacion}
+                    readOnly={!isEditing}
+                    value={reference.identificacion || ""}
                     onChange={(e) =>
-                      actualizarFamiliar(index, "cedulaRuc", e.target.value)
+                      updateReference(index, "identificacion", e.target.value)
                     }
                     className={styles.input}
                     placeholder="cédula/RUC"
@@ -105,11 +74,12 @@ export default function FormFamily({
                 <td className={styles.td}>
                   <input
                     type="text"
-                    value={reference.fullnames}
+                    readOnly={!isEditing}
+                    value={reference.fullnames || ""}
                     onChange={(e) =>
-                      actualizarFamiliar(
+                      updateReference(
                         index,
-                        "nombre",
+                        "fullnames",
                         e.target.value.toUpperCase(),
                       )
                     }
@@ -119,9 +89,10 @@ export default function FormFamily({
                 </td>
                 <td className={styles.td}>
                   <select
-                    value={reference.relationship}
+                    value={reference.relationship || ""}
+                    disabled={!isEditing}
                     onChange={(e) =>
-                      actualizarFamiliar(index, "parentesco", e.target.value)
+                      updateReference(index, "relationship", e.target.value)
                     }
                     className={styles.select}
                   >
@@ -136,39 +107,20 @@ export default function FormFamily({
                 <td className={styles.td}>
                   <input
                     type="tel"
-                    value={reference.phone}
+                    readOnly={!isEditing}
+                    value={reference.phone || ""}
                     onChange={(e) =>
-                      actualizarFamiliar(index, "telefono", e.target.value)
+                      updateReference(index, "phone", e.target.value)
                     }
                     className={styles.input}
                     placeholder="Ej: 0991234567"
                   />
                 </td>
-                <td className={`${styles.td} text-center`}>
-                  <Button
-                    type="button"
-                    onClick={() => eliminarFila(index)}
-                    className="bg-indigo-600 hover:bg-indigo-700 h-7 p-2 rounded-full"
-                    title="Eliminar fila"
-                  >
-                    ×
-                  </Button>
-                </td>
               </tr>
-            ))
-          ) : (
-            <div className="p-1 text-left text-xs text-gray-500">
-              No hay referencias familiares.
-            </div>
-          )}
+            );
+          })}
         </tbody>
       </table>
-
-      <div className="mt-3 flex justify-start">
-        <button type="button" onClick={agregarFila} className={styles.button}>
-          + Agregar familiar
-        </button>
-      </div>
     </div>
   );
 }
