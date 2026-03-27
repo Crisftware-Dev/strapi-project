@@ -61,6 +61,13 @@
       "type": "component",
       "component": "component.references",
       "repeatable": true
+    },
+    "currentAge": {
+      "type": "date"
+    },
+    "planPrincipal": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

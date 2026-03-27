@@ -447,6 +447,7 @@ export interface ApiClienteCliente extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    currentAge: Schema.Attribute.Date;
     email: Schema.Attribute.Email;
     estado: Schema.Attribute.Enumeration<
       ['ACTIVO', 'CORTADO', 'SUSPENDIDO', 'TERMINADO']
@@ -463,6 +464,7 @@ export interface ApiClienteCliente extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Private;
     nombres: Schema.Attribute.String;
+    planPrincipal: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     plans: Schema.Attribute.Relation<'oneToMany', 'api::plan.plan'>;
     publishedAt: Schema.Attribute.DateTime;
     reference: Schema.Attribute.Component<'component.references', true>;
