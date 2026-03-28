@@ -15,6 +15,13 @@ export interface Client {
   planPrincipal: boolean;
   tipoCliente: string;
   reference: Reference[];
+  automaticCut: boolean;
+  discountLaw: DiscountLaw;
+}
+
+export interface DiscountLaw {
+  disability: boolean;
+  oldAge: boolean;
 }
 
 export interface Reference {

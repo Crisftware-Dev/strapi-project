@@ -78,6 +78,8 @@ export function ClientProvider({ children }: { children: ReactNode }) {
         planPrincipal: Boolean(client.planPrincipal),
         tipoCliente: client.tipoCliente,
         reference: client.reference,
+        automaticCut: client.automaticCut,
+        discountLaw: client.discountLaw,
       };
       setFormData(data);
       setOriginalData(data);
