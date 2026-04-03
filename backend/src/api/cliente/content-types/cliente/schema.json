@@ -76,6 +76,15 @@
     "discountLaw": {
       "type": "component",
       "component": "component.discount-law",
+      "repeatable": false
+    },
+    "withholdingAgent": {
+      "type": "boolean",
+      "default": false
+    },
+    "files": {
+      "type": "component",
+      "component": "component.file",
       "repeatable": true
     }
   }

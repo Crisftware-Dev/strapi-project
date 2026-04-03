@@ -449,11 +449,12 @@ export interface ApiClienteCliente extends Struct.CollectionTypeSchema {
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     currentAge: Schema.Attribute.Date;
-    discountLaw: Schema.Attribute.Component<'component.discount-law', true>;
+    discountLaw: Schema.Attribute.Component<'component.discount-law', false>;
     email: Schema.Attribute.Email;
     estado: Schema.Attribute.Enumeration<
       ['ACTIVO', 'CORTADO', 'SUSPENDIDO', 'TERMINADO']
     >;
+    files: Schema.Attribute.Component<'component.file', true>;
     identificacion: Schema.Attribute.String &
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 13;
@@ -477,6 +478,8 @@ export interface ApiClienteCliente extends Struct.CollectionTypeSchema {
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     valores: Schema.Attribute.Decimal;
+    withholdingAgent: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<false>;
   };
 }
 

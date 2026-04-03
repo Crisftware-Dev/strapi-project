@@ -11,6 +11,21 @@ export interface ComponentDiscountLaw extends Struct.ComponentSchema {
   };
 }
 
+export interface ComponentFile extends Struct.ComponentSchema {
+  collectionName: 'components_component_files';
+  info: {
+    displayName: 'file';
+  };
+  attributes: {
+    file: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
+    filename: Schema.Attribute.String;
+    name: Schema.Attribute.String;
+  };
+}
+
 export interface ComponentLink extends Struct.ComponentSchema {
   collectionName: 'components_component_links';
   info: {
@@ -57,6 +72,7 @@ declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
       'component.discount-law': ComponentDiscountLaw;
+      'component.file': ComponentFile;
       'component.link': ComponentLink;
       'component.references': ComponentReferences;
       'layout.hero-section': LayoutHeroSection;
