@@ -1,5 +1,4 @@
 import qs from "qs";
-import { cacheLife } from "next/cache";
 
 interface LoginData {
   identifier: string;
@@ -39,9 +38,6 @@ const QUERY_HOME_PAGE = {
 };
 
 export async function getHomePage() {
-  "use cache";
-  cacheLife({ expire: 300 });
-
   const query = qs.stringify(QUERY_HOME_PAGE);
   const response = await getStrapiData(`/api/home-page?${query}`);
   return response?.data;
@@ -49,7 +45,11 @@ export async function getHomePage() {
 
 export async function getStrapiData(url: string) {
   try {
-    const response = await fetch(`${STRAPI_BASE_URL}${url}`);
+    const response = await fetch(`${STRAPI_BASE_URL}${url}`, {
+      next: {
+        revalidate: 300,
+      },
+    });
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -92,4 +92,5 @@ export async function fetchAuth(endopoint: string, userData: UserData) {
 }
 
 export const loginUserService = (data: LoginData) => fetchAuth("local", data);
-export const registerUserService = (data: RegisterData) => fetchAuth("local/register", data);
+export const registerUserService = (data: RegisterData) =>
+  fetchAuth("local/register", data);
