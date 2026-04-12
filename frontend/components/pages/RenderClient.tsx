@@ -28,7 +28,7 @@ import {
 import { Input } from "../ui/input";
 import { styles } from "@/app/styles/styles";
 import { usePlans } from "@/hooks/usePlans";
-import { DiscountLaw, Plan } from "@/types/typeClients";
+import { Contact, DiscountLaw, Plan } from "@/types/typeClients";
 import { SearchPlans } from "../ui/searchParams";
 import CurrentAge from "./current-age";
 import FileUploader from "../ui/files";
@@ -51,15 +51,6 @@ export default function RenderClient() {
     },
     [setFormData],
   );
-
-  const [toggles, setToggles] = useState({
-    corteAutomatico: false,
-    facturaAutomatica: false,
-    descuentoDiscapacidad: false,
-    descuentoTerceraEdad: false,
-    agenteRetencion: false,
-    principal: false,
-  });
 
   const [searchPlan, setSearchPlan] = useState("");
   const [plansResults, setPlansResults] = useState<Plan[]>([]);
@@ -90,8 +81,8 @@ export default function RenderClient() {
       const media = `${plan.type}`.toLowerCase();
       const search = searchPlan.toLowerCase();
 
-      if (client?.tipoPlan) {
-        if (media.includes(client.tipoPlan.toLowerCase())) {
+      if (formData.tipoPlan) {
+        if (media.includes(formData.tipoPlan.toLowerCase())) {
           return plan.plan.toLowerCase().includes(search);
         }
       }
@@ -104,6 +95,8 @@ export default function RenderClient() {
     if (!isEditing) return;
     setFormData((prev) => {
       const current = prev.plans || client?.plans || [];
+      if (current.some((p) => p.documentId === plan.documentId)) return prev;
+
       const newPlans = [...current, plan];
       return { ...prev, plans: newPlans, planPrincipal: newPlans.length > 0 };
     });
@@ -130,7 +123,7 @@ export default function RenderClient() {
 
       const newPlans = [...current];
       const [selected] = newPlans.splice(selectedIndex, 1);
-      newPlans.unshift(selected); // Put principal as first element
+      newPlans.unshift(selected);
 
       return {
         ...prev,
@@ -138,13 +131,6 @@ export default function RenderClient() {
         planPrincipal: true,
       };
     });
-  };
-
-  const handleToggle = (key: keyof typeof toggles) => {
-    setToggles((prev) => ({
-      ...prev,
-      [key]: !prev[key],
-    }));
   };
 
   const handleToggleDiscount = (field: keyof DiscountLaw) => {
@@ -168,6 +154,16 @@ export default function RenderClient() {
         oldAge: field === "oldAge",
       });
     }
+  };
+
+  const handleContact = (field: keyof Contact, value: string) => {
+    if (!isEditing) return;
+
+    const currentContact =
+      formData.contact || client?.contact || ({} as Partial<Contact>);
+
+    const newContact = { ...currentContact, [field]: value } as Contact;
+    handleField("contact", newContact);
   };
 
   if (!selectedClientId) {
@@ -297,14 +293,10 @@ export default function RenderClient() {
                   type="text"
                   className={cn(styles.input, "font-mono")}
                   value={
-                    isEditing
-                      ? (formData.telefono?.toString() ?? "")
-                      : "0" + client.telefono.toString()
+                    (isEditing ? formData.contact?.telephone : client.contact?.telephone) ?? ""
                   }
                   readOnly={!isEditing}
-                  onChange={(e) =>
-                    handleField("telefono", Number(e.target.value) || 0)
-                  }
+                  onChange={(e) => handleContact("telephone", e.target.value)}
                 />
               </div>
 
@@ -313,6 +305,11 @@ export default function RenderClient() {
                 <Input
                   type="text"
                   className={cn(styles.input, "font-mono")}
+                  value={
+                    (isEditing ? formData.contact?.phoneSms : client.contact?.phoneSms) ?? ""
+                  }
+                  readOnly={!isEditing}
+                  onChange={(e) => handleContact("phoneSms", e.target.value)}
                   placeholder="0999999999"
                 />
               </div>
@@ -322,6 +319,11 @@ export default function RenderClient() {
                 <Input
                   type="text"
                   className={cn(styles.input, "font-mono")}
+                  value={
+                    (isEditing ? formData.contact?.phoneTwo : client.contact?.phoneTwo) ?? ""
+                  }
+                  readOnly={!isEditing}
+                  onChange={(e) => handleContact("phoneTwo", e.target.value)}
                   placeholder="0999999999"
                 />
               </div>
@@ -544,7 +546,7 @@ export default function RenderClient() {
             rowClassName="border-none bg-transparent hover:bg-transparent min-h-0 p-0"
           />
           <FileUploader
-          files={isEditing ? formData.files : client.files || []}
+            files={isEditing ? formData.files : client.files || []}
           />
 
           <div className="border-t border-indigo-100 dark:border-indigo-900/30 bg-white dark:bg-gray-950">
@@ -575,8 +577,12 @@ export default function RenderClient() {
 
             <DataToggle
               label="Factura auto."
-              onToggle={() => handleToggle("facturaAutomatica")}
-              isOn={toggles.facturaAutomatica}
+              onToggle={() =>
+                handleField("automaticInvoice", !formData.automaticInvoice)
+              }
+              isOn={Boolean(
+                isEditing ? formData.automaticInvoice : client.automaticInvoice,
+              )}
             />
 
             <ClientDataRow label="Referencia">

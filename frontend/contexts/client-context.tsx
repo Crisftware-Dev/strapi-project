@@ -82,6 +82,8 @@ export function ClientProvider({ children }: { children: ReactNode }) {
         discountLaw: client.discountLaw,
         withholdingAgent: Boolean(client.withholdingAgent),
         files: client.files,
+        automaticInvoice: client.automaticInvoice,
+        contact: client.contact,
       };
       setFormData(data);
       setOriginalData(data);
