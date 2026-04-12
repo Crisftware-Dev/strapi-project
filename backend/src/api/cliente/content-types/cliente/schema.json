@@ -86,6 +86,15 @@
       "type": "component",
       "component": "component.file",
       "repeatable": true
+    },
+    "automaticInvoice": {
+      "type": "boolean",
+      "default": true
+    },
+    "contact": {
+      "type": "component",
+      "component": "component.contact",
+      "repeatable": false
     }
   }
 }

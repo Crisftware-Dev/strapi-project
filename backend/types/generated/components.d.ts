@@ -1,5 +1,17 @@
 import type { Schema, Struct } from '@strapi/strapi';
 
+export interface ComponentContact extends Struct.ComponentSchema {
+  collectionName: 'components_component_contacts';
+  info: {
+    displayName: 'contact';
+  };
+  attributes: {
+    phoneSms: Schema.Attribute.String;
+    phoneTwo: Schema.Attribute.String;
+    telephone: Schema.Attribute.String;
+  };
+}
+
 export interface ComponentDiscountLaw extends Struct.ComponentSchema {
   collectionName: 'components_component_discount_laws';
   info: {
@@ -71,6 +83,7 @@ export interface LayoutHeroSection extends Struct.ComponentSchema {
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
+      'component.contact': ComponentContact;
       'component.discount-law': ComponentDiscountLaw;
       'component.file': ComponentFile;
       'component.link': ComponentLink;

@@ -443,7 +443,10 @@ export interface ApiClienteCliente extends Struct.CollectionTypeSchema {
   attributes: {
     apellidos: Schema.Attribute.String;
     automaticCut: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    automaticInvoice: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<true>;
     ciudad: Schema.Attribute.String;
+    contact: Schema.Attribute.Component<'component.contact', false>;
     contrato: Schema.Attribute.BigInteger;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
