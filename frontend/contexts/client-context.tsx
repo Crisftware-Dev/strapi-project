@@ -84,6 +84,8 @@ export function ClientProvider({ children }: { children: ReactNode }) {
         files: client.files,
         automaticInvoice: client.automaticInvoice,
         contact: client.contact,
+        entity: client.entity,
+        applied_discount: client.applied_discount,
       };
       setFormData(data);
       setOriginalData(data);
