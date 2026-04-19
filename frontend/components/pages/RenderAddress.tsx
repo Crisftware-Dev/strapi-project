@@ -66,7 +66,7 @@ export default function RenderAddress() {
   return (
     <article className={styles.container} key={selectedClientId}>
       <main className={styles.mainGrid}>
-        <section className={cn(styles.leftColumn, "w-3/5")}>
+        <section className={cn(styles.leftColumn, "w-3/5 flex flex-col")}>
           <ClientDataRow label="Fecha de instalación">
             <p className={styles.select}>11-01-2026</p>
           </ClientDataRow>
@@ -144,7 +144,7 @@ export default function RenderAddress() {
             <Input type="text" className={styles.input} value={""} readOnly />
           </ClientDataRow>
         </section>
-        <section className={cn(styles.rightColumn, "w-2/5")}>
+        <section className={cn(styles.rightColumn, "w-2/5 flex flex-col")}>
           <ClientDataRow label="Fecha de creación">
             <p className={styles.select}>10-01-2026</p>
           </ClientDataRow>

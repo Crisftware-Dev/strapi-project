@@ -28,10 +28,15 @@ import {
 import { Input } from "../ui/input";
 import { styles } from "@/app/styles/styles";
 import { usePlans } from "@/hooks/usePlans";
-import { Contact, DiscountLaw, Plan } from "@/types/typeClients";
+import {
+  Contact,
+  DiscountLaw,
+  Plan,
+} from "@/types/typeClients";
 import { SearchPlans } from "../ui/searchParams";
 import CurrentAge from "./current-age";
 import FileUploader from "../ui/files";
+import { useAppliedDiscount } from "@/hooks/useAppliedDiscount";
 
 export default function RenderClient() {
   const { selectedClientId, isEditing, formData, setFormData } =
@@ -57,6 +62,7 @@ export default function RenderClient() {
   const [isFetchEnabled, setIsFetchEnabled] = useState(false);
 
   const { data: plans } = usePlans(isFetchEnabled);
+  const { data: appliedDiscount } = useAppliedDiscount();
   const plansData = plans?.data || [];
 
   const activePlans =
@@ -103,6 +109,19 @@ export default function RenderClient() {
     setSearchPlan("");
     setPlansResults([]);
     setIsFetchEnabled(false);
+  };
+
+  const handleAddDiscount = (value: string) => {
+    if (!isEditing) return;
+    const currentDiscount = formData.applied_discount || client?.applied_discount;
+    const discount = appliedDiscount?.data.find((d) => d.name === value);
+
+    console.log(formData.applied_discount?.name);
+    
+    if (currentDiscount?.documentId === discount?.documentId) return;
+    setFormData((prev) => {
+      return { ...prev, applied_discount: discount };
+    });
   };
 
   const handleRemovePlan = (index: number) => {
@@ -293,7 +312,9 @@ export default function RenderClient() {
                   type="text"
                   className={cn(styles.input, "font-mono")}
                   value={
-                    (isEditing ? formData.contact?.telephone : client.contact?.telephone) ?? ""
+                    (isEditing
+                      ? formData.contact?.telephone
+                      : client.contact?.telephone) ?? ""
                   }
                   readOnly={!isEditing}
                   onChange={(e) => handleContact("telephone", e.target.value)}
@@ -306,7 +327,9 @@ export default function RenderClient() {
                   type="text"
                   className={cn(styles.input, "font-mono")}
                   value={
-                    (isEditing ? formData.contact?.phoneSms : client.contact?.phoneSms) ?? ""
+                    (isEditing
+                      ? formData.contact?.phoneSms
+                      : client.contact?.phoneSms) ?? ""
                   }
                   readOnly={!isEditing}
                   onChange={(e) => handleContact("phoneSms", e.target.value)}
@@ -320,7 +343,9 @@ export default function RenderClient() {
                   type="text"
                   className={cn(styles.input, "font-mono")}
                   value={
-                    (isEditing ? formData.contact?.phoneTwo : client.contact?.phoneTwo) ?? ""
+                    (isEditing
+                      ? formData.contact?.phoneTwo
+                      : client.contact?.phoneTwo) ?? ""
                   }
                   readOnly={!isEditing}
                   onChange={(e) => handleContact("phoneTwo", e.target.value)}
@@ -465,24 +490,45 @@ export default function RenderClient() {
             </CompactTable>
           </ClientDataRow>
 
-          <DataSelect label="Es una entidad">
+          <DataSelect
+            value={isEditing ? formData.entity : client.entity}
+            disabled={!isEditing}
+            onChange={(e) => handleField("entity", e.target.value)}
+            label="Es una entidad"
+          >
             <option>PRIVADA</option>
             <option>PUBLICA</option>
           </DataSelect>
 
-          <DataSelect label="Rubro Instalación">
-            <option>INSTALACION RESIDENCIAL F.O | 178.2522</option>
-          </DataSelect>
+          <ClientDataRow label="Rubro Instalación">
+            <div className="flex w-full items-center">
+              <p className={styles.select}>
+                INSTALACION RESIDENCIAL F.O | 178.2522
+              </p>
+            </div>
+          </ClientDataRow>
 
           <ClientDataRow label="Descuento Aplicado">
             <div className="flex-1 flex items-center">
-              <Select className={cn("w-3/4")}>
-                <option>Ninguno</option>
+              <Select
+                value={
+                  isEditing
+                    ? formData.applied_discount?.name
+                    : client.applied_discount?.name
+                }
+                onChange={(e) => handleAddDiscount(e.target.value)}
+                disabled={!isEditing}
+                className={cn("w-3/4")}
+              >
+                {appliedDiscount?.data.map((discount) => (
+                  <option key={discount.documentId}>{discount.name}</option>
+                ))}
               </Select>
               <div className="flex items-center px-4 border-l border-indigo-100 dark:border-indigo-900/30 text-[11px] text-gray-500 bg-indigo-50/20 h-full">
                 A Cancelar:{" "}
                 <span className="ml-2 font-bold text-indigo-700 dark:text-indigo-300 font-mono text-xs">
-                  178.2522
+                  {formData.applied_discount?.value ||
+                    client.applied_discount?.value}
                 </span>
               </div>
             </div>

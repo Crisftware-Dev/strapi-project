@@ -19,7 +19,7 @@ export const ClientDataRow: React.FC<ClientDataRowProps> = ({
   return (
     <div
       className={cn(
-        "flex border-b border-indigo-100 dark:border-indigo-900/30 min-h-[40px] hover:bg-indigo-50/30 dark:hover:bg-indigo-900/10 transition-colors",
+        "flex flex-1 min-h-[40px] border-b border-indigo-100 dark:border-indigo-900/30 hover:bg-indigo-50/30 dark:hover:bg-indigo-900/10 transition-colors",
         className,
       )}
     >
