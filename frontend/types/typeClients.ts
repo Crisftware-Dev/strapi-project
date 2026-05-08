@@ -23,6 +23,9 @@ export interface Client {
   contact: Contact;
   entity: string;
   applied_discount: applied_discount;
+  installationDate: string;
+  transferDate: string;
+  sinceCustomer: string;
 }
 
 export interface DiscountLaw {

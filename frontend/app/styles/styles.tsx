@@ -1,7 +1,7 @@
 export const styles = {
   container:
     "w-full h-screen flex flex-col flex-1 bg-white dark:bg-gray-950 text-xs shadow-sm border border-indigo-100 dark:border-indigo-900/30 rounded-lg overflow-x-hidden",
-  mainGrid: "w-full flex h-[850px] gap-0",
+  mainGrid: "w-full flex min-h-[50px] gap-0",
   leftColumn: "h-full border-r border-indigo-300 dark:border-indigo-900/30",
   rightColumn: "h-full bg-gray-50/50 dark:bg-gray-900/20",
 

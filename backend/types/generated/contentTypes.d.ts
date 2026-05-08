@@ -499,6 +499,7 @@ export interface ApiClienteCliente extends Struct.CollectionTypeSchema {
         maxLength: 13;
         minLength: 8;
       }>;
+    installationDate: Schema.Attribute.DateTime;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -510,9 +511,11 @@ export interface ApiClienteCliente extends Struct.CollectionTypeSchema {
     plans: Schema.Attribute.Relation<'oneToMany', 'api::plan.plan'>;
     publishedAt: Schema.Attribute.DateTime;
     reference: Schema.Attribute.Component<'component.references', true>;
+    sinceCustomer: Schema.Attribute.Date;
     telefono: Schema.Attribute.BigInteger;
     tipoCliente: Schema.Attribute.String;
     tipoPlan: Schema.Attribute.String;
+    transferDate: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;

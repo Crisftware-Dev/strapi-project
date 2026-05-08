@@ -54,8 +54,11 @@ export default function RenderAddress() {
     );
   }
 
-  if (isLoading)
-    return <div className="p-8 text-center text-xs">Cargando datos...</div>;
+  console.log(client?.sinceCustomer)
+
+  if (isLoading){
+    return <div className="p-8 text-center text-xs">Cargando datos...</div>;     
+  }
   if (error || !client)
     return (
       <div className="p-8 text-center text-xs text-red-500">
@@ -63,18 +66,27 @@ export default function RenderAddress() {
       </div>
     );
 
+
   return (
     <article className={styles.container} key={selectedClientId}>
       <main className={styles.mainGrid}>
         <section className={cn(styles.leftColumn, "w-3/5 flex flex-col")}>
           <ClientDataRow label="Fecha de instalación">
-            <p className={styles.select}>11-01-2026</p>
+            <p className={styles.select}>
+              {client.installationDate
+                ? client.installationDate.replace("T", " ").substring(0, 16)
+                : ""}
+            </p>
           </ClientDataRow>
           <ClientDataRow label="Fecha de Traslado">
-            <p className={styles.select}>12-01-2026</p>
+            <p className={styles.select}>
+              {client.transferDate
+                ? client.transferDate.replace("T", " ").substring(0, 16)
+                : ""}
+            </p>
           </ClientDataRow>
           <ClientDataRow label="Cliente desde">
-            <p className={styles.select}># años | # meses | # dias</p>
+            <p className={styles.select}>{client.sinceCustomer}</p>
           </ClientDataRow>
           <ClientDataRow label="Cantón">
             <p className={styles.select}>{client.ciudad}</p>

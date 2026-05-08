@@ -107,6 +107,15 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::applied-discount.applied-discount"
+    },
+    "installationDate": {
+      "type": "datetime"
+    },
+    "transferDate": {
+      "type": "datetime"
+    },
+    "sinceCustomer": {
+      "type": "date"
     }
   }
 }
