@@ -89,6 +89,9 @@ export function ClientProvider({ children }: { children: ReactNode }) {
         installationDate: client.installationDate,
         transferDate: client.transferDate,
         sinceCustomer: client.sinceCustomer,
+        scoreCredit: client.scoreCredit,
+        seller_user: client.seller_user,
+        
       };
       setFormData(data);
       setOriginalData(data);

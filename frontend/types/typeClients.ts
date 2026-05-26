@@ -26,6 +26,13 @@ export interface Client {
   installationDate: string;
   transferDate: string;
   sinceCustomer: string;
+  scoreCredit: number;
+  seller_user: sellerName;
+}
+
+export interface sellerName {
+  fullname: string;
+  lastname: string;
 }
 
 export interface DiscountLaw {
