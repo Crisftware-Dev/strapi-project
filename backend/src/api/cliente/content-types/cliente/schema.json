@@ -116,6 +116,15 @@
     },
     "sinceCustomer": {
       "type": "date"
+    },
+    "scoreCredit": {
+      "type": "integer",
+      "default": 0
+    },
+    "seller_user": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
     }
   }
 }
