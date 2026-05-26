@@ -18,6 +18,7 @@ const CLIENT_POPULATE = [
   "populate[contact]=true",
   "populate[files][populate][file]=true",
   "populate[applied_discount]=true",
+  "populate[seller_user]=true",
 ].join("&");
 
 export async function fetchClients(): Promise<{ data: Client[] }> {
