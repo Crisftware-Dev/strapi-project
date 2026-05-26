@@ -54,18 +54,40 @@ export default function RenderAddress() {
     );
   }
 
-  console.log(client?.sinceCustomer)
+  const getDisplayValue = () => {
+    const score = isEditing ? formData.scoreCredit : client?.scoreCredit;
 
-  if (isLoading){
-    return <div className="p-8 text-center text-xs">Cargando datos...</div>;     
+    if (score === null || score === undefined) return "0";
+    return score.toString();
+  };
+
+  const handleScoreChange = (value: string) => {
+    if (value === "") {
+      handleField("scoreCredit", 0);
+    } else if (/^\d*$/.test(value)) {
+      handleField("scoreCredit", Number(value));
+    }
+  };
+
+  const handleBlur = () => {
+    const score = isEditing ? formData.scoreCredit : client?.scoreCredit;
+
+    if (score === null || score === undefined || score === 0) {
+      handleField("scoreCredit", 0);
+    }
+  };
+
+  if (isLoading) {
+    return <div className="p-8 text-center text-xs">Cargando datos...</div>;
   }
   if (error || !client)
     return (
       <div className="p-8 text-center text-xs text-red-500">
         Error al cargar datos
       </div>
-    );
+  );
 
+  console.log(client);
 
   return (
     <article className={styles.container} key={selectedClientId}>
@@ -95,26 +117,23 @@ export default function RenderAddress() {
             <Input
               type="text"
               className={styles.input}
-              value={isEditing ? (formData.ciudad ?? "") : client.ciudad}
-              readOnly={!isEditing}
-              onChange={(e) => handleField("ciudad", e.target.value)}
+              value={client.ciudad || ""}
+              readOnly
             />
           </ClientDataRow>
           <ClientDataRow label="Dirección de Trabajo">
-            <Input
-              type="text"
-              className={styles.input}
-              value={isEditing ? (formData.ciudad ?? "") : client.ciudad}
-              readOnly={!isEditing}
-              onChange={(e) => handleField("ciudad", e.target.value)}
-            />
+            <Input type="text" className={styles.input} value="" readOnly />
           </ClientDataRow>
           <ClientDataRow label="La vivienda es_">
-            <Select defaultValue={client.estado}>
+            {/* <Select
+              value={isEditing ? (formData.estado ?? client.estado) : client.estado}
+              disabled={!isEditing}
+              onChange={(e) => handleField("estado", e.target.value)}
+            >
               <option value="Propia">PROPIA</option>
               <option value="Alquilada">ALQUILADA</option>
               <option value="Familiar">FAMILIAR</option>
-            </Select>
+            </Select> */}
           </ClientDataRow>
           <ClientDataRow label="Referencia de la ubicación">
             <textarea
@@ -124,9 +143,23 @@ export default function RenderAddress() {
             />
           </ClientDataRow>
           <ClientDataRow label="Calificación Crediticia">
-            <p className={styles.select}>0</p>
+            <Input
+              type="text" // Cambiado a text
+              inputMode="numeric" // Teclado numérico en móviles
+              className={styles.select}
+              value={getDisplayValue()}
+              readOnly={!isEditing}
+              onChange={(e) => handleScoreChange(e.target.value)}
+              onBlur={handleBlur}
+            />
             <span>
-              <StarRating score={500} />
+              <StarRating
+                score={
+                  isEditing
+                    ? (formData.scoreCredit ?? 0)
+                    : (client.scoreCredit ?? 0)
+                }
+              />
             </span>
           </ClientDataRow>
           <ClientDataRow label="Referencias">
@@ -150,7 +183,7 @@ export default function RenderAddress() {
             <Input type="text" className={styles.input} value={""} readOnly />
           </ClientDataRow>
           <ClientDataRow label="Vendido por:">
-            <Input type="text" className={styles.input} value={""} readOnly />
+            <Input type="text" className={styles.input} value={client.seller_user?.fullname + " " + client.seller_user?.lastname} readOnly />
           </ClientDataRow>
           <ClientDataRow label="Instalador Asignado">
             <Input type="text" className={styles.input} value={""} readOnly />
