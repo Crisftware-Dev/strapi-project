@@ -53,6 +53,17 @@ export interface ComponentLink extends Struct.ComponentSchema {
   };
 }
 
+export interface ComponentLocation extends Struct.ComponentSchema {
+  collectionName: 'components_component_locations';
+  info: {
+    displayName: 'location';
+  };
+  attributes: {
+    latitude: Schema.Attribute.String;
+    longitude: Schema.Attribute.String;
+  };
+}
+
 export interface ComponentReferences extends Struct.ComponentSchema {
   collectionName: 'components_component_references';
   info: {
@@ -87,6 +98,7 @@ declare module '@strapi/strapi' {
       'component.discount-law': ComponentDiscountLaw;
       'component.file': ComponentFile;
       'component.link': ComponentLink;
+      'component.location': ComponentLocation;
       'component.references': ComponentReferences;
       'layout.hero-section': LayoutHeroSection;
     }

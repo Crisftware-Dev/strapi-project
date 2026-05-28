@@ -477,6 +477,10 @@ export interface ApiClienteCliente extends Struct.CollectionTypeSchema {
       'oneToOne',
       'api::applied-discount.applied-discount'
     >;
+    assigned_installer: Schema.Attribute.Relation<
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
     automaticCut: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
     automaticInvoice: Schema.Attribute.Boolean &
       Schema.Attribute.DefaultTo<true>;
@@ -487,6 +491,7 @@ export interface ApiClienteCliente extends Struct.CollectionTypeSchema {
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     currentAge: Schema.Attribute.Date;
+    dateEnding: Schema.Attribute.DateTime;
     discountLaw: Schema.Attribute.Component<'component.discount-law', false>;
     email: Schema.Attribute.Email;
     entity: Schema.Attribute.Enumeration<['PUBLICA', 'PRIVADA']>;
@@ -506,6 +511,7 @@ export interface ApiClienteCliente extends Struct.CollectionTypeSchema {
       'api::cliente.cliente'
     > &
       Schema.Attribute.Private;
+    location: Schema.Attribute.Component<'component.location', false>;
     nombres: Schema.Attribute.String;
     planPrincipal: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     plans: Schema.Attribute.Relation<'oneToMany', 'api::plan.plan'>;

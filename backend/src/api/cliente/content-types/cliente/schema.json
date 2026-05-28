@@ -125,6 +125,19 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "plugin::users-permissions.user"
+    },
+    "assigned_installer": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "dateEnding": {
+      "type": "datetime"
+    },
+    "location": {
+      "type": "component",
+      "component": "component.location",
+      "repeatable": false
     }
   }
 }
