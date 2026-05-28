@@ -8,12 +8,14 @@ import { styles } from "@/app/styles/styles";
 import { ClientDataRow } from "../ui/client-data-row";
 import { cn } from "@/lib/utils";
 import { Input } from "../ui/input";
-import Select from "../ui/select";
+// import Select from "../ui/select";
 import StarRating from "../ui/stars";
 import { CompactTable } from "../ui/compact-table";
 import FormFamily from "../ui/formFamily";
 import { DataToggle } from "../ui/client-data-fields";
 import { useState, useCallback } from "react";
+import CurrentAge from "./current-age";
+import type { Location } from "@/types/typeClients";
 
 export default function RenderAddress() {
   const { selectedClientId, isEditing, formData, setFormData } =
@@ -39,7 +41,10 @@ export default function RenderAddress() {
   };
 
   const handleField = useCallback(
-    (field: keyof EditableClientData, value: string | number) => {
+    <K extends keyof EditableClientData>(
+      field: K,
+      value: EditableClientData[K],
+    ) => {
       setFormData((prev) => ({ ...prev, [field]: value }));
     },
     [setFormData],
@@ -77,6 +82,15 @@ export default function RenderAddress() {
     }
   };
 
+  const handleLocation = (field: keyof Location, value: string) => {
+    if (!isEditing) return;
+
+    const currentLocation = formData.location || client?.location || ({} as Partial<Location>);
+
+    const newLocation = { ...currentLocation, [field]: value } as Location;
+    handleField("location", newLocation);
+  };
+
   if (isLoading) {
     return <div className="p-8 text-center text-xs">Cargando datos...</div>;
   }
@@ -86,8 +100,6 @@ export default function RenderAddress() {
         Error al cargar datos
       </div>
   );
-
-  console.log(client);
 
   return (
     <article className={styles.container} key={selectedClientId}>
@@ -108,7 +120,7 @@ export default function RenderAddress() {
             </p>
           </ClientDataRow>
           <ClientDataRow label="Cliente desde">
-            <p className={styles.select}>{client.sinceCustomer}</p>
+            <CurrentAge date={formData.installationDate || client.installationDate} text="Cliente por:" />
           </ClientDataRow>
           <ClientDataRow label="Cantón">
             <p className={styles.select}>{client.ciudad}</p>
@@ -186,15 +198,19 @@ export default function RenderAddress() {
             <Input type="text" className={styles.input} value={client.seller_user?.fullname + " " + client.seller_user?.lastname} readOnly />
           </ClientDataRow>
           <ClientDataRow label="Instalador Asignado">
-            <Input type="text" className={styles.input} value={""} readOnly />
+            <Input type="text" className={styles.input} value={client.assigned_installer?.fullname + " " + client.assigned_installer?.lastname} readOnly />
           </ClientDataRow>
         </section>
         <section className={cn(styles.rightColumn, "w-2/5 flex flex-col")}>
           <ClientDataRow label="Fecha de creación">
-            <p className={styles.select}>10-01-2026</p>
+            <p className={styles.select}>
+              {client.installationDate
+                ? client.installationDate.replace("T", " ").substring(0, 10)
+                : ""}
+            </p>
           </ClientDataRow>
           <ClientDataRow label="Fecha de Terminado">
-            <p className={styles.select}>00-00-0000</p>
+            <p className={styles.select}></p>
           </ClientDataRow>
           <ClientDataRow label="" />
           <ClientDataRow label="Sector">
@@ -210,8 +226,16 @@ export default function RenderAddress() {
             <Input
               type="text"
               className={styles.input}
-              value="0.00000, 79.11111"
-              readOnly
+              value={(isEditing ? formData.location?.latitude : client.location?.latitude) || ""}
+              onChange={(e) => handleLocation("latitude", e.target.value)}
+              readOnly={!isEditing}
+            />
+            <Input
+              type="text"
+              className={styles.input}
+              value={(isEditing ? formData.location?.longitude : client.location?.longitude) || ""}
+              onChange={(e) => handleLocation("longitude", e.target.value)}
+              readOnly={!isEditing}
             />
           </ClientDataRow>
           <ClientDataRow label="" />

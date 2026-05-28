@@ -393,7 +393,7 @@ export default function RenderClient() {
                 onChange={(e) => handleField("currentAge", e.target.value)}
                 className="bg-transparent text-xs text-gray-600 dark:text-gray-300"
               />
-              <CurrentAge date={formData.currentAge || client.currentAge} />
+              <CurrentAge date={formData.currentAge || client.currentAge} text="📅 Edad:" />
             </div>
           </ClientDataRow>
 

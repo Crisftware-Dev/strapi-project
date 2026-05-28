@@ -27,12 +27,14 @@ export interface Client {
   transferDate: string;
   sinceCustomer: string;
   scoreCredit: number;
-  seller_user: sellerName;
+  seller_user: User;
+  assigned_installer: User;
+  location: Location;
 }
 
-export interface sellerName {
-  fullname: string;
-  lastname: string;
+export interface Location {
+  latitude: string;
+  longitude: string;
 }
 
 export interface DiscountLaw {
