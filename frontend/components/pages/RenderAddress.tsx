@@ -16,6 +16,7 @@ import { DataToggle } from "../ui/client-data-fields";
 import { useState, useCallback } from "react";
 import CurrentAge from "./current-age";
 import type { Location } from "@/types/typeClients";
+import RenderMap from "./RenderMap";
 
 export default function RenderAddress() {
   const { selectedClientId, isEditing, formData, setFormData } =
@@ -237,7 +238,17 @@ export default function RenderAddress() {
               onChange={(e) => handleLocation("longitude", e.target.value)}
               readOnly={!isEditing}
             />
+            <RenderMap 
+              latitude={isEditing ? formData.location?.latitude : client.location?.latitude}
+              longitude={isEditing ? formData.location?.longitude : client.location?.longitude}
+              isEditing={isEditing}
+              onLocationSelect={(lat, lon) => {
+                handleLocation("latitude", lat.toString());
+                handleLocation("longitude", lon.toString());
+              }}
+            />
           </ClientDataRow>
+
           <ClientDataRow label="" />
           <ClientDataRow label="Actividad Económica">
             <Input
