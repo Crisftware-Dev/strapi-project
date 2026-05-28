@@ -19,6 +19,8 @@ const CLIENT_POPULATE = [
   "populate[files][populate][file]=true",
   "populate[applied_discount]=true",
   "populate[seller_user]=true",
+  "populate[assigned_installer]=true",
+  "populate[location]=true",
 ].join("&");
 
 export async function fetchClients(): Promise<{ data: Client[] }> {
@@ -96,6 +98,11 @@ export async function updateClientById(
 ): Promise<{ data: Client }> {
   try {
     const payload = { ...data };
+    
+    // Remove read-only relations to avoid Strapi v5 validation errors (Invalid key documentId)
+    delete payload.seller_user;
+    delete payload.assigned_installer;
+
     if (payload.plans) {
       payload.plans = payload.plans.map(
         (plan) => plan.documentId,
@@ -129,6 +136,14 @@ export async function updateClientById(
         telephone: payload.contact.telephone ?? "",
         phoneSms: payload.contact.phoneSms ?? "",
         phoneTwo: payload.contact.phoneTwo ?? "",
+      };
+    }
+
+    // Strip internal Strapi component id from location before sending
+    if (payload.location) {
+      payload.location = {
+        latitude: payload.location.latitude ?? "",
+        longitude: payload.location.longitude ?? "",
       };
     }
 
