@@ -138,6 +138,37 @@
       "type": "component",
       "component": "component.location",
       "repeatable": false
+    },
+    "economicActivity": {
+      "type": "string"
+    },
+    "typeOfHousing": {
+      "type": "enumeration",
+      "enum": [
+        "PROPIA",
+        "ALQUILADA",
+        "FAMILIAR"
+      ]
+    },
+    "relatedClient": {
+      "type": "boolean",
+      "required": true,
+      "default": false
+    },
+    "creditButt": {
+      "type": "boolean",
+      "required": true,
+      "default": false
+    },
+    "discardButt": {
+      "type": "boolean",
+      "required": true,
+      "default": false
+    },
+    "hasDucts": {
+      "type": "boolean",
+      "required": true,
+      "default": false
     }
   }
 }
