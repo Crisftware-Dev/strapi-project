@@ -30,6 +30,12 @@ export interface Client {
   seller_user: User;
   assigned_installer: User;
   location: Location;
+  economicActivity: string | undefined;
+  typeOfHousing: string | undefined;
+  relatedClient: boolean;
+  creditButt: boolean;
+  discardButt: boolean;
+  hasDucts: boolean;
 }
 
 export interface Location {
