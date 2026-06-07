@@ -19,6 +19,8 @@ import { Ul } from "@/components/ui/ul";
 import { useState } from "react";
 import ChangePass from "@/components/ui/change-pass";
 import { useUser } from "@/hooks/useUser";
+import { useTabsControl } from "@/contexts/control-context";
+import { useClickOutside } from "@/hooks/useClickOutside";
 
 const styles = {
   header:
@@ -32,14 +34,16 @@ const styles = {
 };
 
 export default function HeaderControl() {
-  const [active, setActive] = useState("");
+  const { openTab, activeControls, setActiveControls } = useTabsControl();
   const [isOpen, setIsOpen] = useState(false);
+
   const { data: user } = useUser();
 
-  const nameAndLastname = user?.fullname
-    ?.split(" ")[0]
-    .concat(" ", user?.lastname?.split(" ")[0])
-    ?.toUpperCase();
+  const nameAndLastname =
+    user?.fullname
+      ?.split(" ")[0]
+      .concat(" ", user?.lastname?.split(" ")[0])
+      ?.toUpperCase() || "";
 
   const data = nameAndLastname
     ?.split(" ")
@@ -49,6 +53,16 @@ export default function HeaderControl() {
 
   const handleLogout = () => {
     logoutUserAction();
+  };
+
+  const navRef = useClickOutside<HTMLElement>(() => {
+    if (activeControls) setActiveControls("");
+  });
+
+  const handleDropdownClick = (e: React.MouseEvent, id?: string) => {
+    if (!id) return;
+    e.stopPropagation();
+    setActiveControls(activeControls === id ? "" : id);
   };
 
   return (
@@ -66,6 +80,7 @@ export default function HeaderControl() {
         </div>
       </a>
       <nav
+        ref={navRef}
         aria-label="Navegación principal"
         className="flex flex-1 justify-between items-center"
       >
@@ -73,68 +88,85 @@ export default function HeaderControl() {
           <LiControlHeader
             id="control"
             text="Control"
-            setActive={setActive}
-            isActive={active === "control"}
+            activeControls={activeControls === "control"}
             icon={<CircleI className={styles.icon} />}
             caret={
               <ArrowRigthI
-                className={` ${styles.caret} ${active === "control" ? "rotate-90" : "rotate-0"}`}
+                className={` ${styles.caret} ${activeControls === "control" ? "rotate-90" : "rotate-0"}`}
               />
             }
-            onClick={(e) => {
-              e.stopPropagation();
-              setActive((prev) => (prev === "control" ? "" : "control"));
-            }}
+            onClick={handleDropdownClick}
           >
-            <Li>
+            <Li
+              id="busqueda"
+              label="Busqueda de contratos"
+              onClick={(e) => {
+                e.stopPropagation();
+                openTab("busqueda", "Busqueda de contratos");
+                setActiveControls("");
+              }}
+            >
               <SearchI className={styles.icon} />
-              <span>Busqueda de contratos</span>
             </Li>
-            <Li>
+            <Li
+              label="Contratos"
+              id="contratos"
+              onClick={(e) => {
+                e.stopPropagation();
+                openTab("contratos", "Contratos");
+                setActiveControls("");
+              }}
+            >
               <UserI className={styles.icon} />
-              <span>Contratos</span>
             </Li>
-            <Li>
+            <Li
+              id="modificar"
+              label="Modificar contratos"
+              onClick={(e) => {
+                e.stopPropagation();
+                openTab("modificar", "Modificar contratos");
+                setActiveControls("");
+              }}
+            >
               <PencilModifYI className={styles.icon} />
-              <span>Modificar contratos</span>
             </Li>
-            <Li>
+            <Li
+              label="Soporte"
+              id="soporte"
+              onClick={(e) => {
+                e.stopPropagation();
+                openTab("soporte", "Soporte");
+                setActiveControls("");
+              }}
+            >
               <SupportI className={styles.icon} />
-              <span>Soporte</span>
             </Li>
           </LiControlHeader>
         </Ul>
         <Ul className={styles.ul}>
           <LiControlHeader
-            setActive={setActive}
             id="usuario"
             text={data}
+            activeControls={activeControls === "usuario"}
             icon={<UserI className={styles.icon} />}
             caret={
               <ArrowRigthI
-                className={`${styles.caret} ${active === "usuario" ? "rotate-90" : "rotate-0"}`}
+                className={`${styles.caret} ${activeControls === "usuario" ? "rotate-90" : "rotate-0"}`}
               />
             }
-            isActive={active === "usuario"}
-            onClick={(e) => {
-              e.stopPropagation();
-              setActive((prev) => (prev === "usuario" ? "" : "usuario"));
-            }}
+            onClick={handleDropdownClick}
           >
-            <Li>
+            <Li label={nameAndLastname}>
               <UserI className={styles.icon} />
-              <span>{nameAndLastname}</span>
             </Li>
-            <div className="w-full" onClick={() => setIsOpen(true)}>
-              <Li>
+            <div className="w-full" onClick={() => { setIsOpen(true); setActiveControls(""); }}>
+              <Li label="Cambiar Clave">
                 <KeyI className={styles.icon} />
-                <span>Cambiar Clave</span>
               </Li>
             </div>
-            <div className="w-full" onClick={handleLogout}>
-              <Li>
+            <div className="w-full" onClick={() => { handleLogout(); setActiveControls(""); }}>
+              <Li label="Cerrar Sesión">
                 <PowerOffI className={styles.icon} />
-                <span>Cerrar Sesión</span>
               </Li>
             </div>
           </LiControlHeader>

@@ -13,7 +13,7 @@ import StarRating from "../ui/stars";
 import { CompactTable } from "../ui/compact-table";
 import FormFamily from "../ui/formFamily";
 import { DataInput, DataSelect, DataToggle } from "../ui/client-data-fields";
-import { useState, useCallback } from "react";
+import { useCallback } from "react";
 import CurrentAge from "./current-age";
 import type { Location } from "@/types/typeClients";
 import RenderMap from "./RenderMap";
@@ -26,20 +26,6 @@ export default function RenderAddress() {
     isLoading,
     error,
   } = useClientById(selectedClientId || "");
-
-  const [toggles, setToggles] = useState({
-    clienteRelacionado: false,
-    buroCrediticio: true,
-    descartarBuro: false,
-    poseeDuctos: false,
-  });
-
-  const handleToggle = (key: keyof typeof toggles) => {
-    setToggles((prev) => ({
-      ...prev,
-      [key]: !prev[key],
-    }));
-  };
 
   const handleField = useCallback(
     <K extends keyof EditableClientData>(
