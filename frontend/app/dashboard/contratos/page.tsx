@@ -2,6 +2,6 @@
 
 import Control from "@/components/pages/control/Control";
 
-export default function DashboardRoute() {
+export default function ContratosRoute() {
   return <Control />;
 }
