@@ -5,6 +5,7 @@ import { useClientContext } from "@/contexts/client-context";
 import { useClientById } from "@/hooks/useClientById";
 import { useUpdateClient } from "@/hooks/useUpdateClient";
 
+
 export default function FooterControl() {
   const {
     selectedClientId,
@@ -85,6 +86,7 @@ export default function FooterControl() {
 
   const hasClient = !!selectedClientId;
   const isSaving = updateClient.isPending || uploadFiles.isPending;
+
 
   return (
     <footer className="w-full bg-white dark:bg-gray-950 border-t border-indigo-100 dark:border-indigo-900/30 p-3 shadow-sm mt-auto">
