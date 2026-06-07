@@ -1,4 +1,3 @@
-import { useClickOutside } from "@/hooks/useClickOutside";
 import { JSX } from "react";
 
 interface LiControlHeaderProps {
@@ -6,10 +5,11 @@ interface LiControlHeaderProps {
   id: string;
   icon: JSX.Element;
   isActive?: boolean;
-  setActive: (id: string) => void;
+  activeControls?: boolean;
+  menuRef?: React.RefObject<HTMLLIElement>;
   caret?: JSX.Element;
   children?: React.ReactNode;
-  onClick: (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => void;
+  onClick: (e: React.MouseEvent<HTMLLIElement, MouseEvent>, id?: string) => void;
 }
 
 const styles = {
@@ -24,26 +24,26 @@ export default function LiControlHeader({
   icon,
   caret,
   isActive,
-  setActive,
+  activeControls,
   children,
+  menuRef
 }: LiControlHeaderProps) {
-  const menuRef = useClickOutside<HTMLLIElement>(() => {
-    if (isActive) setActive("");
-  });
+  
+  const isMenuOpen = isActive ?? activeControls;
 
   return (
     <button
       aria-controls={id + "-dropdown"}
       className="w-full focus:outline-none"
     >
-      <li key={id} ref={menuRef} onClick={onClick} className={styles.li}>
+      <li key={id} ref={menuRef} onClick={(e) => onClick(e, id)} className={styles.li}>
         {icon}
         <span>{text}</span>
         {caret}
         <ul
           className={
             styles.ul +
-            (isActive && children
+            (isMenuOpen && children
               ? " opacity-100 scale-100 translate-y-0 pointer-events-auto"
               : " opacity-0 scale-95 -translate-y-2 pointer-events-none")
           }

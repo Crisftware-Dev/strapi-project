@@ -2,7 +2,12 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
-function Li({ className, ...props }: React.ComponentProps<"li">) {
+function Li({
+  className,
+  label,
+  ...props
+}: React.ComponentProps<"li"> & { label?: string }) {
+
   return (
     <li
       data-slot="li"
@@ -13,6 +18,7 @@ function Li({ className, ...props }: React.ComponentProps<"li">) {
       {...props}
     >
       {props.children}
+      {label && <span>{label}</span>}
     </li>
   );
 }
