@@ -34,7 +34,7 @@ const styles = {
 };
 
 export default function HeaderControl() {
-  const { openTab, activeControls, setActiveControls } = useTabsControl();
+  const { openTab, activeControls, setActiveControls, setActiveSubControls } = useTabsControl();
   const [isOpen, setIsOpen] = useState(false);
 
   const { data: user } = useUser();
@@ -103,6 +103,7 @@ export default function HeaderControl() {
               onClick={(e) => {
                 e.stopPropagation();
                 openTab("busqueda", "Busqueda de contratos");
+                setActiveSubControls("busqueda");
                 setActiveControls("");
               }}
             >
@@ -114,6 +115,7 @@ export default function HeaderControl() {
               onClick={(e) => {
                 e.stopPropagation();
                 openTab("contratos", "Contratos");
+                setActiveSubControls("contratos");
                 setActiveControls("");
               }}
             >
@@ -125,6 +127,7 @@ export default function HeaderControl() {
               onClick={(e) => {
                 e.stopPropagation();
                 openTab("modificar", "Modificar contratos");
+                setActiveSubControls("modificar");
                 setActiveControls("");
               }}
             >
@@ -136,6 +139,7 @@ export default function HeaderControl() {
               onClick={(e) => {
                 e.stopPropagation();
                 openTab("soporte", "Soporte");
+                setActiveSubControls("soporte");
                 setActiveControls("");
               }}
             >
