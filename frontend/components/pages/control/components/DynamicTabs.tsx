@@ -18,7 +18,7 @@ const TAB_ICONS: Record<string, JSX.Element> = {
 };
 
 export default function DynamicTabs() {
-  const { openTabs, activeControls, setActiveControls, closeTab } =
+  const { openTabs, activeSubControls, setActiveSubControls, closeTab } =
     useTabsControl();
 
   return (
@@ -30,7 +30,8 @@ export default function DynamicTabs() {
       >
         {/* ── Pestañas abiertas ──────────────────────────────────────────── */}
         {openTabs.map((tab) => {
-          const isActive = tab.id === activeControls;
+          const isActive = tab.id === activeSubControls;
+
           return (
             <button
               key={tab.id}
@@ -38,7 +39,7 @@ export default function DynamicTabs() {
               id={`tab-btn-${tab.id}`}
               aria-selected={isActive}
               aria-controls={`tabpanel-${tab.id}`}
-              onClick={() => setActiveControls(tab.id)}
+              onClick={() => setActiveSubControls(tab.id)}
               className={`
                 group relative flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium
                 whitespace-nowrap select-none outline-none

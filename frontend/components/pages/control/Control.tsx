@@ -6,7 +6,7 @@ import BusquedaContratos from "./components/BusquedaContratos";
 
 import ModificarContratos from "./components/ModificarContratos";
 import SoporteContratos from "./components/SoporteContratos";
-import Contratos from "./components/Contratos";
+import Contratos from "./contratos/Contratos";
 import { useTabsControl } from "@/contexts/control-context";
 
 // ─── Inner component (necesita acceder al context) ────────────────────────────
