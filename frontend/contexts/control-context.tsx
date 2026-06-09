@@ -55,7 +55,7 @@ export function ControlProvider({ children }: { children: ReactNode }) {
   const closeTab = (id: string) => {
     setOpenTabs((prev) => prev.filter((t) => t.id !== id));
 
-    if (id === activeControls) {
+    if (id === activeSubControls) {
       const remainingTabs = openTabs.filter((t) => t.id !== id);
       setActiveSubControls(
         remainingTabs.length > 0
