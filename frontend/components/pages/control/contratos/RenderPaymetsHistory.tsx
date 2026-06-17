@@ -1,13 +1,13 @@
 import { useClientContext } from "@/contexts/client-context";
 import { useClientById } from "@/hooks/useClientById";
 import { styles } from "@/app/styles/styles";
-import { CompactTable, Headers, PaymentRow } from "../ui/compact-table";
-import { Label } from "../ui/label";
+import { CompactTable, Headers, PaymentRow } from "@/components/ui/compact-table";
+import { Label } from "@/components/ui/label";
 import { useUser } from "@/hooks/useUser";
-import LiControlHeader from "../ui/li-control-header";
+import LiControlHeader from "@/components/ui/li-control-header";
 import { useState } from "react";
-import { ArrowRigthI, CircleI, DeleteI, DetailsI, DocumentI, PrintI, XMLI } from "../icons/Icons";
-import { Li } from "../ui/li";
+import { ArrowRigthI, CircleI, DeleteI, DetailsI, DocumentI, PrintI, XMLI } from "@/components/icons/Icons";
+import { Li } from "@/components/ui/li";
 
 export default function RenderPaymentsHistory() {
   const [active, setActive] = useState("");
@@ -84,7 +84,6 @@ export default function RenderPaymentsHistory() {
                 <LiControlHeader
                   id="opciones"
                   text="Opciones"
-                  setActive={setActive}
                   isActive={active === "opciones"}
                   icon={<CircleI className={styles.icon} />}
                   caret={

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import dynamic from "next/dynamic";
 
-const LocationMap = dynamic(() => import("../ui/LocationMap"), { ssr: false });
+const LocationMap = dynamic(() => import("@/components/ui/LocationMap"), { ssr: false });
 
 interface RenderMapProps {
   latitude?: string | number;

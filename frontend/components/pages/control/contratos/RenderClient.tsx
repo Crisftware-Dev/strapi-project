@@ -9,33 +9,29 @@ import { useState, useCallback } from "react";
 import { SearchI, UserI } from "@/components/icons/Icons";
 import { ClientDataRow } from "@/components/ui/client-data-row";
 import { cn } from "@/lib/utils";
-import Separator from "../ui/separator";
-import Select from "../ui/select";
-import { Label } from "../ui/label";
-import { Button } from "../ui/button";
+import Separator from "@/components/ui/separator";
+import Select from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 import {
   TableSearchHeader,
   CompactTable,
   Headers,
   PaymentRow,
-} from "../ui/compact-table";
+} from "@/components/ui/compact-table";
 import {
   DataInput,
   DataSelect,
   DataToggle,
   DataRadioGroup,
-} from "../ui/client-data-fields";
-import { Input } from "../ui/input";
+} from "@/components/ui/client-data-fields";
+import { Input } from "@/components/ui/input";
 import { styles } from "@/app/styles/styles";
 import { usePlans } from "@/hooks/usePlans";
-import {
-  Contact,
-  DiscountLaw,
-  Plan,
-} from "@/types/typeClients";
-import { SearchPlans } from "../ui/searchParams";
-import CurrentAge from "./current-age";
-import FileUploader from "../ui/files";
+import { Contact, DiscountLaw, Plan } from "@/types/typeClients";
+import { SearchPlans } from "@/components/ui/searchParams";
+import CurrentAge from "@/components/pages/control/contratos/current-age";
+import FileUploader from "@/components/ui/files";
 import { useAppliedDiscount } from "@/hooks/useAppliedDiscount";
 
 export default function RenderClient() {
@@ -113,11 +109,12 @@ export default function RenderClient() {
 
   const handleAddDiscount = (value: string) => {
     if (!isEditing) return;
-    const currentDiscount = formData.applied_discount || client?.applied_discount;
+    const currentDiscount =
+      formData.applied_discount || client?.applied_discount;
     const discount = appliedDiscount?.data.find((d) => d.name === value);
 
     console.log(formData.applied_discount?.name);
-    
+
     if (currentDiscount?.documentId === discount?.documentId) return;
     setFormData((prev) => {
       return { ...prev, applied_discount: discount };
@@ -393,7 +390,10 @@ export default function RenderClient() {
                 onChange={(e) => handleField("currentAge", e.target.value)}
                 className="bg-transparent text-xs text-gray-600 dark:text-gray-300"
               />
-              <CurrentAge date={formData.currentAge || client.currentAge} text="📅 Edad:" />
+              <CurrentAge
+                date={formData.currentAge || client.currentAge}
+                text="📅 Edad:"
+              />
             </div>
           </ClientDataRow>
 

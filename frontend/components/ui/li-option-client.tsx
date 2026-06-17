@@ -5,7 +5,7 @@ interface LiOptionClientProps {
   label: string;
   icon: JSX.Element;
   isActive: boolean;
-  onClick: () => void;
+  onClick?: (id: string) => void;
 }
 
 export default function LiOptionClient({
@@ -18,7 +18,7 @@ export default function LiOptionClient({
   return (
     <li
       key={id}
-      onClick={onClick}
+      onClick={() => onClick?.(id)}
       className={`
               flex items-center gap-2 px-5 py-0.5
               cursor-pointer select-none

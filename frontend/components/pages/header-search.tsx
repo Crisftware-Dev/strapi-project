@@ -95,6 +95,10 @@ export default function HeaderSearch() {
     setTimeout(() => setShowError(false), 3000);
   };
 
+  const activePageClient = (id: string) => {
+    setActiveTab(id);
+  };
+
   const styles = {
     header:
       "w-full bg-gray-200 dark:bg-gray-950 border-b border-gray-200 dark:border-gray-800 p-1.5 sticky top-8 z-2000 shadow-sm",
@@ -169,28 +173,28 @@ export default function HeaderSearch() {
             label="Cliente"
             icon={<FaUser className={styles.icon} />}
             isActive={activeTab === "cliente"}
-            onClick={() => setActiveTab("cliente")}
+            onClick={activePageClient}
           />
           <LiOptionClient
-            id="Dirección"
+            id="direccion"
             label="Dirección"
             icon={<FaNfcDirectional className={styles.icon} />}
             isActive={activeTab === "direccion"}
-            onClick={() => setActiveTab("direccion")}
+            onClick={activePageClient}
           />
           <LiOptionClient
             id="pagosPendientes"
             label="Pagos pendientes"
             icon={<FaMoneyBill1Wave className={styles.icon} />}
             isActive={activeTab === "pagosPendientes"}
-            onClick={() => setActiveTab("pagosPendientes")}
+            onClick={activePageClient}
           />
           <LiOptionClient
             id="pagosRealizados"
             label="Pagos realizados"
             icon={<FaMoneyCheckDollar className={styles.icon} />}
             isActive={activeTab === "pagosRealizados"}
-            onClick={() => setActiveTab("pagosRealizados")}
+            onClick={activePageClient}
           />
         </ul>
       </nav>

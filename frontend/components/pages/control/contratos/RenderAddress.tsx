@@ -3,20 +3,19 @@ import {
   EditableClientData,
 } from "@/contexts/client-context";
 import { useClientById } from "@/hooks/useClientById";
-import { UserI } from "../icons/Icons";
+import { UserI } from "@/components/icons/Icons";
 import { styles } from "@/app/styles/styles";
-import { ClientDataRow } from "../ui/client-data-row";
+import { ClientDataRow } from "@/components/ui/client-data-row";
 import { cn } from "@/lib/utils";
-import { Input } from "../ui/input";
-// import Select from "../ui/select";
-import StarRating from "../ui/stars";
-import { CompactTable } from "../ui/compact-table";
-import FormFamily from "../ui/formFamily";
-import { DataToggle } from "../ui/client-data-fields";
-import { useState, useCallback } from "react";
-import CurrentAge from "./current-age";
+import { Input } from "@/components/ui/input";
+import StarRating from "@/components/ui/stars";
+import { CompactTable } from "@/components/ui/compact-table";
+import FormFamily from "@/components/ui/formFamily";
+import { useCallback } from "react";
+import CurrentAge from "@/components/pages/control/contratos/current-age";
 import type { Location } from "@/types/typeClients";
-import RenderMap from "./RenderMap";
+import RenderMap from "@/components/pages/control/contratos/RenderMap";
+import { DataInput, DataSelect, DataToggle } from "@/components/ui/client-data-fields";
 
 export default function RenderAddress() {
   const { selectedClientId, isEditing, formData, setFormData } =
@@ -26,20 +25,6 @@ export default function RenderAddress() {
     isLoading,
     error,
   } = useClientById(selectedClientId || "");
-
-  const [toggles, setToggles] = useState({
-    clienteRelacionado: false,
-    buroCrediticio: true,
-    descartarBuro: false,
-    poseeDuctos: false,
-  });
-
-  const handleToggle = (key: keyof typeof toggles) => {
-    setToggles((prev) => ({
-      ...prev,
-      [key]: !prev[key],
-    }));
-  };
 
   const handleField = useCallback(
     <K extends keyof EditableClientData>(
@@ -86,7 +71,8 @@ export default function RenderAddress() {
   const handleLocation = (field: keyof Location, value: string) => {
     if (!isEditing) return;
 
-    const currentLocation = formData.location || client?.location || ({} as Partial<Location>);
+    const currentLocation =
+      formData.location || client?.location || ({} as Partial<Location>);
 
     const newLocation = { ...currentLocation, [field]: value } as Location;
     handleField("location", newLocation);
@@ -100,7 +86,7 @@ export default function RenderAddress() {
       <div className="p-8 text-center text-xs text-red-500">
         Error al cargar datos
       </div>
-  );
+    );
 
   return (
     <article className={styles.container} key={selectedClientId}>
@@ -121,7 +107,10 @@ export default function RenderAddress() {
             </p>
           </ClientDataRow>
           <ClientDataRow label="Cliente desde">
-            <CurrentAge date={formData.installationDate || client.installationDate} text="Cliente por:" />
+            <CurrentAge
+              date={formData.installationDate || client.installationDate}
+              text="Cliente por:"
+            />
           </ClientDataRow>
           <ClientDataRow label="Cantón">
             <p className={styles.select}>{client.ciudad}</p>
@@ -196,10 +185,28 @@ export default function RenderAddress() {
             <Input type="text" className={styles.input} value={""} readOnly />
           </ClientDataRow>
           <ClientDataRow label="Vendido por:">
-            <Input type="text" className={styles.input} value={client.seller_user?.fullname + " " + client.seller_user?.lastname} readOnly />
+            <Input
+              type="text"
+              className={styles.input}
+              value={
+                client.seller_user?.fullname +
+                " " +
+                client.seller_user?.lastname
+              }
+              readOnly
+            />
           </ClientDataRow>
           <ClientDataRow label="Instalador Asignado">
-            <Input type="text" className={styles.input} value={client.assigned_installer?.fullname + " " + client.assigned_installer?.lastname} readOnly />
+            <Input
+              type="text"
+              className={styles.input}
+              value={
+                client.assigned_installer?.fullname +
+                " " +
+                client.assigned_installer?.lastname
+              }
+              readOnly
+            />
           </ClientDataRow>
         </section>
         <section className={cn(styles.rightColumn, "w-2/5 flex flex-col")}>
@@ -227,20 +234,36 @@ export default function RenderAddress() {
             <Input
               type="text"
               className={styles.input}
-              value={(isEditing ? formData.location?.latitude : client.location?.latitude) || ""}
+              value={
+                (isEditing
+                  ? formData.location?.latitude
+                  : client.location?.latitude) || ""
+              }
               onChange={(e) => handleLocation("latitude", e.target.value)}
               readOnly={!isEditing}
             />
             <Input
               type="text"
               className={styles.input}
-              value={(isEditing ? formData.location?.longitude : client.location?.longitude) || ""}
+              value={
+                (isEditing
+                  ? formData.location?.longitude
+                  : client.location?.longitude) || ""
+              }
               onChange={(e) => handleLocation("longitude", e.target.value)}
               readOnly={!isEditing}
             />
-            <RenderMap 
-              latitude={isEditing ? formData.location?.latitude : client.location?.latitude}
-              longitude={isEditing ? formData.location?.longitude : client.location?.longitude}
+            <RenderMap
+              latitude={
+                isEditing
+                  ? formData.location?.latitude
+                  : client.location?.latitude
+              }
+              longitude={
+                isEditing
+                  ? formData.location?.longitude
+                  : client.location?.longitude
+              }
               isEditing={isEditing}
               onLocationSelect={(lat, lon) => {
                 handleLocation("latitude", lat.toString());
@@ -250,32 +273,48 @@ export default function RenderAddress() {
           </ClientDataRow>
 
           <ClientDataRow label="" />
-          <ClientDataRow label="Actividad Económica">
-            <Input
-              type="text"
-              className={styles.input}
-              value="TRABAJADOR"
-              readOnly
-            />
-          </ClientDataRow>
-          <ClientDataRow label="Extensión">
-            <Input type="text" className={styles.input} value="" readOnly />
-          </ClientDataRow>
+          <DataInput
+            label="Actividad Económica"
+            className="uppercase font-medium"
+            value={
+              isEditing
+                ? formData.economicActivity || ""
+                : client.economicActivity
+            }
+            readOnly={!isEditing}
+            onChange={(e) => handleField("economicActivity", e.target.value)}
+          />
+          <DataSelect
+            label="LA VIVIENDA ES"
+            value={isEditing ? formData.typeOfHousing : client.typeOfHousing}
+            disabled={!isEditing}
+            onChange={(e) => handleField("typeOfHousing", e.target.value)}
+          >
+            <option value="PROPIA">PROPIA</option>
+            <option value="ALQUILADA">ALQUILADA</option>
+            <option value="FAMILIAR">FAMILIAR</option>
+          </DataSelect>
           <ClientDataRow label="" />
           <DataToggle
             label="Cliente Relacionado"
-            onToggle={() => handleToggle("clienteRelacionado")}
-            isOn={toggles.clienteRelacionado}
+            onToggle={() =>
+              handleField("relatedClient", !formData.relatedClient)
+            }
+            isOn={Boolean(
+              isEditing ? formData.relatedClient : client.relatedClient,
+            )}
           />
           <DataToggle
             label="A buró crediticio"
-            onToggle={() => handleToggle("buroCrediticio")}
-            isOn={toggles.buroCrediticio}
+            onToggle={() => handleField("creditButt", !formData.creditButt)}
+            isOn={Boolean(isEditing ? formData.creditButt : client.creditButt)}
           />
           <DataToggle
             label="Descartar Buro"
-            onToggle={() => handleToggle("descartarBuro")}
-            isOn={toggles.descartarBuro}
+            onToggle={() => handleField("discardButt", !formData.discardButt)}
+            isOn={Boolean(
+              isEditing ? formData.discardButt : client.discardButt,
+            )}
           />
           <ClientDataRow label="" />
           <ClientDataRow label="Pisos de la Edificación">
@@ -283,8 +322,8 @@ export default function RenderAddress() {
           </ClientDataRow>
           <DataToggle
             label="Posee Ductos"
-            onToggle={() => handleToggle("poseeDuctos")}
-            isOn={toggles.poseeDuctos}
+            onToggle={() => handleField("hasDucts", !formData.hasDucts)}
+            isOn={Boolean(isEditing ? formData.hasDucts : client.hasDucts)}
           />
           <ClientDataRow label="Ejecutivo de Cuenta:">
             <Input type="text" className={styles.input} value={""} readOnly />

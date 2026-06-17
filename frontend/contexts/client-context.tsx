@@ -93,6 +93,12 @@ export function ClientProvider({ children }: { children: ReactNode }) {
         seller_user: client.seller_user,
         assigned_installer: client.assigned_installer,
         location: client.location,
+        economicActivity: client.economicActivity,
+        typeOfHousing: client.typeOfHousing,
+        relatedClient: Boolean(client.relatedClient),
+        creditButt: Boolean(client.creditButt),
+        discardButt: Boolean(client.discardButt),
+        hasDucts: Boolean(client.hasDucts),
       };
       setFormData(data);
       setOriginalData(data);
