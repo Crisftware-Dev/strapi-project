@@ -225,7 +225,7 @@ export default function RenderAddress() {
             <Input
               type="text"
               className={styles.input}
-              value={isEditing ? (formData.ciudad ?? "") : client.ciudad}
+              value={isEditing ? formData.ciudad : client.ciudad}
               readOnly={!isEditing}
               onChange={(e) => handleField("ciudad", e.target.value)}
             />
@@ -278,7 +278,7 @@ export default function RenderAddress() {
             className="uppercase font-medium"
             value={
               isEditing
-                ? formData.economicActivity || ""
+                ? formData.economicActivity
                 : client.economicActivity
             }
             readOnly={!isEditing}
