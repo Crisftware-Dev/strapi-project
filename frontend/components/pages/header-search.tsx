@@ -13,6 +13,7 @@ import {
   FaUser,
 } from "react-icons/fa6";
 import SearchNames from "../ui/searchParams";
+import ModalIdentificator from "./Modal";
 
 export default function HeaderSearch() {
   const { activeTab, setActiveTab, trySelectClient } = useClientContext();
@@ -22,6 +23,8 @@ export default function HeaderSearch() {
   const [contratoInput, setContratoInput] = useState("");
 
   const [nameResults, setNameResults] = useState<Client[]>([]);
+  const [idResults, setIdResults] = useState<Client[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [showError, setShowError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [isFetchEnabled, setIsFetchEnabled] = useState(false);
@@ -32,16 +35,17 @@ export default function HeaderSearch() {
   const handleIdentifierSearch = () => {
     if (!identifierInput.trim()) return;
 
-    const client = clients.find(
-      (c) => c.identificacion === identifierInput.trim(),
+    
+
+    const found = clients.filter((c) =>
+      c.identificacion.includes(identifierInput),
     );
 
-    if (client) {
-      trySelectClient(client.documentId);
-      setIdentifierInput("");
-      setShowError(false);
+    if (found.length === 1) {
+      trySelectClient(found[0].documentId);
     } else {
-      showErrorMessage("No se encontró ningún cliente con esa identificación");
+      setIdResults(found);
+      setIsModalOpen(true);
     }
   };
 
@@ -86,6 +90,8 @@ export default function HeaderSearch() {
     trySelectClient(client.documentId);
     setNameInput("");
     setNameResults([]);
+    setIdentifierInput("");
+    setIsModalOpen(false);
     setShowError(false);
   };
 
@@ -161,6 +167,12 @@ export default function HeaderSearch() {
             errorMessage={errorMessage}
             nameResults={nameResults}
             isLoading={isLoading}
+            handleClientSelect={handleClientSelect}
+          />
+          <ModalIdentificator
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            resultados={idResults}
             handleClientSelect={handleClientSelect}
           />
         </div>
