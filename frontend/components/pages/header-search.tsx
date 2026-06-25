@@ -35,8 +35,6 @@ export default function HeaderSearch() {
   const handleIdentifierSearch = () => {
     if (!identifierInput.trim()) return;
 
-    
-
     const found = clients.filter((c) =>
       c.identificacion.includes(identifierInput),
     );
