@@ -7,7 +7,6 @@ export interface Client {
   contrato: number;
   ciudad: string;
   email: string;
-  telefono: number;
   estado: string;
   valores: number;
   plans: Plan[];
