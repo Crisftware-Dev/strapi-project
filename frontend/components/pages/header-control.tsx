@@ -122,12 +122,12 @@ export default function HeaderControl() {
               <UserI className={styles.icon} />
             </Li>
             <Li
-              id="modificar"
-              label="Modificar contratos"
+              id="add-plans"
+              label="Añadir Planes"
               onClick={(e) => {
                 e.stopPropagation();
-                openTab("modificar", "Modificar contratos");
-                setActiveSubControls("modificar");
+                openTab("add-plans", "Añadir Planes");
+                setActiveSubControls("add-plans");
                 setActiveControls("");
               }}
             >

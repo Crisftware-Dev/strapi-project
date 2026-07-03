@@ -2,10 +2,9 @@
 
 import { Suspense } from "react";
 import DynamicTabs from "./components/DynamicTabs";
-import BusquedaContratos from "./components/BusquedaContratos";
-
-import ModificarContratos from "./components/ModificarContratos";
+import AddPlans from "./components/AddPlans";
 import SoporteContratos from "./components/SoporteContratos";
+import BusquedaContratos from "./busqueda/BusquedaContratos";
 import Contratos from "./contratos/Contratos";
 import { useTabsControl } from "@/contexts/control-context";
 
@@ -19,7 +18,7 @@ function ContratosInner() {
       <>
         {activeSubControls === "contratos" && <Contratos />}
         {activeSubControls === "busqueda" && <BusquedaContratos />}
-        {activeSubControls === "modificar" && <ModificarContratos />}
+        {activeSubControls === "add-plans" && <AddPlans />}
         {activeSubControls === "soporte" && <SoporteContratos />}
       </>
     </>
