@@ -176,6 +176,20 @@ export async function updateClientById(
   }
 }
 
+export async function createPlan(
+  data: Partial<Plan>,
+): Promise<{ data: Plan }> {
+  try {
+    return await strapiJson<{ data: Plan }>(`/api/plans`, {
+      method: "POST",
+      body: JSON.stringify({ data }),
+    });
+  } catch (error) {
+    console.error("Error creating plan:", error);
+    throw new Error("Error creating plan");
+  }
+}
+
 export async function uploadFileToStrapi(
   formData: FormData,
 ): Promise<StrapiMedia[]> {
