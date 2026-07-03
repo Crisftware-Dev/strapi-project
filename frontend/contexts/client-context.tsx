@@ -70,7 +70,6 @@ export function ClientProvider({ children }: { children: ReactNode }) {
         currentAge: client.currentAge,
         ciudad: client.ciudad,
         email: client.email,
-        telefono: client.telefono,
         estado: client.estado,
         valores: client.valores,
         plans: client.plans,
