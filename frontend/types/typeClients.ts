@@ -73,6 +73,7 @@ export interface Plan {
   valor: number;
   descuento: number;
   meses: number;
+  CREATEDBY: string;
 }
 
 export interface applied_discount {
