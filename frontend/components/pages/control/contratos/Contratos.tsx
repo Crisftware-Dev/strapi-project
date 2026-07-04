@@ -1,14 +1,13 @@
 "use client";
 
-import HeaderSearch from "@/components/pages/header-search";
+import HeaderSearch from "@/components/pages/control/contratos/header-search";
 import RenderAddress from "@/components/pages/control/contratos/RenderAddress";
 import ClientDataDisplay from "@/components/pages/control/contratos/RenderClient";
 import RenderPaymentsOuts from "@/components/pages/control/contratos/RenderPaymentsOuts";
 import RenderPaymentsHistory from "@/components/pages/control/contratos/RenderPaymetsHistory";
 import { ClientProvider, useClientContext } from "@/contexts/client-context";
 import { useEffect, useRef } from "react";
-import FooterControl from "../../FooterControl";
-
+import FooterControl from "./FooterControl";
 
 function DashboardRoute() {
   const { selectedClientId, activeTab, setActiveTab } = useClientContext();
@@ -40,5 +39,5 @@ export default function Contratos() {
     <ClientProvider>
       <DashboardRoute />
     </ClientProvider>
-  )
+  );
 }

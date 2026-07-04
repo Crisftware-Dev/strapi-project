@@ -8,7 +8,7 @@ import { useClients } from "@/hooks/useClients";
 import { usePlans } from "@/hooks/usePlans";
 import { Client } from "@/types/typeClients";
 import { useState } from "react";
-import ClientSearchResults from "../components/ClientSearchResults";
+import ClientSearchResults from "./ClientSearchResults";
 
 export default function BusquedaContratos() {
   const [namesInput, setNamesInput] = useState("");

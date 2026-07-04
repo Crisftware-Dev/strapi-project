@@ -2,7 +2,7 @@
 
 import { Suspense } from "react";
 import DynamicTabs from "./components/DynamicTabs";
-import AddPlans from "./components/AddPlans";
+import AddPlans from "./planes/AddPlans";
 import SoporteContratos from "./components/SoporteContratos";
 import BusquedaContratos from "./busqueda/BusquedaContratos";
 import Contratos from "./contratos/Contratos";

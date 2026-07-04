@@ -12,7 +12,7 @@ import {
   FaNfcDirectional,
   FaUser,
 } from "react-icons/fa6";
-import SearchNames from "../ui/searchParams";
+import SearchNames from "../../../ui/searchParams";
 import ModalIdentificator from "./Modal";
 
 export default function HeaderSearch() {
