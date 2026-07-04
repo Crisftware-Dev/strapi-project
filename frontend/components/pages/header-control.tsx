@@ -18,7 +18,7 @@ import { Ul } from "@/components/ui/ul";
 
 import { useState } from "react";
 import ChangePass from "@/components/ui/change-pass";
-import { useUser } from "@/hooks/useUser";
+import { CurrentUser } from "@/hooks/useUser";
 import { useTabsControl } from "@/contexts/control-context";
 import { useClickOutside } from "@/hooks/useClickOutside";
 
@@ -36,20 +36,7 @@ const styles = {
 export default function HeaderControl() {
   const { openTab, activeControls, setActiveControls, setActiveSubControls } = useTabsControl();
   const [isOpen, setIsOpen] = useState(false);
-
-  const { data: user } = useUser();
-
-  const nameAndLastname =
-    user?.fullname
-      ?.split(" ")[0]
-      .concat(" ", user?.lastname?.split(" ")[0])
-      ?.toUpperCase() || "";
-
-  const data = nameAndLastname
-    ?.split(" ")
-    .map((n) => n[0])
-    .join("")
-    .toUpperCase();
+  const { nameAndLastname, initials } = CurrentUser();
 
   const handleLogout = () => {
     logoutUserAction();
@@ -150,7 +137,7 @@ export default function HeaderControl() {
         <Ul className={styles.ul}>
           <LiControlHeader
             id="usuario"
-            text={data}
+            text={initials}
             activeControls={activeControls === "usuario"}
             icon={<UserI className={styles.icon} />}
             caret={
