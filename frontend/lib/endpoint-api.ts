@@ -179,6 +179,7 @@ export async function updateClientById(
 export async function createPlan(
   data: Partial<Plan>,
 ): Promise<{ data: Plan }> {
+
   try {
     return await strapiJson<{ data: Plan }>(`/api/plans`, {
       method: "POST",
