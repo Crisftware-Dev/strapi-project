@@ -52,11 +52,7 @@ export const Files: FileItem[] = [
   { name: "AUDIO ZONA MESH", filename: "AUDIO_ZONA_MESH.mp3" },
 ] as const;
 
-/**
- * Builds a viewable URL for a file item.
- * - Pending files: creates a temporary object URL from the browser File
- * - Existing files: uses the Strapi media URL
- */
+
 function getFileViewUrl(fileItem: FileItem): string | null {
   if (fileItem.pendingFile) {
     return URL.createObjectURL(fileItem.pendingFile);
