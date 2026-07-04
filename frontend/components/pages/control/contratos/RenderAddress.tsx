@@ -3,7 +3,6 @@ import {
   EditableClientData,
 } from "@/contexts/client-context";
 import { useClientById } from "@/hooks/useClientById";
-import { UserI } from "@/components/icons/Icons";
 import { styles } from "@/app/styles/styles";
 import { ClientDataRow } from "@/components/ui/client-data-row";
 import { cn } from "@/lib/utils";
@@ -18,7 +17,7 @@ import RenderMap from "@/components/pages/control/contratos/RenderMap";
 import { DataInput, DataSelect, DataToggle } from "@/components/ui/client-data-fields";
 
 export default function RenderAddress() {
-  const { selectedClientId, isEditing, formData, setFormData } =
+  const { selectedClientId, isEditing, formData, setFormData, setActiveTab } =
     useClientContext();
   const {
     data: client,
@@ -37,12 +36,7 @@ export default function RenderAddress() {
   );
 
   if (!selectedClientId) {
-    return (
-      <div className="flex flex-col items-center justify-center h-full min-h-150 text-gray-400 dark:text-gray-600">
-        <UserI className="text-6xl mb-4 opacity-20" />
-        <p className="text-sm">Seleccione un cliente para ver su información</p>
-      </div>
-    );
+    setActiveTab("cliente");
   }
 
   const getDisplayValue = () => {
