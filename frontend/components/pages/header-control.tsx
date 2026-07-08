@@ -2,16 +2,6 @@
 
 import { logoutUserAction } from "@/actions/auth";
 
-import {
-  ArrowRigthI,
-  CircleI,
-  KeyI,
-  PencilModifYI,
-  PowerOffI,
-  SearchI,
-  SupportI,
-  UserI,
-} from "@/components/icons/Icons";
 import LiControlHeader from "@/components/ui/li-control-header";
 import { Li } from "@/components/ui/li";
 import { Ul } from "@/components/ui/ul";
@@ -21,6 +11,7 @@ import ChangePass from "@/components/ui/change-pass";
 import { CurrentUser } from "@/hooks/useUser";
 import { useTabsControl } from "@/contexts/control-context";
 import { useClickOutside } from "@/hooks/useClickOutside";
+import { buildControlsList } from "@/components/ui/arrays";
 
 const styles = {
   header:
@@ -34,7 +25,8 @@ const styles = {
 };
 
 export default function HeaderControl() {
-  const { openTab, activeControls, setActiveControls, setActiveSubControls } = useTabsControl();
+  const { openTab, activeControls, setActiveControls, setActiveSubControls } =
+    useTabsControl();
   const [isOpen, setIsOpen] = useState(false);
   const { nameAndLastname, initials } = CurrentUser();
 
@@ -51,6 +43,17 @@ export default function HeaderControl() {
     e.stopPropagation();
     setActiveControls(activeControls === id ? "" : id);
   };
+
+  const controlsList = buildControlsList({
+  activeControls,
+  initials,
+  nameAndLastname,
+  openTab,
+  setActiveSubControls,
+  setActiveControls,
+  setIsOpen,
+  handleLogout,
+});
 
   return (
     <header className={styles.header}>
@@ -71,97 +74,29 @@ export default function HeaderControl() {
         aria-label="Navegación principal"
         className="flex flex-1 justify-between items-center"
       >
-        <Ul className={styles.ul}>
-          <LiControlHeader
-            id="control"
-            text="Control"
-            activeControls={activeControls === "control"}
-            icon={<CircleI className={styles.icon} />}
-            caret={
-              <ArrowRigthI
-                className={` ${styles.caret} ${activeControls === "control" ? "rotate-90" : "rotate-0"}`}
-              />
-            }
-            onClick={handleDropdownClick}
-          >
-            <Li
-              id="busqueda"
-              label="Busqueda de contratos"
-              onClick={(e) => {
-                e.stopPropagation();
-                openTab("busqueda", "Busqueda de contratos");
-                setActiveSubControls("busqueda");
-                setActiveControls("");
-              }}
+        {controlsList.map((control) => (
+          <Ul key={control.id} className={styles.ul}>
+            <LiControlHeader
+              id={control.id}
+              text={control.text}
+              activeControls={activeControls === control.id}
+              icon={control.icon}
+              caret={control.caret}
+              onClick={handleDropdownClick}
             >
-              <SearchI className={styles.icon} />
-            </Li>
-            <Li
-              label="Contratos"
-              id="contratos"
-              onClick={(e) => {
-                e.stopPropagation();
-                openTab("contratos", "Contratos");
-                setActiveSubControls("contratos");
-                setActiveControls("");
-              }}
-            >
-              <UserI className={styles.icon} />
-            </Li>
-            <Li
-              id="add-plans"
-              label="Añadir Planes"
-              onClick={(e) => {
-                e.stopPropagation();
-                openTab("add-plans", "Añadir Planes");
-                setActiveSubControls("add-plans");
-                setActiveControls("");
-              }}
-            >
-              <PencilModifYI className={styles.icon} />
-            </Li>
-            <Li
-              label="Soporte"
-              id="soporte"
-              onClick={(e) => {
-                e.stopPropagation();
-                openTab("soporte", "Soporte");
-                setActiveSubControls("soporte");
-                setActiveControls("");
-              }}
-            >
-              <SupportI className={styles.icon} />
-            </Li>
-          </LiControlHeader>
-        </Ul>
-        <Ul className={styles.ul}>
-          <LiControlHeader
-            id="usuario"
-            text={initials}
-            activeControls={activeControls === "usuario"}
-            icon={<UserI className={styles.icon} />}
-            caret={
-              <ArrowRigthI
-                className={`${styles.caret} ${activeControls === "usuario" ? "rotate-90" : "rotate-0"}`}
-              />
-            }
-            onClick={handleDropdownClick}
-          >
-            <Li label={nameAndLastname}>
-              <UserI className={styles.icon} />
-            </Li>
-            <div className="w-full" onClick={() => { setIsOpen(true); setActiveControls(""); }}>
-              <Li label="Cambiar Clave">
-                <KeyI className={styles.icon} />
-              </Li>
-            </div>
-            <div className="w-full" onClick={() => { handleLogout(); setActiveControls(""); }}>
-              <Li label="Cerrar Sesión">
-                <PowerOffI className={styles.icon} />
-              </Li>
-            </div>
-          </LiControlHeader>
-        </Ul>
+              {control.children?.map((child) => (
+                <Li
+                  key={child.id}
+                  id={child.id}
+                  label={child.text}
+                  onClick={child.onClick}
+                >
+                  {child.icon}
+                </Li>
+              ))}
+            </LiControlHeader>
+          </Ul>
+        ))}
       </nav>
       <ChangePass isOpen={isOpen} setIsOpen={setIsOpen} />
     </header>
