@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateClientById, uploadFileToStrapi } from "@/lib/endpoint-api";
-import { Client, StrapiMedia } from "@/types/typeClients";
+import { Client, StrapiMedia } from "@/types/typesDB";
 
 interface UpdateClientParams {
   documentId: string;

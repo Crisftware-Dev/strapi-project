@@ -1,6 +1,6 @@
 import { fetchPlans, createPlan } from "@/lib/endpoint-api";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plan } from "@/types/typeClients";
+import { Plan } from "@/types/typesDB";
 
 export function usePlans(enabled: boolean = true) {
   return useQuery({

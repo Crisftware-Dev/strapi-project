@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import Select from "@/components/ui/select";
 import { useClients } from "@/hooks/useClients";
 import { usePlans } from "@/hooks/usePlans";
-import { Client } from "@/types/typeClients";
+import { Client } from "@/types/typesDB";
 import { useState } from "react";
 import ClientSearchResults from "./ClientSearchResults";
 

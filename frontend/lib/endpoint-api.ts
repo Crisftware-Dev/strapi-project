@@ -7,7 +7,7 @@ import type {
   FileItem,
   StrapiMedia,
   applied_discount,
-} from "@/types/typeClients";
+} from "@/types/typesDB";
 import { strapiJson } from "./api";
 
 /** Deep populate query for client with nested media in file components */
@@ -98,7 +98,7 @@ export async function updateClientById(
 ): Promise<{ data: Client }> {
   try {
     const payload = { ...data };
-    
+
     // Remove read-only relations to avoid Strapi v5 validation errors (Invalid key documentId)
     delete payload.seller_user;
     delete payload.assigned_installer;
@@ -148,7 +148,8 @@ export async function updateClientById(
     }
 
     if ("applied_discount" in payload) {
-      payload.applied_discount = (payload.applied_discount?.documentId || null) as unknown as applied_discount;
+      payload.applied_discount = (payload.applied_discount?.documentId ||
+        null) as unknown as applied_discount;
     }
 
     // Serialize file components: send media ID reference instead of full object
@@ -176,10 +177,7 @@ export async function updateClientById(
   }
 }
 
-export async function createPlan(
-  data: Partial<Plan>,
-): Promise<{ data: Plan }> {
-
+export async function createPlan(data: Partial<Plan>): Promise<{ data: Plan }> {
   try {
     return await strapiJson<{ data: Plan }>(`/api/plans`, {
       method: "POST",

@@ -12,9 +12,13 @@ import { CompactTable } from "@/components/ui/compact-table";
 import FormFamily from "@/components/ui/formFamily";
 import { useCallback } from "react";
 import CurrentAge from "@/components/pages/control/contratos/current-age";
-import type { Location } from "@/types/typeClients";
+import type { Location } from "@/types/typesDB";
 import RenderMap from "@/components/pages/control/contratos/RenderMap";
-import { DataInput, DataSelect, DataToggle } from "@/components/ui/client-data-fields";
+import {
+  DataInput,
+  DataSelect,
+  DataToggle,
+} from "@/components/ui/client-data-fields";
 
 export default function RenderAddress() {
   const { selectedClientId, isEditing, formData, setFormData, setActiveTab } =
@@ -271,9 +275,7 @@ export default function RenderAddress() {
             label="Actividad Económica"
             className="uppercase font-medium"
             value={
-              isEditing
-                ? formData.economicActivity
-                : client.economicActivity
+              isEditing ? formData.economicActivity : client.economicActivity
             }
             readOnly={!isEditing}
             onChange={(e) => handleField("economicActivity", e.target.value)}

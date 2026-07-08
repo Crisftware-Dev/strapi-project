@@ -28,7 +28,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { styles } from "@/app/styles/styles";
 import { usePlans } from "@/hooks/usePlans";
-import { Contact, DiscountLaw, Plan } from "@/types/typeClients";
+import { Contact, DiscountLaw, Plan } from "@/types/typesDB";
 import { SearchPlans } from "@/components/ui/searchParams";
 import CurrentAge from "@/components/pages/control/contratos/current-age";
 import FileUploader from "@/components/ui/files";

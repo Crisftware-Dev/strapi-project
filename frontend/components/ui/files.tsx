@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { FileItem } from "@/types/typeClients";
+import { FileItem } from "@/types/typesDB";
 import { styles } from "@/app/styles/styles";
 import { Button } from "./button";
 import Select from "./select";
@@ -51,7 +51,6 @@ export const Files: FileItem[] = [
   { name: "CONTRATO ZONA MESH", filename: "CONTRATO_ZONA_MESH.pdf" },
   { name: "AUDIO ZONA MESH", filename: "AUDIO_ZONA_MESH.mp3" },
 ] as const;
-
 
 function getFileViewUrl(fileItem: FileItem): string | null {
   if (fileItem.pendingFile) {
@@ -215,9 +214,11 @@ export default function FileUploader({
                             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
                               <div className="bg-white dark:bg-gray-900 w-11/12 max-w-5xl h-[85vh] rounded-xl shadow-2xl flex flex-col overflow-hidden">
                                 <div className="flex justify-between items-center p-3 px-4 border-b border-gray-200 dark:border-gray-800 relative z-10 bg-white dark:bg-gray-900">
-                                  <span className="font-semibold truncate">{file.name}</span>
-                                  <Button 
-                                    onClick={() => handleToggleView(index)} 
+                                  <span className="font-semibold truncate">
+                                    {file.name}
+                                  </span>
+                                  <Button
+                                    onClick={() => handleToggleView(index)}
                                     variant="outline"
                                     className="py-1 h-auto"
                                   >
@@ -236,7 +237,9 @@ export default function FileUploader({
                           ) : (
                             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
                               <div className="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-2xl flex flex-col gap-5 items-center w-full max-w-sm">
-                                <h3 className="font-semibold text-lg text-center">{file.name}</h3>
+                                <h3 className="font-semibold text-lg text-center">
+                                  {file.name}
+                                </h3>
                                 <div className="w-full bg-gray-50 dark:bg-gray-950 rounded-lg p-4 border border-gray-100 dark:border-gray-800 flex justify-center">
                                   <audio
                                     controls
@@ -245,8 +248,8 @@ export default function FileUploader({
                                     className="w-full"
                                   />
                                 </div>
-                                <Button 
-                                  onClick={() => handleToggleView(index)} 
+                                <Button
+                                  onClick={() => handleToggleView(index)}
                                   variant="outline"
                                   className="w-full"
                                 >

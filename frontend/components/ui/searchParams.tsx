@@ -1,4 +1,4 @@
-import { Client, Plan } from "@/types/typeClients";
+import { Client, Plan } from "@/types/typesDB";
 import { Li } from "./li";
 import { Ul } from "./ul";
 
@@ -72,35 +72,32 @@ export default function SearchNames({
   );
 }
 
-export function SearchPlans({
-  plansResults,
-  handleAddPlan,
-}: SearchPlansProps) {
+export function SearchPlans({ plansResults, handleAddPlan }: SearchPlansProps) {
   return (
     <div className="absolute left-0 w-auto z-100 top-20">
-    <div className="mt-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg shadow-sm max-h-64 overflow-y-auto">
-      <Ul className="divide-y divide-gray-200 dark:divide-gray-800">
-        {plansResults.map((plan) => (
-          <Li
-            key={plan.documentId}
-            onClick={() => handleAddPlan(plan)}
-            className="px-3 py-3 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 cursor-pointer transition-colors"
-          >
-            <div>
-              <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                {plan.plan}
-              </p>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
-                Tipo: {plan.type} • Corte: {plan.cut}
-              </p>
-            </div>
-            <div className="text-xs font-bold text-indigo-600 dark:text-indigo-400">
-              ${plan.valor}
-            </div>
-          </Li>
-        ))}
-      </Ul>
-    </div>
+      <div className="mt-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg shadow-sm max-h-64 overflow-y-auto">
+        <Ul className="divide-y divide-gray-200 dark:divide-gray-800">
+          {plansResults.map((plan) => (
+            <Li
+              key={plan.documentId}
+              onClick={() => handleAddPlan(plan)}
+              className="px-3 py-3 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 cursor-pointer transition-colors"
+            >
+              <div>
+                <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                  {plan.plan}
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  Tipo: {plan.type} • Corte: {plan.cut}
+                </p>
+              </div>
+              <div className="text-xs font-bold text-indigo-600 dark:text-indigo-400">
+                ${plan.valor}
+              </div>
+            </Li>
+          ))}
+        </Ul>
+      </div>
     </div>
   );
 }

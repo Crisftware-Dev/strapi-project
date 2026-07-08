@@ -3,7 +3,7 @@
 import LiOptionClient from "@/components/ui/li-option-client";
 import SearchInput from "@/components/ui/searchInput";
 import { useClientContext } from "@/contexts/client-context";
-import { Client } from "@/types/typeClients";
+import { Client } from "@/types/typesDB";
 import { useClients } from "@/hooks/useClients";
 import { useState } from "react";
 import {
