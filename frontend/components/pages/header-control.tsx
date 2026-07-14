@@ -2,9 +2,8 @@
 
 import { logoutUserAction } from "@/actions/auth";
 
-import LiControlHeader from "@/components/ui/li-control-header";
-import { Li } from "@/components/ui/li";
-import { Ul } from "@/components/ui/ul";
+import { LiControlHeader } from "@/components/ui/nav-items";
+import { Li, Ul } from "@/components/ui/list";
 
 import { useState } from "react";
 import ChangePass from "@/components/ui/change-pass";

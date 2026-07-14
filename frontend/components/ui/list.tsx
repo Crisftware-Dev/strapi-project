@@ -2,12 +2,23 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
-function Li({
+export function Ul({ className, ...props }: React.ComponentProps<"ul">) {
+  return (
+    <ul
+      data-slot="ul"
+      className={cn("rounded whitespace-nowrap", className)}
+      {...props}
+    >
+      {props.children}
+    </ul>
+  );
+}
+
+export function Li({
   className,
   label,
   ...props
 }: React.ComponentProps<"li"> & { label?: string }) {
-
   return (
     <li
       data-slot="li"
@@ -22,5 +33,3 @@ function Li({
     </li>
   );
 }
-
-export { Li };

@@ -4,10 +4,10 @@ import { styles } from "@/app/styles/styles";
 import { CompactTable, Headers, PaymentRow } from "@/components/ui/compact-table";
 import { Label } from "@/components/ui/label";
 import { useUser } from "@/hooks/useUser";
-import LiControlHeader from "@/components/ui/li-control-header";
+import { LiControlHeader } from "@/components/ui/nav-items";
 import { useState } from "react";
 import { ArrowRigthI, CircleI, DeleteI, DetailsI, DocumentI, PrintI, XMLI } from "@/components/icons/Icons";
-import { Li } from "@/components/ui/li";
+import { Li } from "@/components/ui/list";
 
 export default function RenderPaymentsHistory() {
   const [active, setActive] = useState("");

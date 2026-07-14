@@ -17,7 +17,7 @@ import { Button } from "@/components/ui/button";
 import { FormState } from "@/validations/auth";
 import { useActionState } from "react";
 import { actions } from "@/actions";
-import { FormError } from "../ui/form-error";
+import { FormError } from "../ui/feedback";
 import { usePasswordToggle } from "@/hooks/usePasswordToggle";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 

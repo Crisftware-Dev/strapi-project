@@ -7,7 +7,7 @@ import { PlanProvider, usePlanContext, SERVICE_TYPES, CUT_OPTIONS } from "@/cont
 import { CurrentUser } from "@/hooks/useUser";
 import FormField from "@/components/ui/FormField";
 import FormButton from "@/components/ui/FormButton";
-import Notification from "@/components/ui/Notification";
+import { Notification } from "@/components/ui/feedback";
 
 // ─── Tabla de planes registrados ─────────────────────────────────────────────
 

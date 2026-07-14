@@ -4,7 +4,7 @@ import { useState } from "react";
 import { FileItem } from "@/types/typesDB";
 import { styles } from "@/app/styles/styles";
 import { Button } from "./button";
-import Select from "./select";
+import { Select } from "./primitives";
 import { DeleteI } from "../icons/Icons";
 import { CompactTable, Headers, PaymentRow } from "./compact-table";
 import { STRAPI_BASE_URL } from "@/lib/login-register";

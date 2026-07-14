@@ -4,9 +4,9 @@ import { styles } from "@/app/styles/styles";
 import { CompactTable, Headers, PaymentRow } from "@/components/ui/compact-table";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
-import LiControlHeader from "@/components/ui/li-control-header";
+import { LiControlHeader } from "@/components/ui/nav-items";
 import { ArrowRigthI, CircleI, DeleteI, DetailsI, HandsI, MoneyI, PercentI } from "@/components/icons/Icons";
-import { Li } from "@/components/ui/li";
+import { Li } from "@/components/ui/list";
 
 export default function RenderPaymentsOuts() {
   const [active, setActive] = useState("");

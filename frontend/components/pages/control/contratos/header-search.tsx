@@ -1,7 +1,7 @@
 "use client";
 
-import LiOptionClient from "@/components/ui/li-option-client";
-import SearchInput from "@/components/ui/searchInput";
+import { LiOptionClient } from "@/components/ui/nav-items";
+import { SearchInput } from "@/components/ui/search";
 import { useClientContext } from "@/contexts/client-context";
 import { Client } from "@/types/typesDB";
 import { useClients } from "@/hooks/useClients";
@@ -12,7 +12,7 @@ import {
   FaNfcDirectional,
   FaUser,
 } from "react-icons/fa6";
-import SearchNames from "../../../ui/searchParams";
+import { SearchNames } from "@/components/ui/search";
 import ModalIdentificator from "./Modal";
 
 export default function HeaderSearch() {

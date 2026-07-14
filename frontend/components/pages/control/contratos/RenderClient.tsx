@@ -9,8 +9,7 @@ import { useState, useCallback } from "react";
 import { SearchI, UserI } from "@/components/icons/Icons";
 import { ClientDataRow } from "@/components/ui/client-data-row";
 import { cn } from "@/lib/utils";
-import Separator from "@/components/ui/separator";
-import Select from "@/components/ui/select";
+import { Separator, Select } from "@/components/ui/primitives";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import {
@@ -29,7 +28,7 @@ import { Input } from "@/components/ui/input";
 import { styles } from "@/app/styles/styles";
 import { usePlans } from "@/hooks/usePlans";
 import { Contact, DiscountLaw, Plan } from "@/types/typesDB";
-import { SearchPlans } from "@/components/ui/searchParams";
+import { SearchPlans } from "@/components/ui/search";
 import CurrentAge from "@/components/pages/control/contratos/current-age";
 import FileUploader from "@/components/ui/files";
 import { useAppliedDiscount } from "@/hooks/useAppliedDiscount";

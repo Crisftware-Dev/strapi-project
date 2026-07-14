@@ -18,7 +18,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { FormError } from "@/components/ui/form-error";
+import { FormError } from "@/components/ui/feedback";
 
 const styles = {
   container: "w-full max-w-md",

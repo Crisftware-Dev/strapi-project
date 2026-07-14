@@ -1,8 +1,10 @@
+// ─── Toast / Notificación global ─────────────────────────────────────────────
+
 interface NotificationProps {
   notification: { message: string; type: "success" | "error" } | null;
 }
 
-export default function Notification({ notification }: NotificationProps) {
+export function Notification({ notification }: NotificationProps) {
   if (!notification) return null;
 
   const colorClass =
@@ -25,4 +27,14 @@ export default function Notification({ notification }: NotificationProps) {
       <span>{notification.message}</span>
     </div>
   );
+}
+
+// ─── Error inline de formulario ───────────────────────────────────────────────
+
+export function FormError({ error }: { error?: string[] }) {
+  if (!error) return null;
+
+  return error.map((err, index) => {
+    return <p key={index} className="text-pink-500 text-xs italic mt-1 py-2">{err}</p>;
+  });
 }
