@@ -4,11 +4,11 @@ import type {
   Client,
   User,
   Plan,
-  FileItem,
   StrapiMedia,
   applied_discount,
 } from "@/types/typesDB";
 import { strapiJson } from "./api";
+import { sanitizeClientPayload } from "./utils";
 
 /** Deep populate query for client with nested media in file components */
 const CLIENT_POPULATE = [
@@ -18,8 +18,6 @@ const CLIENT_POPULATE = [
   "populate[contact]=true",
   "populate[files][populate][file]=true",
   "populate[applied_discount]=true",
-  "populate[seller_user]=true",
-  "populate[assigned_installer]=true",
   "populate[location]=true",
 ].join("&");
 
@@ -97,70 +95,7 @@ export async function updateClientById(
   data: Partial<Omit<Client, "documentId">>,
 ): Promise<{ data: Client }> {
   try {
-    const payload = { ...data };
-
-    // Remove read-only relations to avoid Strapi v5 validation errors (Invalid key documentId)
-    delete payload.seller_user;
-    delete payload.assigned_installer;
-
-    if (payload.plans) {
-      payload.plans = payload.plans.map(
-        (plan) => plan.documentId,
-      ) as unknown as Plan[];
-    }
-
-    if (payload.reference) {
-      payload.reference = payload.reference.map((ref) => ({
-        identificacion: ref.identificacion ?? "",
-        fullnames: ref.fullnames ?? "",
-        relationship: ref.relationship ?? "",
-        phone: ref.phone ?? 0,
-      }));
-    }
-
-    if (payload.discountLaw) {
-      if (!payload.discountLaw.disability && !payload.discountLaw.oldAge) {
-        payload.discountLaw = null;
-      } else {
-        // Strip internal Strapi component id before sending
-        payload.discountLaw = {
-          disability: payload.discountLaw.disability,
-          oldAge: payload.discountLaw.oldAge,
-        };
-      }
-    }
-
-    // Strip internal Strapi component id from contact before sending
-    if (payload.contact) {
-      payload.contact = {
-        telephone: payload.contact.telephone ?? "",
-        phoneSms: payload.contact.phoneSms ?? "",
-        phoneTwo: payload.contact.phoneTwo ?? "",
-      };
-    }
-
-    // Strip internal Strapi component id from location before sending
-    if (payload.location) {
-      payload.location = {
-        latitude: payload.location.latitude ?? "",
-        longitude: payload.location.longitude ?? "",
-      };
-    }
-
-    if ("applied_discount" in payload) {
-      payload.applied_discount = (payload.applied_discount?.documentId ||
-        null) as unknown as applied_discount;
-    }
-
-    // Serialize file components: send media ID reference instead of full object
-    if (payload.files && Array.isArray(payload.files)) {
-      payload.files = payload.files.map((f: FileItem) => ({
-        name: f.name,
-        filename: f.filename,
-        // multiple: true requires an array of IDs
-        file: f.file?.[0]?.id ? [f.file[0].id] : [],
-      })) as unknown as FileItem[];
-    }
+    const payload = sanitizeClientPayload(data);
 
     const response = await strapiJson<{
       data: Client;
@@ -189,6 +124,31 @@ export async function createPlan(data: Partial<Plan>): Promise<{ data: Plan }> {
   }
 }
 
+export async function createClient(
+  data: Partial<Omit<Client, "documentId" | "contrato">>,
+): Promise<{ data: Client }> {
+  try {
+    const lastContract = await getLastContractNumber("contrato");
+
+    const contratoNumber = (lastContract || 0) + 1;
+
+    const payload = sanitizeClientPayload({ ...data, contrato: contratoNumber });
+
+    const response = await strapiJson<{
+      data: Client;
+      meta: Record<string, unknown>;
+    }>(`/api/clientes`, {
+      method: "POST",
+      body: JSON.stringify({ data: payload }),
+    });
+
+    return { data: response.data };
+  } catch (error) {
+    console.error("Error updating client by ID:", error);
+    throw new Error("Error al crear el cliente");
+  }
+}
+
 export async function uploadFileToStrapi(
   formData: FormData,
 ): Promise<StrapiMedia[]> {
@@ -200,5 +160,24 @@ export async function uploadFileToStrapi(
   } catch (error) {
     console.error("Error uploading file to Strapi:", error);
     throw new Error("Error uploading file to Strapi");
+  }
+}
+
+export async function getLastContractNumber<K extends keyof Client>(
+  field: K = "contrato" as K
+): Promise<Client[K] | 0> {
+  try {
+    const response = await strapiJson<{
+      data: Record<string, Client[K]>[];
+      meta: Record<string, unknown>;
+    }>(`/api/clientes?sort[0]=${String(field)}:desc&pagination[limit]=1&fields[0]=${String(field)}`);
+
+    if (response.data && response.data.length > 0) {
+      return response.data[0][field as string] ?? 0;
+    }
+    return 0;
+  } catch (error) {
+    console.error(`Error fetching last ${String(field)}:`, error);
+    return 0;
   }
 }
