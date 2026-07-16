@@ -6,6 +6,7 @@ import {
   SupportI,
   CloseI,
   AddI,
+  MoreI,
 } from "@/components/icons/Icons";
 import { useTabsControl } from "@/contexts/control-context";
 import { JSX } from "react";
@@ -15,6 +16,7 @@ const TAB_ICONS: Record<string, JSX.Element> = {
   contratos: <UserI className="w-3 h-3 shrink-0 text-indigo-500 dark:text-indigo-400" />,
   "add-plans": <AddI className="w-3 h-3 shrink-0 text-amber-500 dark:text-amber-400" />,
   soporte: <SupportI className="w-3 h-3 shrink-0 text-purple-500 dark:text-purple-400" />,
+  "new-client": <MoreI className="w-3 h-3 shrink-0 text-green-500 dark:text-green-400" />,
 };
 
 export default function DynamicTabs() {

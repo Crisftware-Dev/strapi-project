@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { useClientContext } from "@/contexts/client-context";
+import { useTabsControl } from "@/contexts/control-context";
 import { useClientById } from "@/hooks/useClientById";
 import { useUpdateClient } from "@/hooks/useUpdateClient";
 
@@ -16,6 +17,8 @@ export default function FooterControl() {
     isValidToSave,
     validationError,
   } = useClientContext();
+
+  const { setActiveSubControls, openTab } = useTabsControl();
 
   const { data: client } = useClientById(selectedClientId || "");
   const { updateClient, uploadFiles } = useUpdateClient();
@@ -130,6 +133,10 @@ export default function FooterControl() {
         <Button
           variant={"outline"}
           className="border-indigo-200 text-indigo-700 hover:bg-indigo-50 dark:border-indigo-800 dark:text-indigo-400 dark:hover:bg-indigo-900/50"
+          onClick={() => {
+            setActiveSubControls("new-client");
+            openTab("new-client", "Nuevo Cliente");
+          }}
         >
           Nuevo
         </Button>
