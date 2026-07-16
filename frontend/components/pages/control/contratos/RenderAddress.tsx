@@ -19,6 +19,7 @@ import {
   DataSelect,
   DataToggle,
 } from "@/components/ui/client-data-fields";
+import { P } from "@/components/ui/p";
 
 export default function RenderAddress() {
   const { selectedClientId, isEditing, formData, setFormData, setActiveTab } =
@@ -183,28 +184,18 @@ export default function RenderAddress() {
             <Input type="text" className={styles.input} value={""} readOnly />
           </ClientDataRow>
           <ClientDataRow label="Vendido por:">
-            <Input
-              type="text"
-              className={styles.input}
-              value={
-                client.seller_user?.fullname +
+            <P>
+              {client.seller_user?.fullname +
                 " " +
-                client.seller_user?.lastname
-              }
-              readOnly
-            />
+                client.seller_user?.lastname}
+            </P>
           </ClientDataRow>
           <ClientDataRow label="Instalador Asignado">
-            <Input
-              type="text"
-              className={styles.input}
-              value={
-                client.assigned_installer?.fullname +
+            <P>
+              {client.assigned_installer?.fullname +
                 " " +
-                client.assigned_installer?.lastname
-              }
-              readOnly
-            />
+                client.assigned_installer?.lastname}
+            </P>
           </ClientDataRow>
         </section>
         <section className={cn(styles.rightColumn, "w-2/5 flex flex-col")}>
