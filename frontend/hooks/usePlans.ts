@@ -1,4 +1,5 @@
-import { fetchPlans, createPlan } from "@/lib/endpoint-api";
+import { fetchPlans } from "@/lib/endpoint-api";
+import { createPlanAction } from "@/actions/mutations";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plan } from "@/types/typesDB";
 
@@ -14,7 +15,7 @@ export function usePlans(enabled: boolean = true) {
 export function useCreatePlan() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: Partial<Plan>) => createPlan(data),
+    mutationFn: (data: Partial<Plan>) => createPlanAction(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["plans"] });
     },

@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateClientById, uploadFileToStrapi } from "@/lib/endpoint-api";
+import { updateClientAction, uploadFileAction } from "@/actions/mutations";
 import { Client, StrapiMedia } from "@/types/typesDB";
 
 interface UpdateClientParams {
@@ -12,12 +12,12 @@ export function useUpdateClient() {
 
   const uploadFiles = useMutation({
     mutationFn: (formData: FormData): Promise<StrapiMedia[]> =>
-      uploadFileToStrapi(formData),
+      uploadFileAction(formData),
   });
 
   const updateClient = useMutation({
     mutationFn: ({ documentId, data }: UpdateClientParams) =>
-      updateClientById(documentId, data),
+      updateClientAction(documentId, data),
     onSuccess: (_result, variables) => {
       queryClient.invalidateQueries({
         queryKey: ["clientById", variables.documentId],
