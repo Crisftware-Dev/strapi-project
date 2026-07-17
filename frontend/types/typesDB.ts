@@ -21,7 +21,7 @@ export interface Client {
   automaticInvoice: boolean;
   contact: Contact;
   entity: string;
-  applied_discount: applied_discount;
+  applied_discount: applied_discounts;
   installationDate: string;
   transferDate: string;
   sinceCustomer: string;
@@ -76,7 +76,7 @@ export interface Plan {
   CREATEDBY: string;
 }
 
-export interface applied_discount {
+export interface applied_discounts {
   documentId: string;
   name: string;
   value: number;
