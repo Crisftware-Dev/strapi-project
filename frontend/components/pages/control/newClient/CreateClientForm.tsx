@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Client } from "@/types/typesDB";
-import { createClient } from "@/lib/endpoint-api";
+import { createClientAction } from "@/actions/mutations";
 import { styles } from "@/app/styles/styles";
 import { Select } from "@/components/ui/primitives";
 
@@ -23,7 +23,7 @@ export default function NewClient({ onSuccess }: { onSuccess?: () => void }) {
     hasDucts: false,
     planPrincipal: false,
     valores: 0,
-    contrato: 0,
+
     scoreCredit: 0,
     contact: { telephone: "", phoneSms: "", phoneTwo: "" },
     location: { latitude: "", longitude: "" },
@@ -64,7 +64,7 @@ export default function NewClient({ onSuccess }: { onSuccess?: () => void }) {
     e.preventDefault();
     setLoading(true);
     try {
-      await createClient(formData);
+      await createClientAction(formData);
       alert("Cliente creado exitosamente");
       if (onSuccess) onSuccess();
     } catch (error) {
@@ -137,12 +137,6 @@ export default function NewClient({ onSuccess }: { onSuccess?: () => void }) {
         <div className="flex flex-col gap-1">
           <Label className={styles.inputLabel}>Longitud (Ubicación) *</Label>
           <Input required type="text" className={styles.input} value={formData.location?.longitude || ""} onChange={(e) => handleLocation("longitude", e.target.value)} />
-        </div>
-
-        {/* Datos Contractuales */}
-        <div className="flex flex-col gap-1">
-          <Label className={styles.inputLabel}>Número de Contrato *</Label>
-          <Input required type="number" className={styles.input} value={formData.contrato || ""} onChange={(e) => handleField("contrato", Number(e.target.value))} />
         </div>
 
         <div className="flex flex-col gap-1">
