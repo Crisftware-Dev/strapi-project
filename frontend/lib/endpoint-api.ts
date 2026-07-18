@@ -18,11 +18,25 @@ const CLIENT_POPULATE = [
   "populate[location]=true",
 ].join("&");
 
+const CLIENT_SEARCH_PARAMS = [
+  "fields[0]=nombres",
+  "fields[1]=apellidos",
+  "fields[2]=identificacion",
+  "fields[3]=contrato",
+  "fields[4]=ciudad",
+  "fields[5]=estado",
+  "fields[6]=tipoPlan",
+  "populate[contact][fields][0]=telephone",
+  "populate[contact][fields][1]=phoneSms",
+  "populate[contact][fields][2]=phoneTwo",
+  "populate[plans][fields][0]=plan",
+].join("&");
+
 export async function fetchClients(): Promise<{ data: Client[] }> {
   const response = await strapiJson<{
     data: Client[];
     meta: Record<string, unknown>;
-  }>(`/api/clientes?${CLIENT_POPULATE}`);
+  }>(`/api/clientes?${CLIENT_SEARCH_PARAMS}`);
 
   return { data: response.data };
 }
