@@ -65,7 +65,6 @@ export default function HeaderSearch() {
 
   const handleNameSearch = (value: string) => {
     setNameInput(value);
-    if (!isFetchEnabled) setIsFetchEnabled(true);
 
     if (!value.trim()) {
       setNameResults([]);
@@ -141,7 +140,6 @@ export default function HeaderSearch() {
               placeholder="Buscar por Apellidos y Nombres"
               value={nameInput}
               onChange={(e) => handleNameSearch(e.target.value)}
-              onFocus={() => setIsFetchEnabled(true)}
             />
 
             <SearchInput
