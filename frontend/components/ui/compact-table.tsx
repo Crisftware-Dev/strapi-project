@@ -28,6 +28,7 @@ interface TableSearchHeaderProps {
   id: string;
   placeholder: string;
   value?: string;
+  disabled?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onFocus?: () => void;
   children?: React.ReactNode;
@@ -65,6 +66,7 @@ export function TableSearchHeader({
   id,
   placeholder,
   value,
+  disabled,
   onChange,
   onFocus,
   children,
@@ -84,6 +86,7 @@ export function TableSearchHeader({
           id={id}
           placeholder={placeholder}
           value={value}
+          disabled={disabled}
           onChange={onChange}
           onFocus={onFocus}
           className="flex-1"
