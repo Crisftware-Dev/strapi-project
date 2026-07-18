@@ -1,52 +1,60 @@
 export interface Client {
+  // Identificación y datos personales
   documentId: string;
   nombres: string;
   apellidos: string;
   currentAge: string;
   identificacion: string;
-  contrato: number;
   ciudad: string;
   email: string;
-  estado: string;
-  valores: number;
-  plans: Plan[];
-  tipoPlan: string;
-  planPrincipal: boolean;
-  tipoCliente: string;
-  reference: Reference[];
-  automaticCut: boolean;
-  discountLaw: DiscountLaw | null;
-  withholdingAgent: boolean;
-  files: FileItem[];
-  automaticInvoice: boolean;
-  contact: Contact;
   entity: string;
-  applied_discount: applied_discounts;
+  economicActivity: string | undefined;
+  typeOfHousing: string | undefined;
   installationDate: string;
   transferDate: string;
   sinceCustomer: string;
+
+  // Contrato y estado financiero
+  contrato: number;
+  estado: string;
+  valores: number;
+  tipoPlan: string;
+  planPrincipal: boolean;
+  tipoCliente: string;
   scoreCredit: number;
-  seller_user: User;
-  assigned_installer: User;
-  location: Location;
-  economicActivity: string | undefined;
-  typeOfHousing: string | undefined;
   relatedClient: boolean;
   creditButt: boolean;
   discardButt: boolean;
   hasDucts: boolean;
+  automaticCut: boolean;
+  automaticInvoice: boolean;
+  withholdingAgent: boolean;
+
+  // Relaciones y componentes
+  plans: Plan[];
+  reference: Reference[];
+  discountLaw: DiscountLaw | null;
+  files: FileItem[];
+  contact: Contact;
+  applied_discount: AppliedDiscount;
+  seller_user: User;
+  assigned_installer: User;
+  location: Location;
 }
 
+// Geolocalización
 export interface Location {
   latitude: string;
   longitude: string;
 }
 
+// Ley de descuento (discapacidad / tercera edad)
 export interface DiscountLaw {
   disability: boolean;
   oldAge: boolean;
 }
 
+// Referencias personales del cliente
 export interface Reference {
   identificacion: string;
   fullnames: string;
@@ -54,17 +62,20 @@ export interface Reference {
   phone: number;
 }
 
+// Datos de contacto
 export interface Contact {
   telephone: string;
   phoneSms: string;
   phoneTwo: string;
 }
 
+// Usuario (vendedor / instalador)
 export interface User {
   fullname: string;
   lastname: string;
 }
 
+// Plan contratado
 export interface Plan {
   documentId: string;
   type: string;
@@ -76,13 +87,15 @@ export interface Plan {
   CREATEDBY: string;
 }
 
-export interface applied_discounts {
+// Descuento aplicado
+export interface AppliedDiscount {
   documentId: string;
   name: string;
   value: number;
   description: string;
 }
 
+// Archivo multimedia de Strapi
 export interface StrapiMedia {
   id: number;
   documentId?: string;
@@ -91,6 +104,7 @@ export interface StrapiMedia {
   mime: string;
 }
 
+// Ítem de archivo (puede tener uno o varios adjuntos)
 export interface FileItem {
   id?: number;
   documentId?: string;

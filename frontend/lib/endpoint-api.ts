@@ -4,7 +4,7 @@ import type {
   Client,
   User,
   Plan,
-  applied_discounts,
+  AppliedDiscount,
 } from "@/types/typesDB";
 import { strapiJson } from "./api";
 
@@ -59,7 +59,7 @@ export async function fetchPlans() {
 
 export async function fetchAppliedDiscount() {
   const response = await strapiJson<{
-    data: applied_discounts[];
+    data: AppliedDiscount[];
     meta: Record<string, unknown>;
   }>("/api/applied-discounts");
 

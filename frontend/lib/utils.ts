@@ -1,4 +1,4 @@
-import { applied_discounts, Client, FileItem, Plan } from "@/types/typesDB";
+import { AppliedDiscount, Client, FileItem, Plan } from "@/types/typesDB";
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
@@ -20,7 +20,7 @@ export function sanitizeClientPayload(data: Partial<Omit<Client, "documentId">>)
   }
 
   if (payload.applied_discount) {
-    payload.applied_discount = (payload.applied_discount.documentId || null) as unknown as applied_discounts;
+    payload.applied_discount = (payload.applied_discount.documentId || null) as unknown as AppliedDiscount;
   }
 
   // Componentes
