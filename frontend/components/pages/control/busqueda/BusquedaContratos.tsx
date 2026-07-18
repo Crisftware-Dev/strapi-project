@@ -22,7 +22,7 @@ export default function BusquedaContratos() {
   const [hasSearched, setHasSearched] = useState(false);
 
   const { data, isLoading } = useClients(isFetchEnabled);
-  const { data: plans } = usePlans(isFetchEnabled);
+  const { data: plans } = usePlans();
 
   const clients = data?.data || [];
   const plansData = plans?.data || [];
@@ -110,9 +110,6 @@ export default function BusquedaContratos() {
             className="bg-white dark:bg-gray-950 border-indigo-100 dark:border-indigo-900/50"
             value={planInput}
             onChange={(e) => setPlanInput(e.target.value)}
-            onFocus={() => {
-              setIsFetchEnabled(true);
-            }}
           >
             <option value="">Seleccione Plan</option>
             {plansData.map((plan) => (
