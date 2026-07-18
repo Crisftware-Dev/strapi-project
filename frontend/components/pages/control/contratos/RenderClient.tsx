@@ -80,13 +80,16 @@ export default function RenderClient() {
 
     const filtered = plansData.filter((plan) => {
       const media = `${plan.type}`.toLowerCase();
-      const search = searchPlan.toLowerCase();
+      const search = value.toLowerCase();
 
       if (formData.tipoPlan) {
         if (media.includes(formData.tipoPlan.toLowerCase())) {
           return plan.plan.toLowerCase().includes(search);
         }
+        return false;
       }
+      
+      return plan.plan.toLowerCase().includes(search);
     });
 
     setPlansResults(filtered);
@@ -417,9 +420,8 @@ export default function RenderClient() {
                   id="planes"
                   placeholder="Busque aquí el plan"
                   value={searchPlan}
-                  onChange={(e) =>
-                    isEditing && handlePlansSearch(e.target.value)
-                  }
+                  disabled={!isEditing}
+                  onChange={(e) => handlePlansSearch(e.target.value)}
                   onFocus={() => isEditing && setIsFetchEnabled(true)}
                   className="col-span-1"
                 >
