@@ -167,7 +167,7 @@ export default function ClientSearchResults({
                     {phoneText}
                   </td>
                   <td
-                    className="px-4 py-3 text-xs text-gray-600 dark:text-gray-300 max-w-[200px] truncate"
+                    className="px-4 py-3 text-xs text-gray-600 dark:text-gray-300 max-w-50 truncate"
                     title={plansText}
                   >
                     {plansText}

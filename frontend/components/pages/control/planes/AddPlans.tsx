@@ -4,7 +4,7 @@ import { usePlans } from "@/hooks/usePlans";
 import { useState } from "react";
 import { SearchI, MoneyI, AddI, UserI } from "@/components/icons/Icons";
 import { PlanProvider, usePlanContext, SERVICE_TYPES, CUT_OPTIONS } from "@/contexts/plan-context";
-import { CurrentUser } from "@/hooks/useUser";
+import { useCurrentUser } from "@/hooks/useUser";
 import FormField from "@/components/ui/FormField";
 import FormButton from "@/components/ui/FormButton";
 import { Notification } from "@/components/ui/feedback";
@@ -15,7 +15,7 @@ function PlansTable() {
   const { data: plansData, isLoading, isError } = usePlans(true);
   const [search, setSearch] = useState("");
 
-  const plans = plansData?.data || [];
+  const plans = plansData || [];
   const filteredPlans = plans.filter(
     (p) =>
       p.plan?.toLowerCase().includes(search.toLowerCase()) ||
@@ -126,7 +126,7 @@ function PlansTable() {
 
 function PlanForm() {
   const { form, handleInputChange, handleSubmit, isPending } = usePlanContext();
-  const { nameAndLastname } = CurrentUser();
+  const { nameAndLastname } = useCurrentUser();
 
   return (
     <div className="lg:col-span-5 space-y-4">

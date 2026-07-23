@@ -8,7 +8,7 @@ import {
   ReactNode,
 } from "react";
 import { useCreatePlan } from "@/hooks/usePlans";
-import { CurrentUser } from "@/hooks/useUser";
+import { useCurrentUser } from "@/hooks/useUser";
 
 // ─── Constantes ─────────────────────────────────────────────────────────────
 
@@ -62,7 +62,7 @@ const PlanContext = createContext<PlanContextType | undefined>(undefined);
 // ─── Provider ────────────────────────────────────────────────────────────────
 
 export function PlanProvider({ children }: { children: ReactNode }) {
-  const { nameAndLastname } = CurrentUser();
+  const { nameAndLastname } = useCurrentUser();
   const createPlanMutation = useCreatePlan();
 
   const [form, setForm] = useState<PlanFormData>(PLAN_INITIAL_STATE);

@@ -24,8 +24,8 @@ export default function BusquedaContratos() {
   const { data, isLoading } = useClients(isFetchEnabled);
   const { data: plans } = usePlans();
 
-  const clients = data?.data || [];
-  const plansData = plans?.data || [];
+  const clients = data || [];
+  const plansData = plans || [];
 
   const showClients = () => {
     if (!isFetchEnabled) setIsFetchEnabled(true);
@@ -71,7 +71,7 @@ export default function BusquedaContratos() {
   return (
     <section className="p-4 space-y-4">
       <header className="flex flex-wrap gap-4 w-full p-4 bg-gray-50/50 dark:bg-gray-900/10 border border-indigo-50 dark:border-indigo-900/20 rounded-xl items-end">
-        <div className="flex-1 min-w-[200px] flex flex-col gap-1.5">
+        <div className="flex-1 min-w-50 flex flex-col gap-1.5">
           <label className="text-[10px] font-bold text-indigo-900/60 dark:text-indigo-300/60 uppercase">
             Nombres o Apellidos
           </label>
@@ -86,7 +86,7 @@ export default function BusquedaContratos() {
           />
         </div>
 
-        <div className="w-[150px] flex flex-col gap-1.5">
+        <div className="w-37.5 flex flex-col gap-1.5">
           <label className="text-[10px] font-bold text-indigo-900/60 dark:text-indigo-300/60 uppercase">
             Teléfono
           </label>
@@ -101,7 +101,7 @@ export default function BusquedaContratos() {
           />
         </div>
 
-        <div className="w-[200px] flex flex-col gap-1.5">
+        <div className="w-50 flex flex-col gap-1.5">
           <label className="text-[10px] font-bold text-indigo-900/60 dark:text-indigo-300/60 uppercase">
             Plan
           </label>
@@ -120,7 +120,7 @@ export default function BusquedaContratos() {
           </Select>
         </div>
 
-        <div className="w-[130px] flex flex-col gap-1.5">
+        <div className="w-32.5 flex flex-col gap-1.5">
           <label className="text-[10px] font-bold text-indigo-900/60 dark:text-indigo-300/60 uppercase">
             Estado
           </label>
@@ -139,7 +139,7 @@ export default function BusquedaContratos() {
           </Select>
         </div>
 
-        <div className="w-[150px] flex flex-col gap-1.5">
+        <div className="w-37.5 flex flex-col gap-1.5">
           <label className="text-[10px] font-bold text-indigo-900/60 dark:text-indigo-300/60 uppercase">
             Medio
           </label>

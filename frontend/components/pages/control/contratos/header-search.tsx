@@ -30,7 +30,7 @@ export default function HeaderSearch() {
   const [isFetchEnabled, setIsFetchEnabled] = useState(false);
 
   const { data, isLoading } = useClients(isFetchEnabled);
-  const clients = data?.data || [];
+  const clients = data || [];
 
   const handleIdentifierSearch = () => {
     if (!identifierInput.trim()) return;

@@ -7,7 +7,7 @@ import { Li, Ul } from "@/components/ui/list";
 
 import { useState } from "react";
 import ChangePass from "@/components/ui/change-pass";
-import { CurrentUser } from "@/hooks/useUser";
+import { useCurrentUser } from "@/hooks/useUser";
 import { useTabsControl } from "@/contexts/control-context";
 import { useClickOutside } from "@/hooks/useClickOutside";
 import { buildControlsList } from "@/components/ui/arrays";
@@ -27,7 +27,7 @@ export default function HeaderControl() {
   const { openTab, activeControls, setActiveControls, setActiveSubControls } =
     useTabsControl();
   const [isOpen, setIsOpen] = useState(false);
-  const { nameAndLastname, initials } = CurrentUser();
+  const { nameAndLastname, initials } = useCurrentUser();
 
   const handleLogout = () => {
     logoutUserAction();

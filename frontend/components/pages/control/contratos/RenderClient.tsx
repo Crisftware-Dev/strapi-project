@@ -58,7 +58,7 @@ export default function RenderClient() {
 
   const { data: plans } = usePlans(isFetchEnabled);
   const { data: appliedDiscount } = useAppliedDiscount();
-  const plansData = plans?.data || [];
+  const plansData = plans || [];
 
   const activePlans =
     (isEditing ? formData.plans || client?.plans : client?.plans) || [];
@@ -113,7 +113,7 @@ export default function RenderClient() {
     if (!isEditing) return;
     const currentDiscount =
       formData.applied_discount || client?.applied_discount;
-    const discount = appliedDiscount?.data.find((d) => d.name === value);
+    const discount = appliedDiscount?.find((d) => d.name === value);
 
     console.log(formData.applied_discount?.name);
 
@@ -521,7 +521,7 @@ export default function RenderClient() {
                 disabled={!isEditing}
                 className={cn("w-3/4")}
               >
-                {appliedDiscount?.data.map((discount) => (
+                {appliedDiscount?.map((discount) => (
                   <option key={discount.documentId}>{discount.name}</option>
                 ))}
               </Select>
