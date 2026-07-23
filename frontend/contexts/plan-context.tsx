@@ -8,7 +8,6 @@ import {
   ReactNode,
 } from "react";
 import { useCreatePlan } from "@/hooks/usePlans";
-import { useCurrentUser } from "@/hooks/useUser";
 
 // ─── Constantes ─────────────────────────────────────────────────────────────
 
@@ -61,8 +60,7 @@ const PlanContext = createContext<PlanContextType | undefined>(undefined);
 
 // ─── Provider ────────────────────────────────────────────────────────────────
 
-export function PlanProvider({ children }: { children: ReactNode }) {
-  const { nameAndLastname } = useCurrentUser();
+export function PlanProvider({ children, userName }: { children: ReactNode; userName: string }) {
   const createPlanMutation = useCreatePlan();
 
   const [form, setForm] = useState<PlanFormData>(PLAN_INITIAL_STATE);
@@ -121,7 +119,7 @@ export function PlanProvider({ children }: { children: ReactNode }) {
           type: form.type,
           valor: valorNum,
           cut: cutNum,
-          CREATEDBY: nameAndLastname,
+          CREATEDBY: userName,
         });
 
         showNotification(
@@ -136,7 +134,7 @@ export function PlanProvider({ children }: { children: ReactNode }) {
         );
       }
     },
-    [form, nameAndLastname, createPlanMutation, showNotification, resetForm]
+    [form, userName, createPlanMutation, showNotification, resetForm]
   );
 
   return (

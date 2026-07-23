@@ -226,8 +226,10 @@ function PlanForm() {
 // ─── Componente principal ─────────────────────────────────────────────────────
 
 export default function AddPlans() {
+  const { nameAndLastname } = useCurrentUser();
+
   return (
-    <PlanProvider>
+    <PlanProvider userName={nameAndLastname}>
       <AddPlansContent />
     </PlanProvider>
   );
