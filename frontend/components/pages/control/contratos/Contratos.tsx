@@ -6,19 +6,10 @@ import ClientDataDisplay from "@/components/pages/control/contratos/RenderClient
 import RenderPaymentsOuts from "@/components/pages/control/contratos/RenderPaymentsOuts";
 import RenderPaymentsHistory from "@/components/pages/control/contratos/RenderPaymetsHistory";
 import { ClientProvider, useClientContext } from "@/contexts/client-context";
-import { useEffect, useRef } from "react";
 import FooterControl from "./FooterControl";
 
 function DashboardRoute() {
-  const { selectedClientId, activeTab, setActiveTab } = useClientContext();
-  const prevClientId = useRef(selectedClientId);
-
-  useEffect(() => {
-    if (selectedClientId !== prevClientId.current) {
-      prevClientId.current = selectedClientId;
-      setActiveTab("cliente");
-    }
-  }, [selectedClientId, setActiveTab]);
+  const { activeTab } = useClientContext();
 
   return (
     <>

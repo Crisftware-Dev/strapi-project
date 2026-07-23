@@ -6,6 +6,7 @@ import {
   useState,
   useCallback,
   useMemo,
+  useEffect,
   ReactNode,
 } from "react";
 import { Client } from "@/types/typesDB";
@@ -27,6 +28,7 @@ interface ClientContextType {
   hasUnsavedChanges: boolean;
   isValidToSave: boolean;
   validationError: string | null;
+  notification: string | null;
   trySelectClient: (id: string) => boolean;
 }
 
@@ -38,10 +40,26 @@ export function ClientProvider({ children }: { children: ReactNode }) {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState<EditableClientData>({});
   const [originalData, setOriginalData] = useState<EditableClientData>({});
+  const [notification, setNotification] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!notification) return;
+    const timer = setTimeout(() => setNotification(null), 5000);
+    return () => clearTimeout(timer);
+  }, [notification]);
 
   const hasUnsavedChanges = useMemo(() => {
     if (!isEditing) return false;
-    return JSON.stringify(formData) !== JSON.stringify(originalData);
+    const keys = new Set([
+      ...Object.keys(formData),
+      ...Object.keys(originalData),
+    ]);
+    for (const key of keys) {
+      if (formData[key as keyof EditableClientData] !== originalData[key as keyof EditableClientData]) {
+        return true;
+      }
+    }
+    return false;
   }, [isEditing, formData, originalData]);
 
   const isValidToSave = useMemo(() => {
@@ -131,6 +149,7 @@ export function ClientProvider({ children }: { children: ReactNode }) {
     (id: string) => {
       if (!isEditing) {
         setSelectedClientId(id);
+        setActiveTab("cliente");
         return true;
       }
       if (!hasUnsavedChanges) {
@@ -138,18 +157,16 @@ export function ClientProvider({ children }: { children: ReactNode }) {
         setFormData({});
         setOriginalData({});
         setSelectedClientId(id);
+        setActiveTab("cliente");
         return true;
       }
       if (isEditing && hasUnsavedChanges) {
-        alert(
+        setNotification(
           "Tiene cambios sin guardar. Guarde o cancele antes de cambiar de cliente.",
         );
         return false;
       }
 
-      // if(formData.tipoPlan !== originalData.plans.map((plan) => plan.type)){
-
-      // }
       return false;
     },
     [isEditing, hasUnsavedChanges],
@@ -170,6 +187,7 @@ export function ClientProvider({ children }: { children: ReactNode }) {
         hasUnsavedChanges,
         isValidToSave,
         validationError,
+        notification,
         trySelectClient,
       }}
     >
