@@ -9,7 +9,7 @@ export function useUser() {
   });
 }
 
-export function CurrentUser() {
+export function useCurrentUser() {
   const { data: user } = useUser();
 
   const nameAndLastname =

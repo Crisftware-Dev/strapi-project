@@ -9,6 +9,7 @@ export function usePlans(enabled: boolean = true) {
     queryFn: fetchPlans,
     staleTime: 1000 * 60 * 5,
     enabled,
+    select: (response: { data: Plan[] }) => response.data,
   });
 }
 
