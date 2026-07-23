@@ -47,7 +47,7 @@ export default function RenderPaymentsHistory() {
     <article className={styles.container} key={selectedClientId}>
       <main className={styles.mainGrid}>
         <CompactTable
-          className="min-w-[1200px]"
+          className="min-w-300"
           gridCols="repeat(10, minmax(max-content, 1fr)) 120px"
         >
           <Headers

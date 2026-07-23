@@ -186,7 +186,7 @@ export default function RenderClient() {
 
   if (!selectedClientId) {
     return (
-      <div className="flex flex-col items-center justify-center h-full min-h-[600px] text-gray-400 dark:text-gray-600">
+      <div className="flex flex-col items-center justify-center h-full min-h-150 text-gray-400 dark:text-gray-600">
         <UserI className="text-6xl mb-4 opacity-20" />
         <p className="text-sm">Seleccione un cliente para ver su información</p>
       </div>
