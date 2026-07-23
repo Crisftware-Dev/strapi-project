@@ -16,6 +16,7 @@ export default function FooterControl() {
     resetFormData,
     isValidToSave,
     validationError,
+    notification,
   } = useClientContext();
 
   const { setActiveSubControls, openTab } = useTabsControl();
@@ -171,6 +172,11 @@ export default function FooterControl() {
           Enviar Contrato
         </Button>
 
+        {notification && (
+          <p className="w-full text-center text-xs text-red-600 mt-1 flex-1 basis-full font-medium">
+            {notification}
+          </p>
+        )}
         {(updateClient.isError || uploadFiles.isError) && (
           <p className="w-full text-center text-xs text-red-500 mt-1 flex-1 basis-full">
             {uploadFiles.isError
