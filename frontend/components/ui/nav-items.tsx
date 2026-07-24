@@ -11,7 +11,7 @@ interface LiControlHeaderProps {
   menuRef?: React.RefObject<HTMLLIElement>;
   caret?: JSX.Element;
   children?: React.ReactNode;
-  onClick: (e: React.MouseEvent<HTMLLIElement, MouseEvent>, id?: string) => void;
+  onClick: (e: React.MouseEvent<HTMLElement>, id?: string) => void;
 }
 
 const LI_STYLE =
@@ -34,28 +34,34 @@ export function LiControlHeader({
   const isMenuOpen = isActive ?? activeControls;
 
   return (
-    <button
-      aria-controls={id + "-dropdown"}
-      className="w-full focus:outline-none"
-    >
-      <li key={id} ref={menuRef} onClick={(e) => onClick(e, id)} className={LI_STYLE}>
+    <li ref={menuRef} key={id} className={`relative ${LI_STYLE}`}>
+      <button
+        type="button"
+        aria-controls={id + "-dropdown"}
+        aria-expanded={Boolean(isMenuOpen)}
+        onClick={(e) => onClick(e, id)}
+        className="flex items-center gap-1 w-full focus:outline-none cursor-pointer"
+      >
+
         {icon}
-        <span>{text}</span>
+        {text && <span>{text}</span>}
         {caret}
-        <ul
-          className={
-            UL_DROPDOWN +
-            (isMenuOpen && children
-              ? " opacity-100 scale-100 translate-y-0 pointer-events-auto"
-              : " opacity-0 scale-95 -translate-y-2 pointer-events-none")
-          }
-        >
-          {children}
-        </ul>
-      </li>
-    </button>
+      </button>
+      <ul
+        id={id + "-dropdown"}
+        className={
+          UL_DROPDOWN +
+          (isMenuOpen && children
+            ? " opacity-100 scale-100 translate-y-0 pointer-events-auto"
+            : " opacity-0 scale-95 -translate-y-2 pointer-events-none")
+        }
+      >
+        {children}
+      </ul>
+    </li>
   );
 }
+
 
 // ─── LiOptionClient — tab de cliente activo ───────────────────────────────────
 
