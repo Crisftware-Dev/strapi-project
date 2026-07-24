@@ -83,16 +83,20 @@ export default function HeaderControl() {
               caret={control.caret}
               onClick={handleDropdownClick}
             >
-              {control.children?.map((child) => (
-                <Li
-                  key={child.id}
-                  id={child.id}
-                  label={child.text}
-                  onClick={child.onClick}
-                >
-                  {child.icon}
-                </Li>
-              ))}
+              {control.children?.map((child) =>
+                child.isComponent ? (
+                  <li key={child.id}>{child.icon}</li>
+                ) : (
+                  <Li
+                    key={child.id}
+                    id={child.id}
+                    label={child.text}
+                    onClick={child.onClick}
+                  >
+                    {child.icon}
+                  </Li>
+                ),
+              )}
             </LiControlHeader>
           </Ul>
         ))}
