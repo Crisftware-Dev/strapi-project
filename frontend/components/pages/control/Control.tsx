@@ -1,13 +1,13 @@
 "use client";
 
 import { Suspense } from "react";
-import DynamicTabs from "./components/DynamicTabs";
-import AddPlans from "./planes/AddPlans";
-import SoporteContratos from "./components/SoporteContratos";
-import BusquedaContratos from "./busqueda/BusquedaContratos";
-import Contratos from "./contratos/Contratos";
+import DynamicTabs from "./DynamicTabs";
+import AddPlans from "./plans/AddPlans";
+import SoporteContratos from "./SoporteContratos";
+import BusquedaContratos from "./search/BusquedaContratos";
+import Contratos from "./contracts/Contratos";
 import { useTabsControl } from "@/contexts/control-context";
-import NewClient from "./newClient/CreateClientForm";
+import NewClient from "./client-form/CreateClientForm";
 
 // ─── Inner component (necesita acceder al context) ────────────────────────────
 function ContratosInner() {

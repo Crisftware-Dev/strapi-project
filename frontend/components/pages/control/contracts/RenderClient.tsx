@@ -29,7 +29,7 @@ import { styles } from "@/app/styles/styles";
 import { usePlans } from "@/hooks/usePlans";
 import { Contact, DiscountLaw, Plan } from "@/types/typesDB";
 import { SearchPlans } from "@/components/ui/search";
-import CurrentAge from "@/components/pages/control/contratos/current-age";
+import CurrentAge from "@/components/pages/control/contracts/current-age";
 import FileUploader from "@/components/ui/files";
 import { useAppliedDiscount } from "@/hooks/useAppliedDiscount";
 

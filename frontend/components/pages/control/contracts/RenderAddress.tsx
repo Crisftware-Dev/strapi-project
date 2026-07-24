@@ -11,9 +11,9 @@ import StarRating from "@/components/ui/stars";
 import { CompactTable } from "@/components/ui/compact-table";
 import FormFamily from "@/components/ui/formFamily";
 import { useCallback } from "react";
-import CurrentAge from "@/components/pages/control/contratos/current-age";
+import CurrentAge from "@/components/pages/control/contracts/current-age";
 import type { Location } from "@/types/typesDB";
-import RenderMap from "@/components/pages/control/contratos/RenderMap";
+import RenderMap from "@/components/pages/control/contracts/RenderMap";
 import {
   DataInput,
   DataSelect,

@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   },
 };
 
-import Providers from "@/components/providers/query-provider";
+import Providers from "@/contexts/app-providers";
 
 export default async function DashboardLayout({
   children,
