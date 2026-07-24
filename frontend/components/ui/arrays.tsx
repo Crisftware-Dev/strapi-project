@@ -1,6 +1,8 @@
 import { styles } from '@/app/styles/styles';
 import { AddI, ArrowRigthI, CircleI, KeyI, PowerOffI, SearchI, SupportI, UserI } from '@/components/icons/Icons';
+import ThemeToggle from '@/components/ui/theme-toggle';
 import { ReactElement } from 'react';
+
 
 export interface MenuItem {
   id: string;
@@ -9,6 +11,7 @@ export interface MenuItem {
   caret?: ReactElement;
   onClick?: (e: React.MouseEvent) => void;
   children?: MenuItem[];
+  isComponent?: boolean;
 }
 
 export type ControlsBuilderProps = {
@@ -62,6 +65,17 @@ export const buildControlsList = (props: ControlsBuilderProps): MenuItem[] => {
       caret: <ArrowRigthI className={`${styles.caret} ${activeControls === "configuracion" ? "rotate-90" : ""}`} />,
       children: [
         { id: "usuario", text: nameAndLastname, icon: <UserI className={styles.icon} /> },
+        {
+          id: "tema",
+          isComponent: true,
+          text: "",
+          icon: (
+            <ThemeToggle
+              variant="label"
+              className="p-2 text-xs font-medium text-gray-600 dark:text-gray-300"
+            />
+          ),
+        },
         { id: "cambiar-clave", text: "Cambiar Clave", icon: <KeyI className={styles.icon} />,
           onClick: (e) => { e.stopPropagation(); setIsOpen(true); setActiveControls(""); }
         },
