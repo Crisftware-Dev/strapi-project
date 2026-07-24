@@ -28,7 +28,7 @@ export default function DynamicTabs() {
       <div
         role="tablist"
         aria-label="Pestañas de contratos"
-        className="flex items-end gap-0 overflow-x-auto px-2 pt-1"
+        className="flex items-end gap-0 px-2 pt-1"
       >
         {/* ── Pestañas abiertas ──────────────────────────────────────────── */}
         {openTabs.map((tab) => {
