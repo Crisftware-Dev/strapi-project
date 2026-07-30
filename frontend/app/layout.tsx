@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Suspense } from "react";
+import { ThemeProvider } from "@/contexts/theme-context";
+
 
 const inter = Inter({
   variable: "--font-inter",
@@ -59,7 +61,26 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} antialiased`}>
+    <html lang="es" suppressHydrationWarning className={`${inter.variable} antialiased`}>
+
+      <head>
+        {/* Script anti-flash: aplica .dark ANTES de que React hidrate */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+(function(){
+  try {
+    var t = localStorage.getItem('app-theme');
+    if (!t) {
+      t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    if (t === 'dark') document.documentElement.classList.add('dark');
+  } catch(e) {}
+})();
+            `.trim(),
+          }}
+        />
+      </head>
       <body>
         <script
           type="application/ld+json"
@@ -78,8 +99,11 @@ export default function RootLayout({
             }),
           }}
         />
-        <Suspense fallback={null}>{children}</Suspense>
+        <ThemeProvider>
+          <Suspense fallback={null}>{children}</Suspense>
+        </ThemeProvider>
       </body>
     </html>
   );
 }
+

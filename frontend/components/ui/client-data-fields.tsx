@@ -1,7 +1,7 @@
 import React from "react";
 import { ClientDataRow } from "./client-data-row";
 import { Input } from "./input";
-import Select from "./select";
+import { Select } from "./primitives";
 import { cn } from "@/lib/utils";
 
 interface DataFieldProps {

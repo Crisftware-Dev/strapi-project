@@ -11,8 +11,7 @@ export const metadata: Metadata = {
   },
 };
 
-import Providers from "@/components/providers/query-provider";
-import FooterControl from "@/components/pages/FooterControl";
+import Providers from "@/contexts/app-providers";
 
 export default async function DashboardLayout({
   children,
@@ -24,7 +23,6 @@ export default async function DashboardLayout({
       <div className="flex flex-col min-h-screen">
         <HeaderControl />
         <main className="flex-1 flex flex-col">{children}</main>
-        <FooterControl />
       </div>
     </Providers>
   );

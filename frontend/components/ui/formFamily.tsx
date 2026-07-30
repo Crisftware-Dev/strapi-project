@@ -1,5 +1,5 @@
 import { useClientContext } from "@/contexts/client-context";
-import { Reference } from "@/types/typeClients";
+import { Reference } from "@/types/typesDB";
 
 const parentescos = [
   "HIJO/A",

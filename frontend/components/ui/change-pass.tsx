@@ -3,7 +3,7 @@
 import { FormState } from "@/validations/auth";
 import { useActionState } from "react";
 import { actions } from "@/actions";
-import { FormError } from "./form-error";
+import { FormError } from "./feedback";
 import { Input } from "./input";
 import { Label } from "./label";
 import { Button } from "./button";

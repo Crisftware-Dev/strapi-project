@@ -1,9 +1,19 @@
 "use client";
 
-import { createContext, useContext, useState, useCallback, useMemo, ReactNode } from "react";
-import { Client } from "@/types/typeClients";
+import {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useMemo,
+  useEffect,
+  ReactNode,
+} from "react";
+import { Client } from "@/types/typesDB";
 
-export type EditableClientData = Partial<Omit<Client, "documentId" | "contrato">>;
+export type EditableClientData = Partial<
+  Omit<Client, "documentId" | "contrato">
+>;
 
 interface ClientContextType {
   selectedClientId: string | null;
@@ -18,6 +28,7 @@ interface ClientContextType {
   hasUnsavedChanges: boolean;
   isValidToSave: boolean;
   validationError: string | null;
+  notification: string | null;
   trySelectClient: (id: string) => boolean;
 }
 
@@ -29,18 +40,38 @@ export function ClientProvider({ children }: { children: ReactNode }) {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState<EditableClientData>({});
   const [originalData, setOriginalData] = useState<EditableClientData>({});
+  const [notification, setNotification] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!notification) return;
+    const timer = setTimeout(() => setNotification(null), 5000);
+    return () => clearTimeout(timer);
+  }, [notification]);
 
   const hasUnsavedChanges = useMemo(() => {
     if (!isEditing) return false;
-    return JSON.stringify(formData) !== JSON.stringify(originalData);
+    const keys = new Set([
+      ...Object.keys(formData),
+      ...Object.keys(originalData),
+    ]);
+    for (const key of keys) {
+      if (formData[key as keyof EditableClientData] !== originalData[key as keyof EditableClientData]) {
+        return true;
+      }
+    }
+    return false;
   }, [isEditing, formData, originalData]);
 
   const isValidToSave = useMemo(() => {
     if (!isEditing) return true;
-    
-    const currentTipoPlan = formData.tipoPlan !== undefined ? formData.tipoPlan : originalData.tipoPlan;
-    const currentPlans = formData.plans !== undefined ? formData.plans : originalData.plans;
-    
+
+    const currentTipoPlan =
+      formData.tipoPlan !== undefined
+        ? formData.tipoPlan
+        : originalData.tipoPlan;
+    const currentPlans =
+      formData.plans !== undefined ? formData.plans : originalData.plans;
+
     if (currentTipoPlan && currentPlans && currentPlans.length > 0) {
       const hasMismatch = currentPlans.some((plan) => {
         const planMedia = `${plan.type}`.toLowerCase();
@@ -52,7 +83,13 @@ export function ClientProvider({ children }: { children: ReactNode }) {
       }
     }
     return true;
-  }, [isEditing, formData.tipoPlan, formData.plans, originalData.tipoPlan, originalData.plans]);
+  }, [
+    isEditing,
+    formData.tipoPlan,
+    formData.plans,
+    originalData.tipoPlan,
+    originalData.plans,
+  ]);
 
   const validationError = useMemo(() => {
     if (!isValidToSave) {
@@ -70,7 +107,6 @@ export function ClientProvider({ children }: { children: ReactNode }) {
         currentAge: client.currentAge,
         ciudad: client.ciudad,
         email: client.email,
-        telefono: client.telefono,
         estado: client.estado,
         valores: client.valores,
         plans: client.plans,
@@ -109,28 +145,32 @@ export function ClientProvider({ children }: { children: ReactNode }) {
     setIsEditing(false);
   }, []);
 
-  const trySelectClient = useCallback((id: string) => {
-    if (!isEditing) {
-      setSelectedClientId(id);
-      return true;
-    }
-    if (!hasUnsavedChanges) {
-      setIsEditing(false);
-      setFormData({});
-      setOriginalData({});
-      setSelectedClientId(id);
-      return true;
-    }
-    if (isEditing && hasUnsavedChanges) {
-      alert("Tiene cambios sin guardar. Guarde o cancele antes de cambiar de cliente.");
-      return false;
-    }
+  const trySelectClient = useCallback(
+    (id: string) => {
+      if (!isEditing) {
+        setSelectedClientId(id);
+        setActiveTab("cliente");
+        return true;
+      }
+      if (!hasUnsavedChanges) {
+        setIsEditing(false);
+        setFormData({});
+        setOriginalData({});
+        setSelectedClientId(id);
+        setActiveTab("cliente");
+        return true;
+      }
+      if (isEditing && hasUnsavedChanges) {
+        setNotification(
+          "Tiene cambios sin guardar. Guarde o cancele antes de cambiar de cliente.",
+        );
+        return false;
+      }
 
-    // if(formData.tipoPlan !== originalData.plans.map((plan) => plan.type)){
-      
-    // }
-    return false;
-  }, [isEditing, hasUnsavedChanges]);
+      return false;
+    },
+    [isEditing, hasUnsavedChanges],
+  );
 
   return (
     <ClientContext.Provider
@@ -147,6 +187,7 @@ export function ClientProvider({ children }: { children: ReactNode }) {
         hasUnsavedChanges,
         isValidToSave,
         validationError,
+        notification,
         trySelectClient,
       }}
     >

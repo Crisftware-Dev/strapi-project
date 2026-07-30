@@ -53,16 +53,17 @@ export function ControlProvider({ children }: { children: ReactNode }) {
   };
 
   const closeTab = (id: string) => {
-    setOpenTabs((prev) => prev.filter((t) => t.id !== id));
-
-    if (id === activeSubControls) {
-      const remainingTabs = openTabs.filter((t) => t.id !== id);
-      setActiveSubControls(
-        remainingTabs.length > 0
-          ? remainingTabs[remainingTabs.length - 1].id
-          : "inicio",
-      );
-    }
+    setOpenTabs((prev) => {
+      const remaining = prev.filter((t) => t.id !== id);
+      if (id === activeSubControls) {
+        setActiveSubControls(
+          remaining.length > 0
+            ? remaining[remaining.length - 1].id
+            : "inicio",
+        );
+      }
+      return remaining;
+    });
   };
 
   return (

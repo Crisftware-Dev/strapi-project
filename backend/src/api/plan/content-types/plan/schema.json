@@ -39,6 +39,10 @@
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::cliente.cliente"
+    },
+    "CREATEDBY": {
+      "type": "string",
+      "required": true
     }
   }
 }
