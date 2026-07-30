@@ -22,7 +22,7 @@ export default function BusquedaContratos() {
   const [hasSearched, setHasSearched] = useState(false);
 
   const { data, isLoading } = useClients(isFetchEnabled);
-  const { data: plans } = usePlans();
+  const { data: plans } = usePlans(isFetchEnabled);
 
   const clients = data || [];
   const plansData = plans || [];
