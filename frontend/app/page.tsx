@@ -13,7 +13,7 @@ export default async function Home() {
   const strapiData = await getHomePage();
   const [heroSection] = strapiData?.sections || [];
   return (
-    <main className="container mx-auto py-6">
+    <main>
       <HeroSection data={heroSection} />
     </main>
   );
