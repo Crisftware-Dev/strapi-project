@@ -91,6 +91,19 @@ export interface LayoutHeroSection extends Struct.ComponentSchema {
   };
 }
 
+export interface LayoutLoginSection extends Struct.ComponentSchema {
+  collectionName: 'components_layout_login_sections';
+  info: {
+    displayName: 'Login Section';
+    icon: 'link';
+  };
+  attributes: {
+    images_demostratives: Schema.Attribute.Media<'images' | 'files', true> &
+      Schema.Attribute.Required;
+    label: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
@@ -101,6 +114,7 @@ declare module '@strapi/strapi' {
       'component.location': ComponentLocation;
       'component.references': ComponentReferences;
       'layout.hero-section': LayoutHeroSection;
+      'layout.login-section': LayoutLoginSection;
     }
   }
 }

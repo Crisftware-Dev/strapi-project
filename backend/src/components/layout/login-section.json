@@ -1,0 +1,24 @@
+{
+  "collectionName": "components_layout_login_sections",
+  "info": {
+    "displayName": "Login Section",
+    "icon": "link"
+  },
+  "options": {},
+  "attributes": {
+    "label": {
+      "type": "string",
+      "required": true
+    },
+    "images_demostratives": {
+      "type": "media",
+      "multiple": true,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files"
+      ]
+    }
+  },
+  "config": {}
+}
