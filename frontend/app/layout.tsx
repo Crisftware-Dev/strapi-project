@@ -4,7 +4,6 @@ import "./globals.css";
 import { Suspense } from "react";
 import { ThemeProvider } from "@/contexts/theme-context";
 
-
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
@@ -61,8 +60,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" suppressHydrationWarning className={`${inter.variable} antialiased`}>
-
+    <html
+      lang="es"
+      suppressHydrationWarning
+      className={`${inter.variable} antialiased`}
+    >
       <head>
         {/* Script anti-flash: aplica .dark ANTES de que React hidrate */}
         <script
@@ -106,4 +108,3 @@ export default function RootLayout({
     </html>
   );
 }
-

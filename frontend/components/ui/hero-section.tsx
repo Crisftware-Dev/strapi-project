@@ -1,10 +1,11 @@
 import { STRAPI_BASE_URL } from "@/lib/login-register";
 import Image from "next/image";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 const styles = {
   header:
-    "relative h-[55vh] min-h-[400px] max-h-[800px] overflow-hidden",
+    "relative h-screen min-h-[400px]  overflow-hidden",
   backgroundImage: "object-cover",
   overlay:
     "relative z-10 flex flex-col items-center justify-center h-full text-center text-white bg-gradient-to-b from-black/70 via-black/40 to-black/20",
@@ -23,8 +24,12 @@ interface HeroData {
 
 export function HeroSection({
   data,
+  className,
+  priority = true,
 }: {
   readonly data?: HeroData | null;
+  readonly className?: string;
+  readonly priority?: boolean;
 }) {
   if (!data?.image?.url) return null;
 
@@ -36,15 +41,14 @@ export function HeroSection({
   const altText = data.image.alternativeText || "Fondo de portada";
 
   return (
-    <header className={styles.header}>
+    <header className={cn(styles.header, className)}>
       <Image
         alt={altText}
         className={styles.backgroundImage}
         fill
-        priority
+        priority={priority}
         sizes="100vw"
         src={imageUrl}
-        unoptimized={true}
       />
       <div className={styles.overlay}>
         {heading && <h1 className={styles.heading}>{heading}</h1>}
