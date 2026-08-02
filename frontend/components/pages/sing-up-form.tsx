@@ -154,7 +154,7 @@ export function SignupForm() {
           Have an account?
           <Link
             className={styles.link}
-            href="signin"
+            href="/"
           >
             Sign In
           </Link>

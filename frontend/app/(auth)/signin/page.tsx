@@ -1,5 +1,5 @@
-import { SigninForm } from "@/components/pages/sing-in-form";
+import { redirect } from "next/navigation";
 
 export default function SignInRoute() {
-  return <SigninForm />;
+  redirect("/");
 }

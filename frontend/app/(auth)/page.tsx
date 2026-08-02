@@ -1,4 +1,4 @@
-import { HeroSection } from "@/components/ui/hero-section";
+import { SigninForm } from "@/components/pages/sing-in-form";
 import { getHomePage } from "@/lib/login-register";
 
 export async function generateMetadata() {
@@ -10,11 +10,5 @@ export async function generateMetadata() {
 }
 
 export default async function Home() {
-  const strapiData = await getHomePage();
-  const [heroSection] = strapiData?.sections || [];
-  return (
-    <main>
-      <HeroSection data={heroSection} />
-    </main>
-  );
+  return <SigninForm />;
 }
