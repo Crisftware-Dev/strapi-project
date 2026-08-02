@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { strapiJson } from "./lib/api";
+import { isJwtExpired } from "./lib/jwt";
 
 const protectedRoutes = ["/dashboard"];
 
@@ -13,6 +14,12 @@ export async function proxy(req: NextRequest) {
   const isProtectedRoute = checkIsProtectedRoute(currentPath);
 
   if (!isProtectedRoute) return NextResponse.next();
+
+  const jwt = req.cookies.get("jwt")?.value;
+
+  if (jwt && isJwtExpired(jwt)) {
+    return NextResponse.redirect(new URL("/", req.url));
+  }
 
   try {
     const user = await strapiJson('/api/users/me');

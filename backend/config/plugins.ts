@@ -3,8 +3,8 @@ export default () => ({
     config: {
       jwtManagement: 'refresh', // Para habilitar endpoints de gestión de JWT
       sessions: {
-      accessTokenLifespan: 18000,  // Tiempo de vida del token para peticiones a la API
-      maxRefreshTokenLifespan: 18000,  // ej: 30 días
+      accessTokenLifespan: 18000,  // Tiempo de vida del token para peticiones a la API (5 horas)
+      maxRefreshTokenLifespan: 18000,  // Máxima duración del refresh token (5 horas)
     },
       jwt: {
         expiresIn: '5h',

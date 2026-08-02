@@ -3,6 +3,7 @@
 import { fetchStrapi } from "@/lib/api";
 import { loginUserService, registerUserService } from "@/lib/login-register";
 import { FORBIDDEN_MESSAGE } from "@/lib/http-errors";
+import { isRedirectError } from "@/lib/jwt";
 import {
   ChangePasswordFormSchema,
   SigninFormSchema,
@@ -198,6 +199,7 @@ export async function changePasswordAction(
       zodErrors: null,
     };
   } catch (error) {
+    if (isRedirectError(error)) throw error;
     console.error("Error changing password:", error);
 
     return {
@@ -228,6 +230,7 @@ export async function logoutGlobalUserAction(): Promise<void> {
       method: "POST",
     });
   } catch(error) {
+    if (isRedirectError(error)) throw error;
     console.error("Error logout global user:", error);
   }
 

@@ -2,6 +2,7 @@
 
 import type { Client, Plan, StrapiMedia } from "@/types/typesDB";
 import { strapiJson } from "@/lib/api";
+import { isRedirectError } from "@/lib/jwt";
 import { sanitizeClientPayload } from "@/lib/utils";
 
 export async function createClientAction(
@@ -18,6 +19,7 @@ export async function createClientAction(
     });
     return { data: response.data };
   } catch (error) {
+    if (isRedirectError(error)) throw error;
     console.error("Error creating client:", error);
     throw new Error(
       error instanceof Error
@@ -46,6 +48,7 @@ export async function updateClientAction(
     });
     return { data: response.data };
   } catch (error) {
+    if (isRedirectError(error)) throw error;
     console.error("Error updating client:", error);
     throw new Error(
       error instanceof Error
@@ -64,6 +67,7 @@ export async function uploadFileAction(
       body: formData,
     });
   } catch (error) {
+    if (isRedirectError(error)) throw error;
     console.error("Error uploading file:", error);
     throw new Error(
       error instanceof Error
@@ -82,6 +86,7 @@ export async function createPlanAction(
       body: JSON.stringify({ data }),
     });
   } catch (error) {
+    if (isRedirectError(error)) throw error;
     console.error("Error creating plan:", error);
     throw new Error(
       error instanceof Error

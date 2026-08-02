@@ -1,8 +1,10 @@
 "use server";
 
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { STRAPI_BASE_URL } from "./login-register";
 import { FORBIDDEN_MESSAGE, isForbiddenWrite } from "./http-errors";
+import { isJwtExpired } from "./jwt";
 
 async function getAuthToken() {
   const cookieStore = await cookies();
@@ -15,6 +17,10 @@ export async function fetchStrapi(
   retry = true
 ): Promise<Response> {
   const authToken = await getAuthToken();
+
+  if (authToken && isJwtExpired(authToken)) {
+    redirect("/");
+  }
 
   const isFormData = options.body instanceof FormData;
 
