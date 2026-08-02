@@ -89,7 +89,8 @@ export function LiOptionClient({
               cursor-pointer select-none
               transition-colors duration-150
               border-t-2 border-transparent
-              bg-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800/60
+              bg-gray-100 hover:bg-gray-50
+              dark:bg-transparent dark:hover:bg-gray-800/60
               ${
                 isActive
                   ? "bg-white text-gray-900 dark:bg-gray-800 dark:text-white border-t-black dark:border-t-white font-semibold"
