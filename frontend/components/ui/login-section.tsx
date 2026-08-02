@@ -1,8 +1,12 @@
 "use client";
 
+import { actions } from "@/actions";
 import { cn } from "@/lib/utils";
+import { FormState } from "@/validations/auth";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
+import { Button } from "./button";
+import { Input } from "./input";
 
 interface LoginData {
   label: string;
@@ -16,22 +20,42 @@ const styles = {
   backgroundImage: "object-fill",
   overlay:
     "absolute flex justify-center items-end pb-50 inset-0 z-20 bg-gradient-to-t from-black/50 via-black/10 to-transparent",
-  content:
-    "absolute inset-0 z-30 flex items-center justify-center",
+  content: "absolute inset-0 z-30 flex items-center justify-center",
   heading: "text-xl font-bold md:text-3xl lg:text-xl",
   button:
-    "inline-flex items-center justify-center px-6 py-3 text-base font-medium text-black bg-white rounded-md shadow hover:bg-gray-100 transition-colors",
+    "inline-flex items-center justify-center px-6 py-3 text-base font-medium text-black bg-white rounded-md shadow hover:bg-gray-100 transition-colors cursor-pointer",
 };
 
-export function LoginSection({
+const INITIAL_STATE: FormState = {
+  data: {
+    identifier: "",
+    password: "",
+  },
+};
+
+export function DescSection({
   data,
   className,
+  defaultIdentifier,
+  defaultPassword,
 }: {
   readonly data?: LoginData | null;
   readonly className?: string;
+  readonly defaultIdentifier?: string;
+  readonly defaultPassword?: string;
 }) {
   const { label, images_demostratives } = data || {};
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [formState, formAction] = useActionState(
+    actions.auth.loginUserAction,
+    {
+      ...INITIAL_STATE,
+      data: {
+        identifier: defaultIdentifier ?? "",
+        password: defaultPassword ?? "",
+      },
+    },
+  );
 
   const images = (images_demostratives ?? []).map((img) => ({
     url: img.url,
@@ -69,9 +93,19 @@ export function LoginSection({
           />
         </div>
       ))}
-      <div className={styles.overlay} aria-hidden="true" >
-          <h1 className={styles.button}>{label}</h1>
-      </div>
+      <form action={formAction} className={styles.overlay} aria-hidden="true">
+        <Input
+          type="hidden"
+          name="identifier"
+          defaultValue={formState.data?.identifier}
+        />
+        <Input
+          type="hidden"
+          name="password"
+          defaultValue={formState.data?.password}
+        />
+        <Button className={styles.button}>{label}</Button>
+      </form>
     </header>
   );
 }

@@ -1,6 +1,6 @@
 import ThemeToggle from "@/components/ui/theme-toggle";
 import { getLoginPage } from "@/lib/login-register";
-import { LoginSection } from "@/components/ui/login-section";
+import { DescSection } from "@/components/ui/login-section";
 
 export default async function AuthLayout({
   children,
@@ -10,13 +10,18 @@ export default async function AuthLayout({
   const strapiData = await getLoginPage();
   const [loginSection] = strapiData?.sections || [];
 
+  const defaultIdentifier = process.env.USER_PRUEBA;
+  const defaultPassword = process.env.PASSWORD_PRUEBA;
+
   return (
     <div className="relative flex min-h-screen flex-col lg:h-screen lg:flex-row">
       {/* Hero — 2/3 en desktop, arriba en móvil */}
       <div className="lg:w-2/3">
-        <LoginSection
+        <DescSection
           data={loginSection}
           className="h-[45vh] min-h-75 lg:h-full lg:min-h-0 lg:max-h-none"
+          defaultIdentifier={defaultIdentifier}
+          defaultPassword={defaultPassword}
         />
       </div>
       {/* Formulario — 1/3 en desktop, abajo en móvil */}
