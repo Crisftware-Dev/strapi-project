@@ -339,7 +339,7 @@ export const PercentI: React.FC<IconProps> = ({ className }) => (
 export const AddI: React.FC<IconProps> = ({ className }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    className={`w-4 h-4 text-amber-600 dark:text-amber-400 ${className}`}
+    className={`lucide lucide-ticket-percent-icon lucide-ticket-percent ${className}`}
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor"
