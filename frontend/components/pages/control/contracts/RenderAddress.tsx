@@ -22,7 +22,7 @@ import {
 import { P } from "@/components/ui/p";
 
 export default function RenderAddress() {
-  const { selectedClientId, isEditing, formData, setFormData, setActiveTab } =
+  const { selectedClientId, isEditing, formData, setFormData } =
     useClientContext();
   const {
     data: client,
@@ -39,10 +39,6 @@ export default function RenderAddress() {
     },
     [setFormData],
   );
-
-  if (!selectedClientId) {
-    setActiveTab("cliente");
-  }
 
   const getDisplayValue = () => {
     const score = isEditing ? formData.scoreCredit : client?.scoreCredit;

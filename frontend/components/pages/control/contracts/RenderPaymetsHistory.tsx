@@ -11,7 +11,7 @@ import { Li } from "@/components/ui/list";
 
 export default function RenderPaymentsHistory() {
   const [active, setActive] = useState("");
-  const { selectedClientId, setActiveTab } = useClientContext();
+  const { selectedClientId } = useClientContext();
   const { data: user } = useUser();
   const {
     data: client,
@@ -29,10 +29,6 @@ export default function RenderPaymentsHistory() {
   const lastname = user?.lastname?.split(" ")[0]?.toUpperCase();
 
   const usuario = firstChar?.concat(lastname || "");
-
-  if (!selectedClientId) {
-    setActiveTab("cliente");
-  }
 
   if (isLoading)
     return <div className="p-8 text-center text-xs">Cargando datos...</div>;

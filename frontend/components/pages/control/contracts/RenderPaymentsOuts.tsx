@@ -10,16 +10,12 @@ import { Li } from "@/components/ui/list";
 
 export default function RenderPaymentsOuts() {
   const [active, setActive] = useState("");
-  const { selectedClientId, setActiveTab } = useClientContext();
+  const { selectedClientId } = useClientContext();
   const {
     data: client,
     isLoading,
     error,
   } = useClientById(selectedClientId || "");
-
-  if (!selectedClientId) {
-    setActiveTab("cliente");
-  }
 
   if (isLoading)
     return <div className="p-8 text-center text-xs">Cargando datos...</div>;

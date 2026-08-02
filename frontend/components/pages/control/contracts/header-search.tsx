@@ -16,7 +16,8 @@ import { SearchNames } from "@/components/ui/search";
 import ModalIdentificator from "./Modal";
 
 export default function HeaderSearch() {
-  const { activeTab, setActiveTab, trySelectClient } = useClientContext();
+  const { activeTab, setActiveTab, trySelectClient, selectedClientId } =
+    useClientContext();
 
   const [identifierInput, setIdentifierInput] = useState("");
   const [nameInput, setNameInput] = useState("");
@@ -99,7 +100,11 @@ export default function HeaderSearch() {
   };
 
   const activePageClient = (id: string) => {
-    setActiveTab(id);
+    if (selectedClientId) {
+      setActiveTab(id);
+    } else {
+      showErrorMessage("Debe seleccionar un cliente");
+    }
   };
 
   const styles = {
