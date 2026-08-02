@@ -215,7 +215,7 @@ export async function logoutUserAction(): Promise<void> {
   const cookieStore = await cookies();
   cookieStore.delete("jwt");
 
-  redirect("/signin");
+  redirect("/");
 }
 
 export async function logoutGlobalUserAction(): Promise<void> {
@@ -238,5 +238,5 @@ export async function logoutGlobalUserAction(): Promise<void> {
     maxAge: 0,
   });
 
-  redirect("/signin");
+  redirect("/");
 }

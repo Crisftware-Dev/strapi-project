@@ -18,7 +18,7 @@ export async function proxy(req: NextRequest) {
     const user = await strapiJson('/api/users/me');
     
     if(!user) {
-      return NextResponse.redirect(new URL("/signin", req.url));
+      return NextResponse.redirect(new URL("/", req.url));
     }
 
     const userResponse = NextResponse.next();
@@ -26,7 +26,7 @@ export async function proxy(req: NextRequest) {
     return userResponse;
   } catch (error) {
     console.error("Error verifying user authentication:", error);
-    return NextResponse.redirect(new URL("/signin", req.url));
+    return NextResponse.redirect(new URL("/", req.url));
   }
 }
 
