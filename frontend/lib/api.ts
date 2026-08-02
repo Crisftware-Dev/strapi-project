@@ -2,6 +2,7 @@
 
 import { cookies } from "next/headers";
 import { STRAPI_BASE_URL } from "./login-register";
+import { FORBIDDEN_MESSAGE, isForbiddenWrite } from "./http-errors";
 
 async function getAuthToken() {
   const cookieStore = await cookies();
@@ -65,6 +66,9 @@ export async function fetchStrapi(
 export async function strapiJson<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
   const res = await fetchStrapi(endpoint, options);
   if(!res.ok) {
+    if (isForbiddenWrite(res.status, options.method)) {
+      throw new Error(FORBIDDEN_MESSAGE);
+    }
     const errorText = await res.text();
     throw new Error(errorText || 'Error al obtener datos');
   }

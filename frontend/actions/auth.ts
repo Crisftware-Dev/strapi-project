@@ -2,6 +2,7 @@
 
 import { fetchStrapi } from "@/lib/api";
 import { loginUserService, registerUserService } from "@/lib/login-register";
+import { FORBIDDEN_MESSAGE } from "@/lib/http-errors";
 import {
   ChangePasswordFormSchema,
   SigninFormSchema,
@@ -165,7 +166,10 @@ export async function changePasswordAction(
     });
 
     if (!res.ok) {
-      const strapiErrorMessage = "The current password is incorrect. Please check it and try again.";
+      const strapiErrorMessage =
+        res.status === 403
+          ? FORBIDDEN_MESSAGE
+          : "The current password is incorrect. Please check it and try again.";
 
       return {
         success: false,

@@ -5,6 +5,7 @@ import { useClientContext } from "@/contexts/client-context";
 import { useTabsControl } from "@/contexts/control-context";
 import { useClientById } from "@/hooks/useClientById";
 import { useUpdateClient } from "@/hooks/useUpdateClient";
+import { FORBIDDEN_MESSAGE } from "@/lib/http-errors";
 
 
 export default function FooterControl() {
@@ -179,9 +180,16 @@ export default function FooterControl() {
         )}
         {(updateClient.isError || uploadFiles.isError) && (
           <p className="w-full text-center text-xs text-red-500 mt-1 flex-1 basis-full">
-            {uploadFiles.isError
-              ? "Error al subir archivos. Intente nuevamente."
-              : "Error al guardar. Intente nuevamente."}
+            {(() => {
+              const error = updateClient.error ?? uploadFiles.error;
+              if (error?.message?.includes(FORBIDDEN_MESSAGE)) {
+                return FORBIDDEN_MESSAGE;
+              }
+              if (uploadFiles.isError) {
+                return "Error al subir archivos. Intente nuevamente.";
+              }
+              return "Error al guardar. Intente nuevamente.";
+            })()}
           </p>
         )}
         {validationError && isEditing && (

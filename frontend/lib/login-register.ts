@@ -1,4 +1,5 @@
 import qs from "qs";
+import { FORBIDDEN_MESSAGE } from "./http-errors";
 
 interface LoginData {
   identifier: string;
@@ -179,6 +180,15 @@ export async function fetchAuth(
     const data = (await response.json()) as StrapiAuthResponse;
 
     if (!response.ok) {
+      if (response.status === 403) {
+        return {
+          error: {
+            status: 403,
+            name: "ForbiddenError",
+            message: FORBIDDEN_MESSAGE,
+          },
+        };
+      }
       if (data.error && data.error.message) {
         return data;
       }
