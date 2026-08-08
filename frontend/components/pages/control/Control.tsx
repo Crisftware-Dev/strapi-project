@@ -7,6 +7,7 @@ import SoporteContratos from "./SoporteContratos";
 import BusquedaContratos from "./search/BusquedaContratos";
 import Contratos from "./contracts/Contratos";
 import { useTabsControl } from "@/contexts/control-context";
+import { NewClienteProvider } from "@/contexts/new-cliente-context";
 import NewClient from "./client-form/CreateClientForm";
 
 // ─── Inner component (necesita acceder al context) ────────────────────────────
@@ -21,7 +22,11 @@ function ContratosInner() {
         {activeSubControls === "busqueda" && <BusquedaContratos />}
         {activeSubControls === "add-plans" && <AddPlans />}
         {activeSubControls === "soporte" && <SoporteContratos />}
-        {activeSubControls === "new-client" && <NewClient />}
+        {activeSubControls === "new-client" && (
+          <NewClienteProvider>
+            <NewClient />
+          </NewClienteProvider>
+        )}
       </>
     </>
   );
