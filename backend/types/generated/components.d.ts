@@ -105,7 +105,7 @@ export interface LayoutLoginSection extends Struct.ComponentSchema {
 }
 
 declare module '@strapi/strapi' {
-  export module Public {
+  export namespace Public {
     export interface ComponentSchemas {
       'component.contact': ComponentContact;
       'component.discount-law': ComponentDiscountLaw;
