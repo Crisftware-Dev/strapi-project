@@ -23,7 +23,8 @@
       "maxLength": 13
     },
     "contrato": {
-      "type": "biginteger"
+      "type": "biginteger",
+      "unique": true
     },
     "ciudad": {
       "type": "string"
@@ -40,7 +41,8 @@
         "ACTIVO",
         "CORTADO",
         "SUSPENDIDO",
-        "TERMINADO"
+        "TERMINADO",
+        "PROSPECTO"
       ]
     },
     "valores": {

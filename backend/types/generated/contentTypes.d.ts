@@ -499,7 +499,7 @@ export interface ApiClienteCliente extends Struct.CollectionTypeSchema {
       Schema.Attribute.DefaultTo<true>;
     ciudad: Schema.Attribute.String;
     contact: Schema.Attribute.Component<'component.contact', false>;
-    contrato: Schema.Attribute.BigInteger;
+    contrato: Schema.Attribute.BigInteger & Schema.Attribute.Unique;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -516,7 +516,7 @@ export interface ApiClienteCliente extends Struct.CollectionTypeSchema {
     email: Schema.Attribute.Email;
     entity: Schema.Attribute.Enumeration<['PUBLICA', 'PRIVADA']>;
     estado: Schema.Attribute.Enumeration<
-      ['ACTIVO', 'CORTADO', 'SUSPENDIDO', 'TERMINADO']
+      ['ACTIVO', 'CORTADO', 'SUSPENDIDO', 'TERMINADO', 'PROSPECTO']
     >;
     files: Schema.Attribute.Component<'component.file', true>;
     hasDucts: Schema.Attribute.Boolean &
