@@ -20,7 +20,7 @@ const TAB_ICONS: Record<string, JSX.Element> = {
 };
 
 export default function DynamicTabs() {
-  const { openTabs, activeSubControls, setActiveSubControls, closeTab } =
+  const { openTabs, activeSubControls, setActiveSubControls, closeTab, removeKey } =
     useTabsControl();
 
   return (
@@ -41,7 +41,9 @@ export default function DynamicTabs() {
               id={`tab-btn-${tab.id}`}
               aria-selected={isActive}
               aria-controls={`tabpanel-${tab.id}`}
-              onClick={() => setActiveSubControls(tab.id)}
+              onClick={() => {
+                setActiveSubControls(tab.id); 
+              }}
               className={`
                 group relative flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium
                 whitespace-nowrap select-none outline-none
@@ -69,6 +71,7 @@ export default function DynamicTabs() {
                   onClick={(e) => {
                     e.stopPropagation();
                     closeTab(tab.id);
+                    removeKey(tab.id);
                   }}
                   // onKeyDown={(e) => {
                   //   if (e.key === "Enter" || e.key === " ") {
