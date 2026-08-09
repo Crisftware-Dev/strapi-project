@@ -5,7 +5,8 @@ import { SearchInput } from "@/components/ui/search";
 import { useClientContext } from "@/contexts/client-context";
 import { Client } from "@/types/typesDB";
 import { useClients } from "@/hooks/useClients";
-import { useState } from "react";
+import { useClientByContrato } from "@/hooks/useClientByContrato";
+import { useState, useEffect } from "react";
 import {
   FaMoneyBill1Wave,
   FaMoneyCheckDollar,
@@ -29,9 +30,26 @@ export default function HeaderSearch() {
   const [showError, setShowError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [isFetchEnabled, setIsFetchEnabled] = useState(false);
+  const [searchContrato, setSearchContrato] = useState("");
 
   const { data, isLoading } = useClients(isFetchEnabled);
   const clients = data || [];
+
+  const { data: contratoResults, isLoading: isContratoLoading } =
+    useClientByContrato(searchContrato, searchContrato.length > 0);
+
+  useEffect(() => {
+    if (!searchContrato || isContratoLoading) return;
+
+    const client = contratoResults?.[0];
+    if (client) {
+      trySelectClient(client.documentId);
+      setContratoInput("");
+      setShowError(false);
+    } else {
+      showErrorMessage("No se encontró ningún cliente con ese contrato");
+    }
+  }, [contratoResults, isContratoLoading, searchContrato, trySelectClient]);
 
   const handleIdentifierSearch = () => {
     if (!identifierInput.trim()) return;
@@ -50,18 +68,7 @@ export default function HeaderSearch() {
 
   const handleContratoSearch = () => {
     if (!contratoInput.trim()) return;
-
-    const client = clients.find(
-      (c) => c.contrato.toString() === contratoInput.trim(),
-    );
-
-    if (client) {
-      trySelectClient(client.documentId);
-      setContratoInput("");
-      setShowError(false);
-    } else {
-      showErrorMessage("No se encontró ningún cliente con ese contrato");
-    }
+    setSearchContrato(contratoInput.trim());
   };
 
   const handleNameSearch = (value: string) => {
