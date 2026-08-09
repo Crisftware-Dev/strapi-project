@@ -482,7 +482,7 @@ export interface ApiClienteCliente extends Struct.CollectionTypeSchema {
     singularName: 'cliente';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     apellidos: Schema.Attribute.String;
