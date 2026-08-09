@@ -22,6 +22,7 @@ export function useUpdateClient() {
       queryClient.invalidateQueries({
         queryKey: ["clientById", variables.documentId],
       });
+      queryClient.invalidateQueries({ queryKey: ["clients"] });
     },
   });
 
