@@ -19,7 +19,7 @@ const styles = {
   input:
     "w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-indigo-500",
   select:
-    "w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-indigo-500 bg-white",
+    "w-full px-2 py-1 border border-gray-300 dark:border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-indigo-500 bg-white dark:bg-gray-900 dark:text-gray-200",
   button: "text-red-600 hover:text-red-800 font-medium",
 };
 
