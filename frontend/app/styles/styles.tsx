@@ -8,7 +8,7 @@ export const styles = {
   input:
     "w-auto bg-transparent border-none px-2 h-6 text-xs focus:ring-0 placeholder:text-gray-300 dark:placeholder:text-gray-700 text-gray-700 dark:text-gray-200",
   select:
-    "w-full p-0 text-xs focus:ring-0 dark:text-gray-200 cursor-pointer border-none dark:border-indigo-800 rounded px-2 py-2 h-8 bg-indigo-100/30 font-semibold text-indigo-900",
+    "w-full p-0 text-xs focus:ring-0 dark:text-gray-200 cursor-pointer border-none dark:border-indigo-800 rounded px-2 py-2 h-8 bg-indigo-100/30 dark:bg-gray-900 font-semibold text-indigo-900",
   inputLabel:
     "text-[10px] font-semibold text-indigo-900/60 dark:text-indigo-300/60 uppercase px-2 border-indigo-100 dark:border-indigo-900/30",
 
