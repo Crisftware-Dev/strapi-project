@@ -6,7 +6,7 @@ export function useClients(enabled: boolean = false) {
   return useQuery({
     queryKey: ["clients"],
     queryFn: fetchClients,
-    staleTime: 1000 * 60 * 5,
+    staleTime: 1000 * 30,
     enabled,
     select: (response: { data: Client[] }) => response.data,
   });
