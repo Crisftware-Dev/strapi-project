@@ -16,6 +16,8 @@ const CLIENT_POPULATE = [
   "populate[files][populate][file]=true",
   "populate[applied_discount]=true",
   "populate[location]=true",
+  "populate[seller_user]=true",
+  "populate[assigned_installer]=true",
 ].join("&");
 
 const CLIENT_SEARCH_PARAMS = [

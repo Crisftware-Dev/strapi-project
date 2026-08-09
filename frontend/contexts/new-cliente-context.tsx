@@ -48,6 +48,7 @@ const DEFAULT_FORM_DATA: NewClientData = {
   estado: "PROSPECTO",
   tipoCliente: "RESIDENCIAL",
   tipoPlan: "FIBRA ÓPTICA",
+  ciudad: "",
   automaticCut: true,
   withholdingAgent: false,
   automaticInvoice: true,
