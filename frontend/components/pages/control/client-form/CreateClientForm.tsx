@@ -8,6 +8,7 @@ import { createClientAction, uploadFileAction } from "@/actions/mutations";
 import { styles } from "@/app/styles/styles";
 import { Select } from "@/components/ui/primitives";
 import { useNewClienteContext } from "@/contexts/new-cliente-context";
+import { useQueryClient } from "@tanstack/react-query";
 
 const TODAY = new Date().toISOString().slice(0, 10);
 
@@ -33,6 +34,7 @@ export default function NewClient({ onSuccess }: { onSuccess?: () => void }) {
     setPlansEnabled,
   } = useNewClienteContext();
 
+  const queryClient = useQueryClient();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -97,26 +99,6 @@ export default function NewClient({ onSuccess }: { onSuccess?: () => void }) {
     setErrorHint(null);
 
     try {
-      // Validación especial de cédula (TAREAS.md)
-      if (existingClient) {
-        const namesMatch =
-          (formData.nombres ?? "") === existingClient.nombres &&
-          (formData.apellidos ?? "") === existingClient.apellidos;
-
-        if (!namesMatch) {
-          setError(
-            "Los nombres completos no coinciden con la cédula registrada.",
-          );
-          setErrorHint(
-            "Si los nombres están bien escritos y está seguro de que es la misma persona, por favor envíe un correo al administrador.",
-          );
-          return;
-        }
-
-        setError("La cédula ya está registrada en el sistema.");
-        return;
-      }
-
       // Archivo de contrato obligatorio
       if (!contractFile) {
         setError("El archivo de contrato es obligatorio.");
@@ -161,6 +143,7 @@ export default function NewClient({ onSuccess }: { onSuccess?: () => void }) {
       };
 
       await createClientAction(payload);
+      await queryClient.invalidateQueries({ queryKey: ["clients"] });
       setSuccess("Cliente creado correctamente.");
       resetFormData();
       setContractFile(null);
@@ -288,9 +271,8 @@ export default function NewClient({ onSuccess }: { onSuccess?: () => void }) {
         </div>
 
         <div className="flex flex-col gap-1">
-          <Label className={styles.inputLabel}>Celular SMS *</Label>
+          <Label className={styles.inputLabel}>Celular SMS</Label>
           <Input
-            required
             type="text"
             className={styles.input}
             value={formData.contact?.phoneSms || ""}
@@ -299,9 +281,8 @@ export default function NewClient({ onSuccess }: { onSuccess?: () => void }) {
         </div>
 
         <div className="flex flex-col gap-1">
-          <Label className={styles.inputLabel}>Celular Alternativo *</Label>
+          <Label className={styles.inputLabel}>Celular Alternativo</Label>
           <Input
-            required
             type="text"
             className={styles.input}
             value={formData.contact?.phoneTwo || ""}
@@ -330,22 +311,6 @@ export default function NewClient({ onSuccess }: { onSuccess?: () => void }) {
             value={formData.location?.longitude || ""}
             onChange={(e) => handleLocation("longitude", e.target.value)}
           />
-        </div>
-
-        <div className="flex flex-col gap-1">
-          <Label className={styles.inputLabel}>Estado *</Label>
-          <Select
-            required
-            className={styles.input}
-            value={formData.estado || ""}
-            onChange={(e) => handleField("estado", e.target.value)}
-          >
-            <option value="PROSPECTO">PROSPECTO</option>
-            <option value="ACTIVO">ACTIVO</option>
-            <option value="CORTADO">CORTADO</option>
-            <option value="SUSPENDIDO">SUSPENDIDO</option>
-            <option value="TERMINADO">TERMINADO</option>
-          </Select>
         </div>
 
         <div className="flex flex-col gap-1">
@@ -456,13 +421,16 @@ export default function NewClient({ onSuccess }: { onSuccess?: () => void }) {
 
         <div className="flex flex-col gap-1">
           <Label className={styles.inputLabel}>Tipo de Vivienda *</Label>
-          <Input
+          <Select
             required
-            type="text"
             className={styles.input}
             value={formData.typeOfHousing || ""}
             onChange={(e) => handleField("typeOfHousing", e.target.value)}
-          />
+          >
+            <option value="PROPIA">PROPIA</option>
+            <option value="ALQUILADA">ALQUILADA</option>
+            <option value="FAMILIAR">FAMILIAR</option>
+          </Select>
         </div>
 
         <div className="flex flex-col gap-1">
