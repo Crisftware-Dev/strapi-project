@@ -32,6 +32,7 @@ const CLIENT_SEARCH_PARAMS = [
   "populate[contact][fields][1]=phoneSms",
   "populate[contact][fields][2]=phoneTwo",
   "populate[plans][fields][0]=plan",
+  "pagination[pageSize]=500",
 ].join("&");
 
 export async function fetchClients(): Promise<{ data: Client[] }> {
@@ -39,6 +40,23 @@ export async function fetchClients(): Promise<{ data: Client[] }> {
     data: Client[];
     meta: Record<string, unknown>;
   }>(`/api/clientes?${CLIENT_SEARCH_PARAMS}`);
+
+  return { data: response.data };
+}
+
+export async function fetchClientByContrato(
+  contrato: string,
+): Promise<{ data: Client[] }> {
+  const params = [
+    CLIENT_SEARCH_PARAMS,
+    `filters[contrato][$eq]=${encodeURIComponent(contrato)}`,
+    "pagination[pageSize]=10",
+  ].join("&");
+
+  const response = await strapiJson<{
+    data: Client[];
+    meta: Record<string, unknown>;
+  }>(`/api/clientes?${params}`);
 
   return { data: response.data };
 }
