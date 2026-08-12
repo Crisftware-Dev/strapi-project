@@ -103,7 +103,7 @@ export default function LocationMap({
         </div>
 
         {/* Buscador de direcciones */}
-        <div className="relative w-full sm:w-[350px] md:w-[450px]">
+        <div className="relative w-full sm:w-87.5 md:w-112.5">
           <input
             type="text"
             value={query}

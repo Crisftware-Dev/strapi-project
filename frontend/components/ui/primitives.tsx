@@ -34,7 +34,7 @@ export function Separator({
     <div
       data-slot="separator"
       className={cn(
-        "w-[2px] h-5 bg-indigo-100 dark:bg-indigo-900/30 mx-2",
+        "w-0.5 h-5 bg-indigo-100 dark:bg-indigo-900/30 mx-2",
         className,
       )}
       {...props}
