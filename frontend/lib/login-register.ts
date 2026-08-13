@@ -25,24 +25,10 @@ interface StrapiMedia {
   height?: number;
 }
 
-interface HeroSectionData {
-  __component: "layout.hero-section";
-  heading?: string;
-  subHeading?: string;
-  link?: { href: string; label: string };
-  image?: StrapiMedia;
-}
-
 interface LoginSectionData {
   __component: "layout.login-section";
   label: string;
   images_demostratives: StrapiMedia[];
-}
-
-interface HomePageData {
-  title?: string;
-  description?: string;
-  sections: HeroSectionData[];
 }
 
 interface LoginPageData {
@@ -54,31 +40,6 @@ interface LoginPageData {
 interface StrapiResponse<T> {
   data: T;
   meta?: Record<string, unknown>;
-}
-
-const QUERY_HOME_PAGE = {
-  populate: {
-    sections: {
-      on: {
-        "layout.hero-section": {
-          populate: {
-            image: {
-              fields: ["url", "alternativeText"],
-            },
-            link: {
-              populate: true,
-            },
-          },
-        },
-      },
-    },
-  },
-};
-
-export async function getHomePage(): Promise<HomePageData | null> {
-  const query = qs.stringify(QUERY_HOME_PAGE);
-  const response = await getStrapiData<HomePageData>(`/api/home-page?${query}`);
-  return response?.data ?? null;
 }
 
 const QUERY_LOGIN_PAGE = {
