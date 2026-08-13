@@ -4,11 +4,11 @@ import { SearchI } from "@/components/icons/Icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/primitives";
-import { useClients } from "@/hooks/useClients";
+import { useClientsSearch } from "@/hooks/useClientsSearch";
 import { usePlans } from "@/hooks/usePlans";
-import { Client } from "@/types/typesDB";
 import { useState } from "react";
 import ClientSearchResults from "./ClientSearchResults";
+import { ClientSearchFilters } from "@/types/typesDB";
 
 export default function BusquedaContratos() {
   const [namesInput, setNamesInput] = useState("");
@@ -17,55 +17,37 @@ export default function BusquedaContratos() {
   const [planInput, setPlanInput] = useState("");
   const [mediaInput, setMediaInput] = useState("");
 
-  const [idResults, setIdResults] = useState<Client[]>([]);
-  const [isFetchEnabled, setIsFetchEnabled] = useState(false);
+  const [searchFilters, setSearchFilters] = useState<ClientSearchFilters>({});
+  const [page, setPage] = useState(1);
   const [hasSearched, setHasSearched] = useState(false);
 
-  const { data, isLoading } = useClients(isFetchEnabled);
-  const { data: plans } = usePlans(isFetchEnabled);
+  const { data, isLoading, isFetching } = useClientsSearch(
+    searchFilters,
+    page,
+    hasSearched,
+  );
+  const { data: plans } = usePlans(hasSearched);
 
-  const clients = data || [];
+  const results = data?.data || [];
+  const pagination = data?.meta.pagination;
   const plansData = plans || [];
 
   const showClients = () => {
-    if (!isFetchEnabled) setIsFetchEnabled(true);
+    const filters: ClientSearchFilters = {};
+
+    if (namesInput.trim()) filters.nombres = namesInput.trim();
+    if (phoneInput.trim()) filters.telefono = phoneInput.trim();
+    if (stateInput) filters.estado = stateInput;
+    if (planInput) filters.plan = planInput;
+    if (mediaInput) filters.medio = mediaInput;
+
+    setSearchFilters(filters);
+    setPage(1);
     setHasSearched(true);
+  };
 
-    const resultsClients = clients.filter((c) => {
-      if (namesInput) {
-        const fullNames = `${c.apellidos || ""} ${c.nombres || ""}`;
-        if (!fullNames.includes(namesInput)) return false;
-      }
-
-      if (phoneInput) {
-        const phone1 = c.contact?.telephone || "";
-        const phone2 = c.contact?.phoneSms || "";
-        const phone3 = c.contact?.phoneTwo || "";
-        if (
-          !phone1.includes(phoneInput) &&
-          !phone2.includes(phoneInput) &&
-          !phone3.includes(phoneInput)
-        ) {
-          return false;
-        }
-      }
-
-      if (stateInput) {
-        if (c.estado !== stateInput) return false;
-      }
-      if (planInput) {
-        if (!c.plans || !c.plans.some((p) => p.plan === planInput))
-          return false;
-      }
-
-      if (mediaInput) {
-        if (c.tipoPlan !== mediaInput) return false;
-      }
-
-      return true;
-    });
-
-    setIdResults(resultsClients);
+  const handlePageChange = (nextPage: number) => {
+    setPage(nextPage);
   };
 
   return (
@@ -166,7 +148,13 @@ export default function BusquedaContratos() {
       </header>
 
       {hasSearched && (
-        <ClientSearchResults results={idResults} isLoading={isLoading} />
+        <ClientSearchResults
+          results={results}
+          isLoading={isLoading || isFetching}
+          pagination={pagination}
+          currentPage={page}
+          onPageChange={handlePageChange}
+        />
       )}
     </section>
   );
