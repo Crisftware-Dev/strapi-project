@@ -1,18 +1,44 @@
 "use client";
 
 import { useSort } from "@/hooks/useSort";
-import { Client } from "@/types/typesDB";
+import { Client, ClientSearchPagination } from "@/types/typesDB";
 import { UserI } from "@/components/icons/Icons";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 interface ClientSearchResultsProps {
   results: Client[];
   isLoading?: boolean;
+  pagination?: ClientSearchPagination;
+  currentPage?: number;
+  onPageChange?: (page: number) => void;
+}
+
+function buildPageList(current: number, total: number): (number | "...")[] {
+  if (total <= 1) return [];
+
+  if (total <= 7) {
+    return Array.from({ length: total }, (_, i) => i + 1);
+  }
+
+  const pages: (number | "...")[] = [1];
+  const start = Math.max(2, current - 1);
+  const end = Math.min(total - 1, current + 1);
+
+  if (start > 2) pages.push("...");
+  for (let i = start; i <= end; i++) pages.push(i);
+  if (end < total - 1) pages.push("...");
+
+  pages.push(total);
+  return pages;
 }
 
 export default function ClientSearchResults({
   results,
   isLoading = false,
+  pagination,
+  currentPage = 1,
+  onPageChange,
 }: ClientSearchResultsProps) {
   const { sortedData, sortConfig, requestSort } = useSort(results);
 
@@ -84,7 +110,12 @@ export default function ClientSearchResults({
     <div className="w-full bg-white dark:bg-gray-950 border border-indigo-100 dark:border-indigo-900/30 rounded-xl shadow-xs overflow-hidden mt-6 transition-all duration-300">
       <div className="p-4 border-b border-indigo-50 dark:border-indigo-900/20 flex justify-between items-center bg-indigo-50/10">
         <span className="text-xs font-semibold text-indigo-900 dark:text-indigo-300">
-          Resultados de Búsqueda ({results.length})
+          Resultados de Búsqueda ({pagination ? pagination.total : results.length})
+          {pagination && pagination.pageCount > 1 && (
+            <span className="ml-2 font-normal text-indigo-900/60 dark:text-indigo-300/60">
+              · Página {pagination.page} de {pagination.pageCount}
+            </span>
+          )}
         </span>
       </div>
 
@@ -188,6 +219,53 @@ export default function ClientSearchResults({
           </tbody>
         </table>
       </div>
+
+      {pagination && pagination.pageCount > 1 && (
+        <div className="flex flex-wrap items-center justify-center gap-1.5 p-3 border-t border-indigo-50 dark:border-indigo-900/20 bg-indigo-50/10">
+          <Button
+            variant="outline"
+            className="border-indigo-200 text-indigo-700 hover:bg-indigo-50 dark:border-indigo-800 dark:text-indigo-400 dark:hover:bg-indigo-900/50 text-xs px-3 h-8"
+            disabled={currentPage <= 1}
+            onClick={() => onPageChange?.(currentPage - 1)}
+          >
+            Anterior
+          </Button>
+
+          {buildPageList(pagination.page, pagination.pageCount).map((p, idx) =>
+            p === "..." ? (
+              <span
+                key={`dots-${idx}`}
+                className="px-2 text-xs text-gray-400 dark:text-gray-500 select-none"
+              >
+                …
+              </span>
+            ) : (
+              <button
+                key={p}
+                type="button"
+                onClick={() => onPageChange?.(p)}
+                className={cn(
+                  "min-w-8 h-8 px-2 rounded-md text-xs font-medium transition-colors",
+                  p === currentPage
+                    ? "bg-indigo-600 text-white shadow-sm"
+                    : "bg-white dark:bg-gray-950 border border-indigo-200 dark:border-indigo-800 text-indigo-700 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/50",
+                )}
+              >
+                {p}
+              </button>
+            ),
+          )}
+
+          <Button
+            variant="outline"
+            className="border-indigo-200 text-indigo-700 hover:bg-indigo-50 dark:border-indigo-800 dark:text-indigo-400 dark:hover:bg-indigo-900/50 text-xs px-3 h-8"
+            disabled={currentPage >= pagination.pageCount}
+            onClick={() => onPageChange?.(currentPage + 1)}
+          >
+            Siguiente
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
