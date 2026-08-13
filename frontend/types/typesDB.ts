@@ -113,3 +113,24 @@ export interface FileItem {
   file?: StrapiMedia[] | null;
   pendingFile?: File;
 }
+
+// Buscador de clientes
+export interface ClientSearchFilters {
+  nombres?: string;
+  telefono?: string;
+  estado?: string;
+  plan?: string;
+  medio?: string;
+}
+
+export interface ClientSearchPagination {
+  page: number;
+  pageSize: number;
+  pageCount: number;
+  total: number;
+}
+
+export interface ClientSearchResponse {
+  data: Client[];
+  meta: { pagination: ClientSearchPagination };
+}
