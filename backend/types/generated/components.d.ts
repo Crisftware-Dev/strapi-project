@@ -77,20 +77,6 @@ export interface ComponentReferences extends Struct.ComponentSchema {
   };
 }
 
-export interface LayoutHeroSection extends Struct.ComponentSchema {
-  collectionName: 'components_layout_hero_sections';
-  info: {
-    displayName: 'Hero Section';
-    icon: 'alien';
-  };
-  attributes: {
-    heading: Schema.Attribute.String;
-    image: Schema.Attribute.Media<'images'> & Schema.Attribute.Required;
-    link: Schema.Attribute.Component<'component.link', false>;
-    subHeading: Schema.Attribute.Text;
-  };
-}
-
 export interface LayoutLoginSection extends Struct.ComponentSchema {
   collectionName: 'components_layout_login_sections';
   info: {
@@ -113,7 +99,6 @@ declare module '@strapi/strapi' {
       'component.link': ComponentLink;
       'component.location': ComponentLocation;
       'component.references': ComponentReferences;
-      'layout.hero-section': LayoutHeroSection;
       'layout.login-section': LayoutLoginSection;
     }
   }

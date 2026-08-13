@@ -565,36 +565,6 @@ export interface ApiClienteCliente extends Struct.CollectionTypeSchema {
   };
 }
 
-export interface ApiHomePageHomePage extends Struct.SingleTypeSchema {
-  collectionName: 'home_pages';
-  info: {
-    displayName: 'Home Page';
-    pluralName: 'home-pages';
-    singularName: 'home-page';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    createdAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    description: Schema.Attribute.Text;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
-    localizations: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::home-page.home-page'
-    > &
-      Schema.Attribute.Private;
-    publishedAt: Schema.Attribute.DateTime;
-    sections: Schema.Attribute.DynamicZone<['layout.hero-section']>;
-    title: Schema.Attribute.String;
-    updatedAt: Schema.Attribute.DateTime;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-  };
-}
-
 export interface ApiLoginPageLoginPage extends Struct.SingleTypeSchema {
   collectionName: 'login_pages';
   info: {
@@ -1173,7 +1143,6 @@ declare module '@strapi/strapi' {
       'admin::user': AdminUser;
       'api::applied-discount.applied-discount': ApiAppliedDiscountAppliedDiscount;
       'api::cliente.cliente': ApiClienteCliente;
-      'api::home-page.home-page': ApiHomePageHomePage;
       'api::login-page.login-page': ApiLoginPageLoginPage;
       'api::plan.plan': ApiPlanPlan;
       'plugin::content-releases.release': PluginContentReleasesRelease;
