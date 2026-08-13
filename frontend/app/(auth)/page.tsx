@@ -1,11 +1,12 @@
 import { SigninForm } from "@/components/pages/sing-in-form";
-import { getHomePage } from "@/lib/login-register";
+import { getLoginPageCached, noIndexMeta } from "@/lib/seo";
 
 export async function generateMetadata() {
-  const strapiData = await getHomePage();
+  const strapiData = await getLoginPageCached();
   return {
     title: strapiData?.title,
     description: strapiData?.description,
+    ...noIndexMeta,
   };
 }
 

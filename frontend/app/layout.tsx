@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Suspense } from "react";
 import { ThemeProvider } from "@/contexts/theme-context";
+import { getLoginPageCached } from "@/lib/seo";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -11,48 +12,55 @@ const inter = Inter({
   preload: false,
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_URL || "http://localhost:3000"),
-  title: {
-    default: "Sistema de Gestión de Clientes",
-    template: "%s | Sistema de Gestión de Clientes",
-  },
-  description:
-    "Gestione sus clientes de manera eficiente y sencilla con Strapi.",
-  keywords: ["Gestión", "Clientes", "CRM", "Strapi", "Next.js"],
-  authors: [{ name: "CJZN" }],
-  creator: "CJZN",
-  publisher: "CJZN",
-  openGraph: {
-    title: "Sistema de Gestión de Clientes",
-    description:
-      "Gestione sus clientes de manera eficiente y sencilla con Strapi.",
-    url: new URL(process.env.NEXT_PUBLIC_URL || "http://localhost:3000"),
-    siteName: "Sistema de Gestión de Clientes",
-    locale: "es_ES",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Sistema de Gestión de Clientes",
-    description:
-      "Gestione sus clientes de manera eficiente y sencilla con Strapi.",
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
+const DEFAULT_TITLE = "Sistema de Gestión de Clientes";
+const DEFAULT_DESCRIPTION =
+  "Gestione sus clientes de manera eficiente y sencilla con Strapi.";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const strapiData = await getLoginPageCached();
+  const title = strapiData?.title ?? DEFAULT_TITLE;
+  const description = strapiData?.description ?? DEFAULT_DESCRIPTION;
+
+  return {
+    metadataBase: new URL(process.env.NEXT_PUBLIC_URL || "http://localhost:3000"),
+    title: {
+      default: title,
+      template: title,
+    },
+    description,
+    keywords: ["Gestión", "Clientes", "CRM", "Strapi", "Next.js"],
+    authors: [{ name: "CJZN" }],
+    creator: "CJZN",
+    publisher: "CJZN",
+    openGraph: {
+      title,
+      description,
+      url: new URL(process.env.NEXT_PUBLIC_URL || "http://localhost:3000"),
+      siteName: DEFAULT_TITLE,
+      locale: "es_ES",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
+    robots: {
       index: true,
       follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
     },
-  },
-  alternates: {
-    canonical: "/",
-  },
-};
+    alternates: {
+      canonical: "/",
+    },
+  };
+}
 
 export default function RootLayout({
   children,

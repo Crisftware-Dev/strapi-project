@@ -1,13 +1,24 @@
+import type { Metadata } from "next";
 import ThemeToggle from "@/components/ui/theme-toggle";
-import { getLoginPage } from "@/lib/login-register";
+import { getLoginPageCached, noIndexMeta } from "@/lib/seo";
 import { DescSection } from "@/components/ui/login-section";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const strapiData = await getLoginPageCached();
+  return {
+    title: strapiData?.title ?? "Acceder",
+    description: strapiData?.description,
+    ...noIndexMeta,
+  };
+}
+
 
 export default async function AuthLayout({
   children,
 }: {
   readonly children: React.ReactNode;
 }) {
-  const strapiData = await getLoginPage();
+  const strapiData = await getLoginPageCached();
   const [loginSection] = strapiData?.sections || [];
 
   const defaultIdentifier = process.env.USER_PRUEBA;
