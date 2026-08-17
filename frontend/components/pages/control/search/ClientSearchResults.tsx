@@ -95,9 +95,9 @@ export default function ClientSearchResults({
         <div className="w-12 h-12 rounded-full bg-indigo-50/50 dark:bg-indigo-950/30 flex items-center justify-center mb-3">
           <UserI className="w-6 h-6 text-indigo-400 opacity-60" />
         </div>
-        <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-200">
+        <p className="text-sm font-semibold text-gray-800 dark:text-gray-200">
           No se encontraron clientes
-        </h3>
+        </p>
         <p className="text-xs text-gray-400 dark:text-gray-500 mt-1 max-w-sm">
           Ajusta los filtros de búsqueda y presiona <strong>Buscar</strong> para
           intentar de nuevo.
