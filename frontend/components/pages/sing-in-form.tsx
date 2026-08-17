@@ -86,6 +86,7 @@ export function SigninForm() {
                 <button
                   type="button"
                   onClick={togglePassword}
+                  aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
                   className={styles.togglePassword}
                 >
                   {showPassword ? <FaEyeSlash /> : <FaEye />}

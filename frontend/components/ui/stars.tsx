@@ -24,6 +24,7 @@ export default function StarRating({ score, size = 20 }: StarRatingProps) {
               size={size}
               className="text-gray-300 fill-gray-300"
               strokeWidth={1.5}
+              aria-hidden="true"
             />
             {(isFull || isPartial) && (
               <div
@@ -34,6 +35,7 @@ export default function StarRating({ score, size = 20 }: StarRatingProps) {
                   size={size}
                   className="text-indigo-700 fill-indigo-700"
                   strokeWidth={1.5}
+                  aria-hidden="true"
                 />
               </div>
             )}

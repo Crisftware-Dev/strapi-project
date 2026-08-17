@@ -191,28 +191,28 @@ export default function HeaderSearch() {
           <LiOptionClient
             id="cliente"
             label="Cliente"
-            icon={<FaUser className={styles.icon} />}
+            icon={<FaUser className={styles.icon} aria-hidden="true" />}
             isActive={activeTab === "cliente"}
             onClick={activePageClient}
           />
           <LiOptionClient
             id="direccion"
             label="Dirección"
-            icon={<FaNfcDirectional className={styles.icon} />}
+            icon={<FaNfcDirectional className={styles.icon} aria-hidden="true" />}
             isActive={activeTab === "direccion"}
             onClick={activePageClient}
           />
           <LiOptionClient
             id="pagosPendientes"
             label="Pagos pendientes"
-            icon={<FaMoneyBill1Wave className={styles.icon} />}
+            icon={<FaMoneyBill1Wave className={styles.icon} aria-hidden="true" />}
             isActive={activeTab === "pagosPendientes"}
             onClick={activePageClient}
           />
           <LiOptionClient
             id="pagosRealizados"
             label="Pagos realizados"
-            icon={<FaMoneyCheckDollar className={styles.icon} />}
+            icon={<FaMoneyCheckDollar className={styles.icon} aria-hidden="true" />}
             isActive={activeTab === "pagosRealizados"}
             onClick={activePageClient}
           />

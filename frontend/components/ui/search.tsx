@@ -48,7 +48,7 @@ export function SearchInput({
         type="button"
         onClick={handleButtonClick}
       >
-        <FaSearch className={inputStyles.icon} />
+        <FaSearch className={inputStyles.icon} aria-hidden="true" />
       </button>
       <Input
         {...props}

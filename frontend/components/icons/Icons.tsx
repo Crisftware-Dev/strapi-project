@@ -15,6 +15,7 @@ export const UserI: React.FC<IconProps> = ({ className }) => (
     strokeWidth="2"
     strokeLinecap="round"
     strokeLinejoin="round"
+    aria-hidden="true"
     className={`${className} lucide lucide-user-icon lucide-user`}
   >
     <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
@@ -33,6 +34,7 @@ export const SearchI: React.FC<IconProps> = ({ className }) => (
     strokeWidth="2"
     strokeLinecap="round"
     strokeLinejoin="round"
+    aria-hidden="true"
     className={`lucide lucide-search-icon lucide-search ${className}`}
   >
     <path d="m21 21-4.34-4.34" />
@@ -51,6 +53,7 @@ export const PencilModifYI: React.FC<IconProps> = ({ className }) => (
     strokeWidth="2"
     strokeLinecap="round"
     strokeLinejoin="round"
+    aria-hidden="true"
     className={`lucide lucide-square-pen-icon lucide-square-pen ${className}`}
   >
     <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
@@ -69,6 +72,7 @@ export const SupportI: React.FC<IconProps> = ({ className }) => (
     strokeWidth="2"
     strokeLinecap="round"
     strokeLinejoin="round"
+    aria-hidden="true"
     className={`lucide lucide-user-round-cog-icon lucide-user-round-cog ${className}`}
   >
     <path d="m14.305 19.53.923-.382" />
@@ -96,6 +100,7 @@ export const ArrowRigthI: React.FC<IconProps> = ({ className }) => (
     strokeWidth="2"
     strokeLinecap="round"
     strokeLinejoin="round"
+    aria-hidden="true"
     className={`lucide lucide-chevron-right-icon lucide-chevron-right ${className}`}
   >
     <path d="m9 18 6-6-6-6" />
@@ -113,6 +118,7 @@ export const CircleI: React.FC<IconProps> = ({ className }) => (
     strokeWidth="2"
     strokeLinecap="round"
     strokeLinejoin="round"
+    aria-hidden="true"
     className={`lucide lucide-circle-small-icon lucide-circle-small ${className}`}
   >
     <circle cx="12" cy="12" r="6" />
@@ -130,6 +136,7 @@ export const KeyI: React.FC<IconProps> = ({ className }) => (
     strokeWidth="2"
     strokeLinecap="round"
     strokeLinejoin="round"
+    aria-hidden="true"
     className={`lucide lucide-key-round-icon lucide-key-round ${className}`}
   >
     <path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z" />
@@ -148,6 +155,7 @@ export const PowerOffI: React.FC<IconProps> = ({ className }) => (
     strokeWidth="2"
     strokeLinecap="round"
     strokeLinejoin="round"
+    aria-hidden="true"
     className={`lucide lucide-power-off-icon lucide-power-off ${className}`}
   >
     <path d="M18.36 6.64A9 9 0 0 1 20.77 15" />
@@ -168,6 +176,7 @@ export const CloseI: React.FC<IconProps> = ({ className }) => (
     strokeWidth="2"
     strokeLinecap="round"
     strokeLinejoin="round"
+    aria-hidden="true"
     className={`lucide lucide-x ${className}`}
   >
     <path d="M18 6 6 18" />
@@ -186,6 +195,7 @@ export const DeleteI: React.FC<IconProps> = ({ className }) => (
     strokeWidth="2"
     strokeLinecap="round"
     strokeLinejoin="round"
+    aria-hidden="true"
     className={`lucide lucide-shredder-icon lucide-shredder ${className}`}
   >
     <path d="M4 13V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.706.706l3.588 3.588A2.4 2.4 0 0 1 20 8v5" />
@@ -209,6 +219,7 @@ export const DetailsI: React.FC<IconProps> = ({ className }) => (
     strokeWidth="2"
     strokeLinecap="round"
     strokeLinejoin="round"
+    aria-hidden="true"
     className={`lucide lucide-ellipsis-icon lucide-ellipsis ${className}`}
   >
     <circle cx="12" cy="12" r="1" />
@@ -228,6 +239,7 @@ export const PrintI: React.FC<IconProps> = ({ className }) => (
     strokeWidth="2"
     strokeLinecap="round"
     strokeLinejoin="round"
+    aria-hidden="true"
     className={`lucide lucide-printer-icon lucide-printer ${className}`}
   >
     <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
@@ -247,6 +259,7 @@ export const XMLI: React.FC<IconProps> = ({ className }) => (
     strokeWidth="2"
     strokeLinecap="round"
     strokeLinejoin="round"
+    aria-hidden="true"
     className={`lucide lucide-file-code-icon lucide-file-code ${className}`}
   >
     <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z" />
@@ -267,6 +280,7 @@ export const DocumentI: React.FC<IconProps> = ({ className }) => (
     strokeWidth="2"
     strokeLinecap="round"
     strokeLinejoin="round"
+    aria-hidden="true"
     className={`lucide lucide-file-text-icon lucide-file-text ${className}`}
   >
     <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z" />
@@ -288,6 +302,7 @@ export const MoneyI: React.FC<IconProps> = ({ className }) => (
     strokeWidth="2"
     strokeLinecap="round"
     strokeLinejoin="round"
+    aria-hidden="true"
     className={`lucide lucide-dollar-sign-icon lucide-dollar-sign ${className}`}
   >
     <line x1="12" x2="12" y1="2" y2="22" />
@@ -306,6 +321,7 @@ export const HandsI: React.FC<IconProps> = ({ className }) => (
     strokeWidth="2"
     strokeLinecap="round"
     strokeLinejoin="round"
+    aria-hidden="true"
     className={`lucide lucide-handshake-icon lucide-handshake ${className}`}
   >
     <path d="m11 17 2 2a1 1 0 1 0 3-3" />
@@ -327,6 +343,7 @@ export const PercentI: React.FC<IconProps> = ({ className }) => (
     strokeWidth="2"
     strokeLinecap="round"
     strokeLinejoin="round"
+    aria-hidden="true"
     className={`lucide lucide-ticket-percent-icon lucide-ticket-percent ${className}`}
   >
     <path d="M2 9a3 3 0 1 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 1 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" />
@@ -344,6 +361,7 @@ export const AddI: React.FC<IconProps> = ({ className }) => (
     viewBox="0 0 24 24"
     stroke="currentColor"
     strokeWidth="2"
+    aria-hidden="true"
   >
     <path
       strokeLinecap="round"
@@ -358,6 +376,7 @@ export const MoreI: React.FC<IconProps> = ({ className }) => (
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 640 640"
     className={`${className}`}
+    aria-hidden="true"
   >
     <path d="M352 128C352 110.3 337.7 96 320 96C302.3 96 288 110.3 288 128L288 288L128 288C110.3 288 96 302.3 96 320C96 337.7 110.3 352 128 352L288 352L288 512C288 529.7 302.3 544 320 544C337.7 544 352 529.7 352 512L352 352L512 352C529.7 352 544 337.7 544 320C544 302.3 529.7 288 512 288L352 288L352 128z" />
   </svg>
