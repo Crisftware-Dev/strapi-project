@@ -8,13 +8,13 @@ Este documento consolida las tareas clave de optimización, SEO, rendimiento, ge
 
 - [ ] **1.1 Meta Data y Open Graph por Ruta**
   - [ ✔️ ] Configurar `generateMetadata` dinámico en rutas de cliente y autenticación (`(auth)`, `dashboard`).
-  - [ ] Definir imágenes OpenGraph estáticas y dinámicas (`og:image`, 1200x630px) para previsualizaciones en redes sociales.
-  - [ ] Actualizar JSON-LD en [app/layout.tsx](file:///c:/Users/cris1/OneDrive/Documentos/CONTRIBUCIONES/strapi-project/frontend/app/layout.tsx) reemplazando enlaces estáticos de ejemplo por variables de entorno reales.
+  - [ ✔️ ] Definir imágenes OpenGraph estáticas y dinámicas (`og:image`, 1200x630px) para previsualizaciones en redes sociales.
+  - [ ✔️ ] Actualizar JSON-LD en [app/layout.tsx](file:///c:/Users/cris1/OneDrive/Documentos/CONTRIBUCIONES/strapi-project/frontend/app/layout.tsx) reemplazando enlaces estáticos de ejemplo por variables de entorno reales.
 
 - [ ] **1.2 Estructura Semántica y Accesibilidad (a11y)**
-  - [ ] Asegurar una jerarquía lógica de encabezados (`<h1>` único por página, seguido de `<h2>`, `<h3>`).
-  - [ ] Añadir texto alternativo (`alt`) descriptivo a todas las imágenes e íconos en el frontend.
-  - [ ] Incluir atributos ARIA (`aria-label`, `aria-expanded`, `role`) en diálogos, modales y navegación del dashboard.
+  - [ ✔️ ] Asegurar una jerarquía lógica de encabezados (`<h1>` único por página, seguido de `<h2>`, `<h3>`).
+  - [ ✔️ ] Añadir texto alternativo (`alt`) descriptivo a todas las imágenes e íconos en el frontend.
+  - [ ✔️ ] Incluir atributos ARIA (`aria-label`, `aria-expanded`, `role`) en diálogos, modales y navegación del dashboard.
 
 - [ ] **1.3 Robots y Sitemap Dinámico**
   - [ ] Ampliar [app/sitemap.ts](file:///c:/Users/cris1/OneDrive/Documentos/CONTRIBUCIONES/strapi-project/frontend/app/sitemap.ts) para incluir páginas públicas dinámicas según el contenido de Strapi.
