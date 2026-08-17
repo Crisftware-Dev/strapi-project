@@ -39,11 +39,21 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: DEFAULT_TITLE,
       locale: "es_ES",
       type: "website",
+      images: [
+        {
+          url: "/og-image.svg",
+          width: 1200,
+          height: 630,
+          alt: DEFAULT_TITLE,
+          type: "image/svg+xml",
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
+      images: ["/og-image.svg"],
     },
     robots: {
       index: true,
