@@ -9,6 +9,7 @@ import Contratos from "./contracts/Contratos";
 import { useTabsControl } from "@/contexts/control-context";
 import { NewClienteProvider } from "@/contexts/new-cliente-context";
 import NewClient from "./client-form/CreateClientForm";
+import RoleBtn from "@/components/ui/role-btn";
 
 // ─── Inner component (necesita acceder al context) ────────────────────────────
 function ContratosInner() {
@@ -17,23 +18,56 @@ function ContratosInner() {
   return (
     <>
       <DynamicTabs />
-      <div key={`contratos-${addKey("contratos")}`} style={{ display: activeSubControls === "contratos" ? "block" : "none" }}>
+      {/* <div
+        role="tabpanel"
+        id="tabpanel-contratos"
+        aria-labelledby="tab-btn-contratos"
+        key={`contratos-${addKey("contratos")}`}
+        style={{ display: activeSubControls === "contratos" ? "block" : "none" }}
+      > */}
+      <RoleBtn
+        role="tabpanel"
+        id="tabpanel-contratos"
+        ariaLl="contratos"
+        style={{ display: activeSubControls === "contratos" ? "block" : "none" }}
+      >
         <Contratos />
-      </div>
-      <div key={`busqueda-${addKey("busqueda")}`} style={{ display: activeSubControls === "busqueda" ? "block" : "none" }}>
+      </RoleBtn>
+      <RoleBtn
+        role="tabpanel"
+        id="tabpanel-busqueda"
+        ariaLl="busqueda"
+        style={{ display: activeSubControls === "busqueda" ? "block" : "none" }}
+      >
         <BusquedaContratos />
-      </div>
-      <div key={`add-plans-${addKey("add-plans")}`} style={{ display: activeSubControls === "add-plans" ? "block" : "none" }}>
+      </RoleBtn>
+      <RoleBtn
+        role="tabpanel"
+        id="tabpanel-add-plans"
+        ariaLl="add-plans"
+        style={{ display: activeSubControls === "add-plans" ? "block" : "none" }}
+      >
         <AddPlans />
-      </div>
-      <div key={`soporte-${addKey("soporte")}`} style={{ display: activeSubControls === "soporte" ? "block" : "none" }}>
+      </RoleBtn>
+      <RoleBtn
+        role="tabpanel"
+        id="tabpanel-soporte"
+        aria-labelledby="tab-btn-soporte"
+        key={`soporte-${addKey("soporte")}`}
+        style={{ display: activeSubControls === "soporte" ? "block" : "none" }}
+      >
         <SoporteContratos />
-      </div>
-      <div key={`new-client-${addKey("new-client")}`} style={{ display: activeSubControls === "new-client" ? "block" : "none" }}>
+      </RoleBtn>
+      <RoleBtn
+        role="tabpanel"
+        id="tabpanel-new-client"
+        ariaLl="new-client"
+        style={{ display: activeSubControls === "new-client" ? "block" : "none" }}
+      >
         <NewClienteProvider>
           <NewClient />
         </NewClienteProvider>
-      </div>
+      </RoleBtn>
     </>
   );
 }
