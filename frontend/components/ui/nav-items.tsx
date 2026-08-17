@@ -39,6 +39,7 @@ export function LiControlHeader({
         type="button"
         aria-controls={id + "-dropdown"}
         aria-expanded={Boolean(isMenuOpen)}
+        aria-haspopup="true"
         onClick={(e) => onClick(e, id)}
         className="flex items-center gap-1 w-full focus:outline-none cursor-pointer"
       >
@@ -49,6 +50,7 @@ export function LiControlHeader({
       </button>
       <ul
         id={id + "-dropdown"}
+        role="menu"
         className={
           UL_DROPDOWN +
           (isMenuOpen && children
@@ -83,7 +85,16 @@ export function LiOptionClient({
   return (
     <li
       key={id}
+      role="tab"
+      aria-selected={isActive}
+      tabIndex={isActive ? 0 : -1}
       onClick={() => onClick?.(id)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onClick?.(id);
+        }
+      }}
       className={`
               flex items-center gap-2 px-5 py-0.5
               cursor-pointer select-none

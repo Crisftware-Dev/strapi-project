@@ -211,10 +211,15 @@ export default function FileUploader({
                         </Button>
                         {viewUrl &&
                           (isPdf ? (
-                            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+                            <div
+                              role="dialog"
+                              aria-modal="true"
+                              aria-labelledby={`pdf-dialog-${index}`}
+                              className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+                            >
                               <div className="bg-white dark:bg-gray-900 w-11/12 max-w-5xl h-[85vh] rounded-xl shadow-2xl flex flex-col overflow-hidden">
                                 <div className="flex justify-between items-center p-3 px-4 border-b border-gray-200 dark:border-gray-800 relative z-10 bg-white dark:bg-gray-900">
-                                  <span className="font-semibold truncate">
+                                  <span id={`pdf-dialog-${index}`} className="font-semibold truncate">
                                     {file.name}
                                   </span>
                                   <Button
@@ -235,9 +240,14 @@ export default function FileUploader({
                               </div>
                             </div>
                           ) : (
-                            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+                            <div
+                              role="dialog"
+                              aria-modal="true"
+                              aria-labelledby={`audio-dialog-${index}`}
+                              className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+                            >
                               <div className="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-2xl flex flex-col gap-5 items-center w-full max-w-sm">
-                                <h3 className="font-semibold text-lg text-center">
+                                <h3 id={`audio-dialog-${index}`} className="font-semibold text-lg text-center">
                                   {file.name}
                                 </h3>
                                 <div className="w-full bg-gray-50 dark:bg-gray-950 rounded-lg p-4 border border-gray-100 dark:border-gray-800 flex justify-center">

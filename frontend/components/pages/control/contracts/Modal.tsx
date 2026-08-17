@@ -19,9 +19,14 @@ export default function ModalIdentificator({
 
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl w-4xl max-h-[85vh] flex flex-col shadow-2xl">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-contratos-title"
+        className="bg-white rounded-2xl w-4xl max-h-[85vh] flex flex-col shadow-2xl"
+      >
         <div className="p-6 border-b">
-          <h2 className="text-2xl font-semibold">
+          <h2 id="modal-contratos-title" className="text-2xl font-semibold">
             El cliente tiene varios contratos
           </h2>
         </div>

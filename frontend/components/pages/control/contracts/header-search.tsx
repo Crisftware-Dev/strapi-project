@@ -186,8 +186,8 @@ export default function HeaderSearch() {
         </div>
       </header>
 
-      <nav className={styles.nav}>
-        <ul className={styles.ul}>
+      <nav className={styles.nav} aria-label="Secciones del cliente">
+        <ul className={styles.ul} role="tablist">
           <LiOptionClient
             id="cliente"
             label="Cliente"

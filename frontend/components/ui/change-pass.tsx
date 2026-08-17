@@ -46,7 +46,12 @@ export default function ChangePass({ isOpen, setIsOpen }: ChangePassProps) {
 
   return (
     isOpen && (
-      <main className={styles.main}>
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="change-pass-title"
+        className={styles.main}
+      >
         <button
           className={styles.close}
           onClick={() => setIsOpen(false)}
@@ -58,7 +63,7 @@ export default function ChangePass({ isOpen, setIsOpen }: ChangePassProps) {
         <form className={styles.form} action={formAction}>
           <Card className="w-100">
             <CardHeader>
-              <CardTitle>Change password</CardTitle>
+              <CardTitle id="change-pass-title">Change password</CardTitle>
             </CardHeader>
             <CardContent>
               <div className={styles.inputContainer}>
@@ -106,7 +111,7 @@ export default function ChangePass({ isOpen, setIsOpen }: ChangePassProps) {
             </CardFooter>
           </Card>
         </form>
-      </main>
+      </div>
     )
   );
 }
