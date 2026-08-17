@@ -2,15 +2,11 @@ import HeaderControl from "@/components/pages/header-control";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { fetchUser } from "@/lib/endpoint-api";
+import DashboardTitle from "@/components/pages/dashboard-title";
 
 export async function generateMetadata(): Promise<Metadata> {
-  let name = "";
-  try {
-    const user = await fetchUser();
-    if (user.fullname) name = `, ${user.fullname}`;
-  } catch {}
   return {
-    title: { absolute: `Hola${name} | Dashboard` },
+    title: { absolute: "Dashboard | Sistema de Gestión de Clientes" },
     description: "Panel de control para la gestión de clientes.",
     robots: {
       index: false,
@@ -26,8 +22,15 @@ export default async function DashboardLayout({
 }: {
   children: ReactNode;
 }) {
+  let userName = "";
+  try {
+    const user = await fetchUser();
+    if (user.fullname) userName = user.fullname;
+  } catch {}
+
   return (
     <Providers>
+      <DashboardTitle userName={userName} />
       <div className="flex flex-col min-h-screen">
         <HeaderControl />
         <main className="flex-1 flex flex-col">
