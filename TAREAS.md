@@ -58,3 +58,9 @@ Este documento consolida las tareas clave de optimización, SEO, rendimiento, ge
   - [ ] Validar disponibilidad de Cédula e historia de coincidencia de Nombre Completo. *(En progreso)*
   - [ ] Integrar el campo de subida obligatoria de archivo de contrato PDF/Imagen con el nuevo módulo de gestión de archivos.
   - [ ] Validar campos obligatorios y soporte para valores por defecto (Corte Automático, Factura Automática, etc.).
+
+
+
+// ARREGLAR BUTTON AND BUTTON used by list.tsx in search plans,
+
+Solve data plans in the  addPLans, not rendering the plans list to click in "Buscar"
