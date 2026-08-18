@@ -6,7 +6,7 @@ export function useAppliedDiscount(enabled: boolean = true) {
   return useQuery({
     queryKey: ["applied-discounts"],
     queryFn: fetchAppliedDiscount,
-    staleTime: 1000 * 60 * 5,
+    staleTime: 1000 * 60 * 10,
     enabled,
     select: (response: { data: AppliedDiscount[] }) => response.data,
   });

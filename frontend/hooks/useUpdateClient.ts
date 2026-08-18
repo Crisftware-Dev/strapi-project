@@ -13,6 +13,12 @@ export function useUpdateClient() {
   const uploadFiles = useMutation({
     mutationFn: (formData: FormData): Promise<StrapiMedia[]> =>
       uploadFileAction(formData),
+    onSuccess: (_result, variables) => {
+      const documentId = variables.get("documentId") as string;
+      if (documentId) {
+        queryClient.invalidateQueries({ queryKey: ["clientById", documentId] });
+      }
+    },
   });
 
   const updateClient = useMutation({

@@ -5,7 +5,7 @@ export function useUser() {
   return useQuery({
     queryKey: ["user"],
     queryFn: fetchUser,
-    staleTime: 1000 * 60 * 5,
+    staleTime: 1000 * 60 * 10,
   });
 }
 

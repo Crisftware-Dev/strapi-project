@@ -7,7 +7,7 @@ export function usePlans(enabled: boolean = true) {
   return useQuery({
     queryKey: ["plans"],
     queryFn: fetchPlans,
-    staleTime: 1000 * 60 * 5,
+    staleTime: 1000 * 60 * 10,
     enabled,
     select: (response: { data: Plan[] }) => response.data,
   });
