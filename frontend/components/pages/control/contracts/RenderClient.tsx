@@ -57,7 +57,7 @@ export default function RenderClient() {
   const [isFetchEnabled, setIsFetchEnabled] = useState(false);
 
   const { data: plans } = usePlans(isFetchEnabled);
-  const { data: appliedDiscount } = useAppliedDiscount();
+  const { data: appliedDiscount } = useAppliedDiscount(!!selectedClientId || isEditing);
   const plansData = plans || [];
 
   const activePlans =

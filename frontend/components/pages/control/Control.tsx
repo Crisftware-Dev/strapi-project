@@ -64,7 +64,7 @@ function ContratosInner() {
         ariaLl="new-client"
         style={{ display: activeSubControls === "new-client" ? "block" : "none" }}
       >
-        <NewClienteProvider>
+        <NewClienteProvider enabled={activeSubControls === "new-client" ? true : false}>
           <NewClient />
         </NewClienteProvider>
       </RoleBtn>

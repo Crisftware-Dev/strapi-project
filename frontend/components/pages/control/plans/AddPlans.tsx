@@ -5,6 +5,7 @@ import { useState } from "react";
 import { SearchI, MoneyI, AddI, UserI } from "@/components/icons/Icons";
 import { PlanProvider, usePlanContext, SERVICE_TYPES, CUT_OPTIONS } from "@/contexts/plan-context";
 import { useCurrentUser } from "@/hooks/useUser";
+import { useTabsControl } from "@/contexts/control-context";
 import FormField from "@/components/ui/FormField";
 import FormButton from "@/components/ui/FormButton";
 import { Notification } from "@/components/ui/feedback";
@@ -12,7 +13,8 @@ import { Notification } from "@/components/ui/feedback";
 // ─── Tabla de planes registrados ─────────────────────────────────────────────
 
 function PlansTable() {
-  const { data: plansData, isLoading, isError } = usePlans(true);
+  const { activeSubControls } = useTabsControl();
+  const { data: plansData, isLoading, isError } = usePlans(activeSubControls === "add-plans");
   const [search, setSearch] = useState("");
 
   const plans = plansData || [];

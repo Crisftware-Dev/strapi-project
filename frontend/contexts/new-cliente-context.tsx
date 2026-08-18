@@ -72,14 +72,14 @@ const LOCKED_FIELDS_FOR_EXISTING_CLIENT: ReadonlySet<string> = new Set([
   "apellidos",
 ]);
 
-export function NewClienteProvider({ children }: { children: ReactNode }) {
+export function NewClienteProvider({ children, enabled = false }: { children: ReactNode; enabled?: boolean }) {
   const [formData, setFormData] = useState<NewClientData>(DEFAULT_FORM_DATA);
   const [existingClient, setExistingClient] = useState<Client | null>(null);
   const [plansEnabled, setPlansEnabled] = useState(true);
   const [plansResults, setPlansResults] = useState<Plan[] | undefined>([]);
 
-  const { data: clients } = useClients(true);
-  const { data: plans } = usePlans(plansEnabled);
+  const { data: clients } = useClients(enabled); 
+  const { data: plans } = usePlans(plansEnabled && enabled);
 
   // SI LA IDENTIFICACIÓN YA EXISTE, DETECTAR AL CLIENTE.
   useEffect(() => {
