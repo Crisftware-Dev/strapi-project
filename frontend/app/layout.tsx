@@ -9,7 +9,7 @@ const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
   display: "swap",
-  preload: false,
+  preload: true,
 });
 
 const DEFAULT_TITLE = "Sistema de Gestión de Clientes";
