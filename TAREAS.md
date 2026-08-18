@@ -11,24 +11,23 @@ Este documento consolida las tareas clave de optimización, SEO, rendimiento, ge
   - [ ✔️ ] Definir imágenes OpenGraph estáticas y dinámicas (`og:image`, 1200x630px) para previsualizaciones en redes sociales.
   - [ ✔️ ] Actualizar JSON-LD en [app/layout.tsx](file:///c:/Users/cris1/OneDrive/Documentos/CONTRIBUCIONES/strapi-project/frontend/app/layout.tsx) reemplazando enlaces estáticos de ejemplo por variables de entorno reales.
 
-- [ ] **1.2 Estructura Semántica y Accesibilidad (a11y)**
+- [ ✔️ ] **1.2 Estructura Semántica y Accesibilidad (a11y)**
   - [ ✔️ ] Asegurar una jerarquía lógica de encabezados (`<h1>` único por página, seguido de `<h2>`, `<h3>`).
   - [ ✔️ ] Añadir texto alternativo (`alt`) descriptivo a todas las imágenes e íconos en el frontend.
   - [ ✔️ ] Incluir atributos ARIA (`aria-label`, `aria-expanded`, `role`) en diálogos, modales y navegación del dashboard.
 
-- [ ] **1.3 Robots y Sitemap Dinámico**
-  - [ ] Ampliar [app/sitemap.ts](file:///c:/Users/cris1/OneDrive/Documentos/CONTRIBUCIONES/strapi-project/frontend/app/sitemap.ts) para incluir páginas públicas dinámicas según el contenido de Strapi.
-  - [ ] Verificar directivas en [app/robots.ts](file:///c:/Users/cris1/OneDrive/Documentos/CONTRIBUCIONES/strapi-project/frontend/app/robots.ts) (proteger rutas de `/dashboard/` y `/api/`).
+- [ ✔️ ] **1.3 Robots y Sitemap Dinámico**
+  - [ ✔️ ] Verificar directivas en [app/robots.ts](file:///c:/Users/cris1/OneDrive/Documentos/CONTRIBUCIONES/strapi-project/frontend/app/robots.ts) (proteger rutas de `/dashboard/` y `/api/`).
 
 ---
 
 ## ⚡ 2. Mejoras de Rendimiento (Performance)
 
-- [ ] **2.1 Frontend (Next.js 16 App Router)**
-  - [ ] **Carga de Fuentes**: Activar `preload: true` e `display: "swap"` en Google Fonts (`Inter`) dentro de [app/layout.tsx](file:///c:/Users/cris1/OneDrive/Documentos/CONTRIBUCIONES/strapi-project/frontend/app/layout.tsx) para prevenir Layout Shift.
-  - [ ] **Code-Splitting & Dynamic Imports**: Cargar dinámicamente (`next/dynamic`) librerías pesadas como Leaflet/React-Leaflet en componentes de mapa.
-  - [ ] **Optimización de Imágenes**: Reemplazar etiquetas `<img>` tradicionales por `<Image />` de Next.js y agregar dominios autorizados en `next.config.ts` (`remotePatterns` para Strapi Media).
-  - [ ] **Gestión de Estado y Caché**: Ajustar `staleTime` y `gcTime` en `@tanstack/react-query` para reducir peticiones duplicadas a Strapi.
+- [ ✔️ ] **2.1 Frontend (Next.js 16 App Router)**
+  - [ ✔️ ] **Carga de Fuentes**: Activar `preload: true` e `display: "swap"` en Google Fonts (`Inter`) dentro de [app/layout.tsx](file:///c:/Users/cris1/OneDrive/Documentos/CONTRIBUCIONES/strapi-project/frontend/app/layout.tsx) para prevenir Layout Shift.
+  - [ ✔️ ] **Code-Splitting & Dynamic Imports**: Cargar dinámicamente (`next/dynamic`) librerías pesadas como Leaflet/React-Leaflet en componentes de mapa.
+  - [ ✔️ ] **Optimización de Imágenes**: Reemplazar etiquetas `<img>` tradicionales por `<Image />` de Next.js y agregar dominios autorizados en `next.config.ts` (`remotePatterns` para Strapi Media).
+  - [ ✔️ ] **Gestión de Estado y Caché**: Ajustar `staleTime` y `gcTime` en `@tanstack/react-query` para reducir peticiones duplicadas a Strapi.
 
 - [ ] **2.2 Backend y Base de Datos (Strapi v5)**
   - [ ] **Consultas Seleccionadas**: Configurar `fields` y `populate` específicos en [lib/api.ts](file:///c:/Users/cris1/OneDrive/Documentos/CONTRIBUCIONES/strapi-project/frontend/lib/api.ts) y Server Actions para no traer esquemas completos de Strapi.
