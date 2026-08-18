@@ -7,7 +7,6 @@ import { useClientById } from "@/hooks/useClientById";
 import { useUpdateClient } from "@/hooks/useUpdateClient";
 import { FORBIDDEN_MESSAGE } from "@/lib/http-errors";
 
-
 export default function FooterControl() {
   const {
     selectedClientId,
@@ -86,12 +85,16 @@ export default function FooterControl() {
   };
 
   const handleCancel = () => {
-    resetFormData(client ?? undefined);
+    if (client) {
+      resetFormData(client);
+      setIsEditing(false);
+    } else {
+      resetFormData(undefined);
+    }
   };
 
   const hasClient = !!selectedClientId;
   const isSaving = updateClient.isPending || uploadFiles.isPending;
-
 
   return (
     <footer className="w-full bg-white dark:bg-gray-950 border-t border-indigo-100 dark:border-indigo-900/30 p-3 shadow-sm mt-auto">

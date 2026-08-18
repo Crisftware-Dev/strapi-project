@@ -6,7 +6,7 @@ import { useClientContext } from "@/contexts/client-context";
 import { Client } from "@/types/typesDB";
 import { useClients } from "@/hooks/useClients";
 import { useClientByContrato } from "@/hooks/useClientByContrato";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   FaMoneyBill1Wave,
   FaMoneyCheckDollar,
@@ -38,18 +38,21 @@ export default function HeaderSearch() {
   const { data: contratoResults, isLoading: isContratoLoading } =
     useClientByContrato(searchContrato, searchContrato.length > 0);
 
+  const trySelectClientRef = useRef(trySelectClient);
+  trySelectClientRef.current = trySelectClient;
+
   useEffect(() => {
     if (!searchContrato || isContratoLoading) return;
 
     const client = contratoResults?.[0];
     if (client) {
-      trySelectClient(client.documentId);
+      trySelectClientRef.current(client.documentId);
       setContratoInput("");
       setShowError(false);
     } else {
       showErrorMessage("No se encontró ningún cliente con ese contrato");
     }
-  }, [contratoResults, isContratoLoading, searchContrato, trySelectClient]);
+  }, [contratoResults, isContratoLoading, searchContrato]);
 
   const handleIdentifierSearch = () => {
     if (!identifierInput.trim()) return;

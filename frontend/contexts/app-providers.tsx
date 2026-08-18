@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState, type ReactNode } from "react";
 
 export default function Providers({ children }: { children: ReactNode }) {
-  const [queryClient] = useState(() => new QueryClient({
+  const [clientById] = useState(() => new QueryClient({
     defaultOptions: {
       queries: {
         staleTime: 30 * 1000,
@@ -17,7 +17,7 @@ export default function Providers({ children }: { children: ReactNode }) {
   }));
 
   return (
-    <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={clientById}>
         <ControlProvider>{children}</ControlProvider>
     </QueryClientProvider>
   );

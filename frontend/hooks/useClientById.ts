@@ -6,7 +6,7 @@ export function useClientById(documentId: string) {
   return useQuery({
     queryKey: ["clientById", documentId],
     queryFn: () => fetchClientById(documentId),
-    staleTime: 1000 * 60 * 5,
+    // staleTime: 1000 * 60 * 5,
     enabled: !!documentId,
     placeholderData: keepPreviousData,
     select: (response: { data: Client }) => response.data,

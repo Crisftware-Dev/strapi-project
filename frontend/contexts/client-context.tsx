@@ -98,6 +98,7 @@ export function ClientProvider({ children }: { children: ReactNode }) {
     return null;
   }, [isValidToSave]);
 
+  
   const resetFormData = useCallback((client?: Client) => {
     if (client) {
       const data: EditableClientData = {
@@ -141,8 +142,8 @@ export function ClientProvider({ children }: { children: ReactNode }) {
     } else {
       setFormData({});
       setOriginalData({});
+      setIsEditing(false);
     }
-    setIsEditing(false);
   }, []);
 
   const trySelectClient = useCallback(
