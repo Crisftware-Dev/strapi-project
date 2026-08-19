@@ -10,7 +10,7 @@ import { useState } from "react";
 import ClientSearchResults from "./ClientSearchResults";
 import { ClientSearchFilters } from "@/types/typesDB";
 
-export default function BusquedaContratos() {
+export default function BusquedaContratos({ enabled }: { enabled: boolean }) {
   const [namesInput, setNamesInput] = useState("");
   const [phoneInput, setPhoneInput] = useState("");
   const [stateInput, setStateInput] = useState("");
@@ -26,7 +26,7 @@ export default function BusquedaContratos() {
     page,
     hasSearched,
   );
-  const { data: plans } = usePlans(hasSearched);
+  const { data: plans } = usePlans(enabled || hasSearched);
 
   const results = data?.data || [];
   const pagination = data?.meta.pagination;

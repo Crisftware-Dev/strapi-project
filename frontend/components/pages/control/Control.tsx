@@ -39,7 +39,7 @@ function ContratosInner() {
         ariaLl="busqueda"
         style={{ display: activeSubControls === "busqueda" ? "block" : "none" }}
       >
-        <BusquedaContratos />
+        <BusquedaContratos enabled={activeSubControls === "busqueda" ? true : false} />
       </RoleBtn>
       <RoleBtn
         role="tabpanel"
