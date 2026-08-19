@@ -26,19 +26,22 @@ export function Li({ className, label, id, onClick, children }: LiProps) {
     return (
       <li
         id={id}
+        role="button"
+        tabIndex={0}
+        onClick={onClick}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            onClick(e as unknown as MouseEvent);
+          }
+        }}
         className={cn(
-          "flex items-center gap-1 px-2 py-1.5 hover:bg-gray-300 dark:hover:bg-gray-800 rounded transition-colors whitespace-nowrap",
+          "flex items-center gap-1 px-2 py-1.5 hover:bg-gray-300 dark:hover:bg-gray-800 rounded transition-colors whitespace-nowrap cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500",
           className,
         )}
       >
-        <button
-          type="button"
-          onClick={onClick}
-          className="flex items-center gap-1 w-full focus:outline-none cursor-pointer"
-        >
-          {children}
-          {label && <span>{label}</span>}
-        </button>
+        {children}
+        {label && <span>{label}</span>}
       </li>
     );
   }
