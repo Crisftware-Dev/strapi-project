@@ -32,14 +32,14 @@ Este documento consolida las tareas clave de optimización, SEO, rendimiento, ge
 - [ ] **2.2 Backend y Base de Datos (Strapi v5)**
   - [ ✔️ ] **Consultas Seleccionadas**: Configurar `fields` y `populate` específicos en [lib/api.ts](file:///c:/Users/cris1/OneDrive/Documentos/CONTRIBUCIONES/strapi-project/frontend/lib/api.ts) y Server Actions para no traer esquemas completos de Strapi.
   - [ ] **Indexación de DB**: Crear índices en base de datos para búsquedas frecuentes (campos `cedula`, `numero_contrato`, `email` en la entidad `Cliente`).
-  - [ ] **Middlewares**: Habilitar compresión HTTP (gzip/brotli) y encabezados de caché para respuestas API estáticas.
+  - [ ✔️ ] **Middlewares**: Habilitar compresión HTTP (gzip/brotli) y encabezados de caché para respuestas API estáticas.
 
 ---
 
 ## 📂 3. Gestión de Archivos y Adjuntos (File Management)
 
 - [ ] **3.1 Componentes y Validación en Frontend**
-  - [ ] Crear un componente reutilizable de carga de archivos (`FileUploadZone`) con soporte Drag & Drop.
+  - [ ✔️ ] Crear un componente reutilizable de carga de archivos (`Files`) con soporte Drag & Drop.
   - [ ] Validar tipos de archivo permitidos (PDF, PNG, JPG) y tamaño máximo de archivo (ej. 5 MB) en el cliente antes de la subida.
   - [ ] Implementar barras de progreso, indicadores de carga (spinners) y previsualización de documentos seleccionados.
 
@@ -135,4 +135,4 @@ Este documento consolida las tareas clave de optimización, SEO, rendimiento, ge
 - [ ] **9.3 Debounce en Buscador** — Implementar un hook `useDebounce` en `hooks/useDebounce.ts` y aplicarlo en `BusquedaContratos.tsx` y `header-search.tsx` para evitar peticiones por cada tecla.
 - [ ] **9.4 Paginación de Clientes** — Agregar soporte de paginación (`page` + `pageSize`) en el hook `useClients` y mostrar botones "Anterior" / "Siguiente" en la vista de búsqueda.
 - [ ] **9.5 Ordenamiento de Tablas** — Usar el hook `useSort.ts` (ya existe) para activar el ordenamiento por columna en la tabla de clientes (nombres, ciudad, estado, contrato).
-- [ ] **9.6 Botón "Volver Arriba"** — Crear un componente `ScrollToTop` flotante (`position: fixed, bottom-4, right-4`) que aparezca al hacer scroll hacia abajo.
+- [ ] **9.6 Botón "Volver Arriba"** — Crear un componente `ScrollToTop` flotante (`position: fixed, bottom-4, right-4`) que aparezca al hacer scroll hacia abajo.
