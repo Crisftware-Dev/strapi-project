@@ -8,7 +8,6 @@ import { Select } from "./primitives";
 import { DeleteI } from "../icons/Icons";
 import { CompactTable, Headers, PaymentRow } from "./compact-table";
 import { STRAPI_BASE_URL } from "@/lib/login-register";
-import { useClientContext } from "@/contexts/client-context";
 
 export const Files: FileItem[] = [
   { name: "-- Selecciona una opción --", filename: "" },
@@ -65,16 +64,24 @@ function getFileViewUrl(fileItem: FileItem): string | null {
   return null;
 }
 
+interface FileUploaderProps {
+  files: FileItem[];
+  onFilesChange: (updater: (prev: FileItem[]) => FileItem[]) => void;
+  isEditing?: boolean;
+  filesList?: FileItem[];
+  className?: string;
+}
+
 export default function FileUploader({
   files,
-}: {
-  files: FileItem[] | undefined;
-}) {
-  const { formData, setFormData, isEditing } = useClientContext();
+  onFilesChange,
+  isEditing = true,
+  filesList = Files,
+  className,
+}: FileUploaderProps) {
   const [selectedFile, setSelectedFile] = useState<FileItem | null>(null);
   const [viewingIndex, setViewingIndex] = useState<number | null>(null);
 
-  /** Opens the native file picker filtered by the expected file type */
   const handleLoadFile = (fileItem: FileItem) => {
     if (!fileItem || !isEditing) return;
 
@@ -97,21 +104,16 @@ export default function FileUploader({
           lastModified: file.lastModified,
         });
 
-        setFormData((prev) => {
-          const currentFiles = [...(prev.files || files || [])];
-          // Replace if a file with the same name already exists
-          const filtered = currentFiles.filter((f) => f.name !== fileItem.name);
-          return {
-            ...prev,
-            files: [
-              ...filtered,
-              {
-                name: fileItem.name,
-                filename: fileItem.filename,
-                pendingFile: renamedFile,
-              },
-            ],
-          };
+        onFilesChange((prev) => {
+          const filtered = prev.filter((f) => f.name !== fileItem.name);
+          return [
+            ...filtered,
+            {
+              name: fileItem.name,
+              filename: fileItem.filename,
+              pendingFile: renamedFile,
+            },
+          ];
         });
       }
     };
@@ -120,14 +122,7 @@ export default function FileUploader({
   };
 
   const handleRemoveFile = (index: number) => {
-    setFormData((prev) => {
-      const currentFiles = prev.files || [];
-      return {
-        ...prev,
-        files: currentFiles.filter((_, i) => i !== index),
-      };
-    });
-    // Close viewer if we removed the file being viewed
+    onFilesChange((prev) => prev.filter((_, i) => i !== index));
     if (viewingIndex === index) {
       setViewingIndex(null);
     }
@@ -138,7 +133,7 @@ export default function FileUploader({
   };
 
   return (
-    <div className="p-4 flex flex-col gap-3">
+    <div className={`p-4 flex flex-col gap-3 ${className ?? ""}`}>
       <div className="flex flex-col gap-2">
         <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">
           Subir Archivos
@@ -147,17 +142,15 @@ export default function FileUploader({
           <Select
             onChange={(e) =>
               setSelectedFile(
-                Files.find((file) => file.name === e.target.value) || null,
+                filesList.find((file) => file.name === e.target.value) || null,
               )
             }
           >
-            {Files.map((file, index) => {
-              return (
-                <option key={index} value={file.name}>
-                  {file.name}
-                </option>
-              );
-            })}
+            {filesList.map((file, index) => (
+              <option key={index} value={file.name}>
+                {file.name}
+              </option>
+            ))}
           </Select>
           <Button
             className={styles.uploadButton}
@@ -176,103 +169,108 @@ export default function FileUploader({
             headers={["Archivo", "Tipo", "Opción"]}
           />
           <div className="contents">
-            {(formData.files || files || []) &&
-              (formData.files || files || []).map((file, index) => {
-                const isPdf = file.filename?.endsWith(".pdf");
-                const isAudio =
-                  file.filename?.endsWith(".mp3") ||
-                  file.filename?.endsWith(".wav");
-                const viewUrl =
-                  viewingIndex === index ? getFileViewUrl(file) : null;
+            {files.map((file, index) => {
+              const isPdf = file.filename?.endsWith(".pdf");
+              const isAudio =
+                file.filename?.endsWith(".mp3") ||
+                file.filename?.endsWith(".wav");
+              const viewUrl =
+                viewingIndex === index ? getFileViewUrl(file) : null;
 
-                return (
-                  <PaymentRow
-                    className="col-span-3 h-10 align-top border-b border-gray-100 dark:border-gray-800 last:border-none"
-                    key={file.documentId || `file-${index}`}
-                    cells={[
-                      `${isPdf ? "📄" : "🎵"} ${file.name}`,
-                      `${isPdf ? "PDF" : isAudio ? "AUDIO" : "OTRO"}`,
-                      <div
-                        key={`actions-${index}`}
-                        className="flex justify-center gap-2"
+              return (
+                <PaymentRow
+                  className="col-span-3 h-10 align-top border-b border-gray-100 dark:border-gray-800 last:border-none"
+                  key={file.documentId || `file-${index}`}
+                  cells={[
+                    `${isPdf ? "📄" : "🎵"} ${file.name}`,
+                    `${isPdf ? "PDF" : isAudio ? "AUDIO" : "OTRO"}`,
+                    <div
+                      key={`actions-${index}`}
+                      className="flex justify-center gap-2"
+                    >
+                      <Button
+                        className="px-2 py-0.5 text-xs bg-white hover:bg-red-50 border border-red-200 text-red-400 hover:text-red-600 hover:border-red-300 rounded-lg transition-all duration-200"
+                        onClick={() => handleRemoveFile(index)}
+                        disabled={!isEditing}
                       >
-                        <Button
-                          className="px-2 py-0.5 text-xs bg-white hover:bg-red-50 border border-red-200 text-red-400 hover:text-red-600 hover:border-red-300 rounded-lg transition-all duration-200"
-                          onClick={() => handleRemoveFile(index)}
-                          disabled={!isEditing}
-                        >
-                          <DeleteI className="w-2 h-2" />
-                        </Button>
-                        <Button
-                          className="px-2 py-0.5 text-xs bg-white hover:bg-indigo-50 border border-indigo-200 text-indigo-400 hover:text-indigo-600 hover:border-indigo-300 rounded-lg transition-all duration-200"
-                          onClick={() => handleToggleView(index)}
-                        >
-                          {viewingIndex === index ? "Cerrar" : "Ver"}
-                        </Button>
-                        {viewUrl &&
-                          (isPdf ? (
-                            <div
-                              role="dialog"
-                              aria-modal="true"
-                              aria-labelledby={`pdf-dialog-${index}`}
-                              className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
-                            >
-                              <div className="bg-white dark:bg-gray-900 w-11/12 max-w-5xl h-[85vh] rounded-xl shadow-2xl flex flex-col overflow-hidden">
-                                <div className="flex justify-between items-center p-3 px-4 border-b border-gray-200 dark:border-gray-800 relative z-10 bg-white dark:bg-gray-900">
-                                  <span id={`pdf-dialog-${index}`} className="font-semibold truncate">
-                                    {file.name}
-                                  </span>
-                                  <Button
-                                    onClick={() => handleToggleView(index)}
-                                    variant="outline"
-                                    className="py-1 h-auto"
-                                  >
-                                    Cerrar
-                                  </Button>
-                                </div>
-                                <div className="flex-1 w-full relative bg-gray-100 dark:bg-gray-950">
-                                  <iframe
-                                    src={`${viewUrl}#zoom=100`}
-                                    className="absolute inset-0 w-full h-full border-none"
-                                    title={`Preview ${file.name}`}
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                          ) : (
-                            <div
-                              role="dialog"
-                              aria-modal="true"
-                              aria-labelledby={`audio-dialog-${index}`}
-                              className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
-                            >
-                              <div className="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-2xl flex flex-col gap-5 items-center w-full max-w-sm">
-                                <h3 id={`audio-dialog-${index}`} className="font-semibold text-lg text-center">
+                        <DeleteI className="w-2 h-2" />
+                      </Button>
+                      <Button
+                        className="px-2 py-0.5 text-xs bg-white hover:bg-indigo-50 border border-indigo-200 text-indigo-400 hover:text-indigo-600 hover:border-indigo-300 rounded-lg transition-all duration-200"
+                        onClick={() => handleToggleView(index)}
+                      >
+                        {viewingIndex === index ? "Cerrar" : "Ver"}
+                      </Button>
+                      {viewUrl &&
+                        (isPdf ? (
+                          <div
+                            role="dialog"
+                            aria-modal="true"
+                            aria-labelledby={`pdf-dialog-${index}`}
+                            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+                          >
+                            <div className="bg-white dark:bg-gray-900 w-11/12 max-w-5xl h-[85vh] rounded-xl shadow-2xl flex flex-col overflow-hidden">
+                              <div className="flex justify-between items-center p-3 px-4 border-b border-gray-200 dark:border-gray-800 relative z-10 bg-white dark:bg-gray-900">
+                                <span
+                                  id={`pdf-dialog-${index}`}
+                                  className="font-semibold truncate"
+                                >
                                   {file.name}
-                                </h3>
-                                <div className="w-full bg-gray-50 dark:bg-gray-950 rounded-lg p-4 border border-gray-100 dark:border-gray-800 flex justify-center">
-                                  <audio
-                                    controls
-                                    src={viewUrl}
-                                    autoPlay
-                                    className="w-full"
-                                  />
-                                </div>
+                                </span>
                                 <Button
                                   onClick={() => handleToggleView(index)}
                                   variant="outline"
-                                  className="w-full"
+                                  className="py-1 h-auto"
                                 >
-                                  Cerrar Vista Previa
+                                  Cerrar
                                 </Button>
                               </div>
+                              <div className="flex-1 w-full relative bg-gray-100 dark:bg-gray-950">
+                                <iframe
+                                  src={`${viewUrl}#zoom=100`}
+                                  className="absolute inset-0 w-full h-full border-none"
+                                  title={`Preview ${file.name}`}
+                                />
+                              </div>
                             </div>
-                          ))}
-                      </div>,
-                    ]}
-                  />
-                );
-              })}
+                          </div>
+                        ) : (
+                          <div
+                            role="dialog"
+                            aria-modal="true"
+                            aria-labelledby={`audio-dialog-${index}`}
+                            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+                          >
+                            <div className="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-2xl flex flex-col gap-5 items-center w-full max-w-sm">
+                              <h3
+                                id={`audio-dialog-${index}`}
+                                className="font-semibold text-lg text-center"
+                              >
+                                {file.name}
+                              </h3>
+                              <div className="w-full bg-gray-50 dark:bg-gray-950 rounded-lg p-4 border border-gray-100 dark:border-gray-800 flex justify-center">
+                                <audio
+                                  controls
+                                  src={viewUrl}
+                                  autoPlay
+                                  className="w-full"
+                                />
+                              </div>
+                              <Button
+                                onClick={() => handleToggleView(index)}
+                                variant="outline"
+                                className="w-full"
+                              >
+                                Cerrar Vista Previa
+                              </Button>
+                            </div>
+                          </div>
+                        ))}
+                    </div>,
+                  ]}
+                />
+              );
+            })}
           </div>
         </CompactTable>
       </div>

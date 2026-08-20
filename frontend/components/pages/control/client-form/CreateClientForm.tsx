@@ -9,6 +9,7 @@ import { styles } from "@/app/styles/styles";
 import { Select } from "@/components/ui/primitives";
 import { useNewClienteContext } from "@/contexts/new-cliente-context";
 import { useQueryClient } from "@tanstack/react-query";
+import FileUploader, { Files } from "@/components/ui/files";
 
 const TODAY = new Date().toISOString().slice(0, 10);
 
@@ -39,24 +40,7 @@ export default function NewClient({ onSuccess }: { onSuccess?: () => void }) {
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [errorHint, setErrorHint] = useState<string | null>(null);
-  const [contractFile, setContractFile] = useState<File | null>(null);
   const [reference, setReference] = useState(EMPTY_REFERENCE);
-
-  const handleContractFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] || null;
-    setContractFile(file);
-
-    if (file) {
-      setFormData((prev) => ({
-        ...prev,
-        files: [
-          { name: "CONTRATO FIRMADO", filename: file.name, pendingFile: file },
-        ],
-      }));
-    } else {
-      setFormData((prev) => ({ ...prev, files: [] }));
-    }
-  };
 
   const addReference = () => {
     if (
@@ -100,7 +84,7 @@ export default function NewClient({ onSuccess }: { onSuccess?: () => void }) {
 
     try {
       // Archivo de contrato obligatorio
-      if (!contractFile) {
+      if (!formData.files || formData.files.length === 0) {
         setError("El archivo de contrato es obligatorio.");
         return;
       }
@@ -146,7 +130,6 @@ export default function NewClient({ onSuccess }: { onSuccess?: () => void }) {
       await queryClient.invalidateQueries({ queryKey: ["clients"] });
       setSuccess("Cliente creado correctamente.");
       resetFormData();
-      setContractFile(null);
       setReference(EMPTY_REFERENCE);
       if (onSuccess) onSuccess();
     } catch (err) {
@@ -446,19 +429,13 @@ export default function NewClient({ onSuccess }: { onSuccess?: () => void }) {
 
         {/* Archivo de Contrato — obligatorio */}
         <div className="flex flex-col gap-1 md:col-span-2 lg:col-span-3">
-          <Label className={styles.inputLabel}>Archivo de Contrato *</Label>
-          <Input
-            required
-            type="file"
-            accept=".pdf"
-            className={styles.input}
-            onChange={handleContractFile}
+          <FileUploader
+            files={formData.files || []}
+            onFilesChange={(updater) =>
+              setFormData((prev) => ({ ...prev, files: updater(prev.files || []) }))
+            }
+            filesList={[Files[0], Files[1]]}
           />
-          {contractFile && (
-            <p className="text-[10px] text-green-600 dark:text-green-400 px-2">
-              Archivo cargado: {contractFile.name}
-            </p>
-          )}
         </div>
       </div>
 

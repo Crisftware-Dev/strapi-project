@@ -591,7 +591,11 @@ export default function RenderClient() {
             rowClassName="border-none bg-transparent hover:bg-transparent min-h-0 p-0"
           />
           <FileUploader
-            files={isEditing ? formData.files : client.files || []}
+            files={isEditing ? formData.files || [] : client.files || []}
+            onFilesChange={(updater) =>
+              setFormData((prev) => ({ ...prev, files: updater(prev.files || []) }))
+            }
+            isEditing={isEditing}
           />
 
           <div className="border-t border-indigo-100 dark:border-indigo-900/30 bg-white dark:bg-gray-950">
