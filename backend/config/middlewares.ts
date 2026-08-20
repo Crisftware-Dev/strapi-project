@@ -24,6 +24,8 @@ export default [
     },
   },
   'strapi::poweredBy',
+  'strapi::compression',
+  { name: 'global::cache-headers' },
   'strapi::query',
   'strapi::body',
   'strapi::session',
