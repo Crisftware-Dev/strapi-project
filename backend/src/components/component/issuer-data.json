@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_component_issuer_data",
+  "info": {
+    "displayName": "issuer_data",
+    "icon": "user"
+  },
+  "options": {},
+  "attributes": {
+    "username": {
+      "type": "string"
+    },
+    "fullname": {
+      "type": "string"
+    },
+    "lastname": {
+      "type": "string"
+    },
+    "email": {
+      "type": "email"
+    }
+  },
+  "config": {}
+}

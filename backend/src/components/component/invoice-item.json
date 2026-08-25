@@ -1,0 +1,20 @@
+{
+  "collectionName": "components_component_invoice_items",
+  "info": {
+    "displayName": "invoice_item",
+    "icon": "filePdf"
+  },
+  "options": {},
+  "attributes": {
+    "description": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "decimal"
+    },
+    "unit_price": {
+      "type": "decimal"
+    }
+  },
+  "config": {}
+}
