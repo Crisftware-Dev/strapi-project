@@ -81,6 +81,12 @@
       "type": "component",
       "component": "component.invoice-item",
       "repeatable": true
+    },
+    "cliente": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::cliente.cliente",
+      "inversedBy": "invoices"
     }
   }
 }

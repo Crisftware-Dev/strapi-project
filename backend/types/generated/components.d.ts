@@ -38,6 +38,33 @@ export interface ComponentFile extends Struct.ComponentSchema {
   };
 }
 
+export interface ComponentInvoiceItem extends Struct.ComponentSchema {
+  collectionName: 'components_component_invoice_items';
+  info: {
+    displayName: 'invoice_item';
+    icon: 'filePdf';
+  };
+  attributes: {
+    amount: Schema.Attribute.Decimal;
+    description: Schema.Attribute.String;
+    unit_price: Schema.Attribute.Decimal;
+  };
+}
+
+export interface ComponentIssuerData extends Struct.ComponentSchema {
+  collectionName: 'components_component_issuer_data';
+  info: {
+    displayName: 'issuer_data';
+    icon: 'user';
+  };
+  attributes: {
+    email: Schema.Attribute.Email;
+    fullname: Schema.Attribute.String;
+    lastname: Schema.Attribute.String;
+    username: Schema.Attribute.String;
+  };
+}
+
 export interface ComponentLink extends Struct.ComponentSchema {
   collectionName: 'components_component_links';
   info: {
@@ -96,6 +123,8 @@ declare module '@strapi/strapi' {
       'component.contact': ComponentContact;
       'component.discount-law': ComponentDiscountLaw;
       'component.file': ComponentFile;
+      'component.invoice-item': ComponentInvoiceItem;
+      'component.issuer-data': ComponentIssuerData;
       'component.link': ComponentLink;
       'component.location': ComponentLocation;
       'component.references': ComponentReferences;

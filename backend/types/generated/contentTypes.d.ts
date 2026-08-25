@@ -528,6 +528,7 @@ export interface ApiClienteCliente extends Struct.CollectionTypeSchema {
         minLength: 8;
       }>;
     installationDate: Schema.Attribute.DateTime;
+    invoices: Schema.Attribute.Relation<'oneToMany', 'api::invoice.invoice'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -562,6 +563,58 @@ export interface ApiClienteCliente extends Struct.CollectionTypeSchema {
     valores: Schema.Attribute.Decimal;
     withholdingAgent: Schema.Attribute.Boolean &
       Schema.Attribute.DefaultTo<false>;
+  };
+}
+
+export interface ApiInvoiceInvoice extends Struct.CollectionTypeSchema {
+  collectionName: 'invoices';
+  info: {
+    displayName: 'invoice';
+    pluralName: 'invoices';
+    singularName: 'invoice';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    cliente: Schema.Attribute.Relation<'manyToOne', 'api::cliente.cliente'>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    currency: Schema.Attribute.String & Schema.Attribute.DefaultTo<'USD $'>;
+    detail: Schema.Attribute.String;
+    discounts: Schema.Attribute.Decimal &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<0>;
+    invoice_item: Schema.Attribute.Component<'component.invoice-item', true>;
+    invoice_nro: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
+    issue_date: Schema.Attribute.DateTime & Schema.Attribute.Required;
+    issuer_data: Schema.Attribute.Component<'component.issuer-data', false>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::invoice.invoice'
+    > &
+      Schema.Attribute.Private;
+    method_payment: Schema.Attribute.Enumeration<
+      ['EFECTIVO', 'TRANSFERENCIA', 'TARJETA']
+    >;
+    paid: Schema.Attribute.Decimal &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<0>;
+    payment_date: Schema.Attribute.DateTime;
+    publishedAt: Schema.Attribute.DateTime;
+    state: Schema.Attribute.Enumeration<['PENDIENTE', 'PAGADA', 'PARCIAL']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'PENDIENTE'>;
+    subtotal: Schema.Attribute.Decimal & Schema.Attribute.Required;
+    taxes: Schema.Attribute.Decimal;
+    total: Schema.Attribute.Decimal & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
   };
 }
 
@@ -1143,6 +1196,7 @@ declare module '@strapi/strapi' {
       'admin::user': AdminUser;
       'api::applied-discount.applied-discount': ApiAppliedDiscountAppliedDiscount;
       'api::cliente.cliente': ApiClienteCliente;
+      'api::invoice.invoice': ApiInvoiceInvoice;
       'api::login-page.login-page': ApiLoginPageLoginPage;
       'api::plan.plan': ApiPlanPlan;
       'plugin::content-releases.release': PluginContentReleasesRelease;
