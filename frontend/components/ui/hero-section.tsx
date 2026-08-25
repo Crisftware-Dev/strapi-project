@@ -1,7 +1,8 @@
-import { STRAPI_BASE_URL } from "@/lib/login-register";
 import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { getStrapiMediaUrl } from "@/lib/strapi-media";
+import type { StrapiMedia } from "@/types/typesDB";
 
 const styles = {
   header:
@@ -19,7 +20,7 @@ interface HeroData {
   heading?: string;
   subHeading?: string;
   link?: { href: string; label: string };
-  image?: { url: string; alternativeText?: string };
+  image?: { url: string; alternativeText?: string; formats?: StrapiMedia["formats"] };
 }
 
 export function HeroSection({
@@ -31,13 +32,13 @@ export function HeroSection({
   readonly className?: string;
   readonly priority?: boolean;
 }) {
-  if (!data?.image?.url) return null;
+  if (!data?.image) return null;
+
+  const imageUrl = getStrapiMediaUrl(data.image, "large");
+  if (!imageUrl) return null;
 
   const { heading, subHeading, link } = data;
 
-  const imageUrl = data.image.url.startsWith("http")
-    ? data.image.url
-    : `${STRAPI_BASE_URL}${data.image.url}`;
   const altText = data.image.alternativeText || "Fondo de portada";
 
   return (

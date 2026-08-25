@@ -3,11 +3,6 @@ import type { StrapiMedia } from "@/types/typesDB";
 
 export type StrapiImageFormat = "thumbnail" | "small" | "medium" | "large";
 
-/**
- *  y cayendo al original
- * si no hay formato solicitado. Convierte rutas relativas en absolutas usando
- * STRAPI_BASE_URL.
- */
 export function getStrapiMediaUrl(
   media: Pick<StrapiMedia, "url" | "formats"> | null | undefined,
   format: StrapiImageFormat = "medium",

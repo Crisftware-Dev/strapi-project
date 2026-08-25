@@ -1,5 +1,6 @@
 import qs from "qs";
 import { FORBIDDEN_MESSAGE } from "./http-errors";
+import type { StrapiMedia } from "@/types/typesDB";
 
 interface LoginData {
   identifier: string;
@@ -17,13 +18,6 @@ interface RegisterData {
 type UserData = LoginData | RegisterData;
 
 export const STRAPI_BASE_URL = process.env.STRAPI_BASE_URL;
-
-interface StrapiMedia {
-  url: string;
-  alternativeText?: string;
-  width?: number;
-  height?: number;
-}
 
 interface LoginSectionData {
   __component: "layout.login-section";
@@ -50,7 +44,7 @@ const QUERY_LOGIN_PAGE = {
         "layout.login-section": {
           populate: {
             images_demostratives: {
-              fields: ["url", "alternativeText", "width", "height"],
+              fields: ["url", "alternativeText", "width", "height", "formats"],
             },
           },
         },
@@ -69,6 +63,16 @@ export async function getLoginPage(): Promise<LoginPageData | null> {
       section.images_demostratives.forEach((img) => {
         if (img.url && !img.url.startsWith("http")) {
           img.url = `${STRAPI_BASE_URL}${img.url}`;
+        }
+        if (img.formats) {
+          (Object.keys(img.formats) as (keyof typeof img.formats)[]).forEach(
+            (key) => {
+              const format = img.formats?.[key];
+              if (format?.url && !format.url.startsWith("http")) {
+                format.url = `${STRAPI_BASE_URL}${format.url}`;
+              }
+            },
+          );
         }
       });
     });

@@ -7,10 +7,12 @@ import Image from "next/image";
 import { useActionState, useEffect, useState } from "react";
 import { Button } from "./button";
 import { Input } from "./input";
+import { getStrapiMediaUrl } from "@/lib/strapi-media";
+import type { StrapiMedia } from "@/types/typesDB";
 
 interface LoginData {
   label: string;
-  images_demostratives: { url: string; alternativeText?: string }[];
+  images_demostratives: StrapiMedia[];
 }
 
 const SLIDESHOW_INTERVAL = 4000;
@@ -58,7 +60,7 @@ export function DescSection({
   );
 
   const images = (images_demostratives ?? []).map((img) => ({
-    url: img.url,
+    url: getStrapiMediaUrl(img, "large") ?? img.url,
     alt: img.alternativeText || label || "Imagen demostrativa",
   }));
 

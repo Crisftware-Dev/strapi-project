@@ -96,12 +96,27 @@ export interface AppliedDiscount {
 }
 
 // Archivo multimedia de Strapi
+export interface StrapiMediaFormat {
+  url: string;
+  width: number;
+  height: number;
+}
+
 export interface StrapiMedia {
-  id: number;
+  id?: number;
   documentId?: string;
   url: string;
-  name: string;
-  mime: string;
+  name?: string;
+  mime?: string;
+  alternativeText?: string;
+  width?: number;
+  height?: number;
+  formats?: {
+    thumbnail?: StrapiMediaFormat;
+    small?: StrapiMediaFormat;
+    medium?: StrapiMediaFormat;
+    large?: StrapiMediaFormat;
+  } | null;
 }
 
 // Ítem de archivo (puede tener uno o varios adjuntos)
