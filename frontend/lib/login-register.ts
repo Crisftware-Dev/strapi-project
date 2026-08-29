@@ -17,7 +17,7 @@ interface RegisterData {
 
 type UserData = LoginData | RegisterData;
 
-export const STRAPI_BASE_URL = process.env.STRAPI_BASE_URL;
+export const STRAPI_BASE_URL = process.env.NEXT_PUBLIC_STRAPI_BASE_URL;
 
 interface LoginSectionData {
   __component: "layout.login-section";
