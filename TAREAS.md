@@ -40,8 +40,7 @@ Este documento consolida las tareas clave de optimización, SEO, rendimiento, ge
 
 - [ ] **3.1 Componentes y Validación en Frontend**
   - [ ✔️ ] Crear un componente reutilizable de carga de archivos (`Files`) con soporte Drag & Drop.
-  - [ ] Validar tipos de archivo permitidos (PDF, PNG, JPG) y tamaño máximo de archivo (ej. 5 MB) en el cliente antes de la subida.
-  - [ ] Implementar barras de progreso, indicadores de carga (spinners) y previsualización de documentos seleccionados.
+  - [ ✔️ ] Validar tipos de archivo permitidos (PDF, MP3, WAV) y tamaño máximo de archivo (ej. 10 MB) en el cliente antes de la subida.
 
 - [ ] **3.2 Procesamiento y Almacenamiento en Backend (Strapi Upload)**
   - [ ] Configurar el plugin de procesamiento de imágenes con `sharp` para auto-comprimir y generar formatos WebP.
