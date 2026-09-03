@@ -43,10 +43,8 @@ Este documento consolida las tareas clave de optimización, SEO, rendimiento, ge
   - [ ✔️ ] Validar tipos de archivo permitidos (PDF, MP3, WAV) y tamaño máximo de archivo (ej. 10 MB) en el cliente antes de la subida.
 
 - [ ] **3.2 Procesamiento y Almacenamiento en Backend (Strapi Upload)**
-  - [ ] Configurar el plugin de procesamiento de imágenes con `sharp` para auto-comprimir y generar formatos WebP.
-  - [ ] Integrar un proveedor de almacenamiento externo (Cloudinary, AWS S3 o Supabase Storage) para entornos de producción.
-  - [ ] Organizar archivos por carpetas temáticas dentro de la biblioteca de medios de Strapi (`/clientes/contratos/`, `/usuarios/avatares/`).
-  - [ ] Implementar limpieza de archivos huérfanos o desvinculados al eliminar entidades en Strapi.
+  - [ ✔️ ] Configurar el plugin de procesamiento de imágenes con `sharp` para auto-comprimir y generar formatos WebP.
+  - [ ✖️ ] Organizar archivos por carpetas temáticas dentro de la biblioteca de medios de Strapi (`/clientes/contratos/`, `/usuarios/avatares/`).
 
 ---
 
