@@ -1,4 +1,4 @@
-export default () => ({
+export default ({ env }) => ({
   upload: {
     config: {
       sizeLimit: 5 * 1024 * 1024,
@@ -8,15 +8,8 @@ export default () => ({
         medium: { width: 1000, height: 1000 },
         large: { width: 1400 },
       },
-      sharp: {
-        cache: true,
-        concurrency: 4,
-      },
-      security: {
-        allowedTypes: ['image/*', 'application/pdf'],
-        deniedTypes: ['application/x-sh', 'application/x-dosexec'],
-      },
-      concurrentUploadSize: 5,
+      allowedTypes: ['image/*', 'application/pdf', 'audio/*'],
+      deniedTypes: ['application/x-sh', 'application/x-dosexec'],
     },
   },
   'users-permissions': {
