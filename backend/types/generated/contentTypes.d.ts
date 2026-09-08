@@ -574,14 +574,14 @@ export interface ApiInvoiceInvoice extends Struct.CollectionTypeSchema {
     singularName: 'invoice';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     cliente: Schema.Attribute.Relation<'manyToOne', 'api::cliente.cliente'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    currency: Schema.Attribute.String & Schema.Attribute.DefaultTo<'USD $'>;
+    currency: Schema.Attribute.String & Schema.Attribute.DefaultTo<'USD'>;
     detail: Schema.Attribute.String;
     discounts: Schema.Attribute.Decimal &
       Schema.Attribute.Required &
@@ -598,13 +598,11 @@ export interface ApiInvoiceInvoice extends Struct.CollectionTypeSchema {
       'api::invoice.invoice'
     > &
       Schema.Attribute.Private;
-    method_payment: Schema.Attribute.Enumeration<
-      ['EFECTIVO', 'TRANSFERENCIA', 'TARJETA']
-    >;
     paid: Schema.Attribute.Decimal &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<0>;
     payment_date: Schema.Attribute.DateTime;
+    payments: Schema.Attribute.Component<'component.payment', true>;
     publishedAt: Schema.Attribute.DateTime;
     state: Schema.Attribute.Enumeration<['PENDIENTE', 'PAGADA', 'PARCIAL']> &
       Schema.Attribute.Required &

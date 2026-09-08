@@ -91,6 +91,22 @@ export interface ComponentLocation extends Struct.ComponentSchema {
   };
 }
 
+export interface ComponentPayment extends Struct.ComponentSchema {
+  collectionName: 'components_component_payments';
+  info: {
+    displayName: 'payment';
+    icon: 'wallet';
+  };
+  attributes: {
+    amount: Schema.Attribute.Decimal & Schema.Attribute.Required;
+    payment_date: Schema.Attribute.DateTime & Schema.Attribute.Required;
+    payment_method: Schema.Attribute.Enumeration<
+      ['EFECTIVO', 'TRANSFERENCIA', 'TARJETA']
+    > &
+      Schema.Attribute.DefaultTo<'EFECTIVO'>;
+  };
+}
+
 export interface ComponentReferences extends Struct.ComponentSchema {
   collectionName: 'components_component_references';
   info: {
@@ -127,6 +143,7 @@ declare module '@strapi/strapi' {
       'component.issuer-data': ComponentIssuerData;
       'component.link': ComponentLink;
       'component.location': ComponentLocation;
+      'component.payment': ComponentPayment;
       'component.references': ComponentReferences;
       'layout.login-section': LayoutLoginSection;
     }

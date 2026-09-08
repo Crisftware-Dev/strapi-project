@@ -1,0 +1,28 @@
+{
+  "collectionName": "components_component_payments",
+  "info": {
+    "displayName": "payment",
+    "icon": "wallet"
+  },
+  "options": {},
+  "attributes": {
+    "amount": {
+      "type": "decimal",
+      "required": true
+    },
+    "payment_date": {
+      "type": "datetime",
+      "required": true
+    },
+    "payment_method": {
+      "type": "enumeration",
+      "default": "EFECTIVO",
+      "enum": [
+        "EFECTIVO",
+        "TRANSFERENCIA",
+        "TARJETA"
+      ]
+    }
+  },
+  "config": {}
+}
