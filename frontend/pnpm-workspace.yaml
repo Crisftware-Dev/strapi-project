@@ -1,5 +1,12 @@
 packages:
   - .
-ignoredBuiltDependencies:
+allowBuilds:
+  sharp: true
+  unrs-resolver: true
+onlyBuiltDependencies:
   - sharp
   - unrs-resolver
+
+minimumReleaseAgeExclude:
+  - '@types/node@26.3.0'
+  - eslint@10.9.1
