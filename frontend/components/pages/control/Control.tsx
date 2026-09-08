@@ -13,22 +13,16 @@ import RoleBtn from "@/components/ui/role-btn";
 
 // ─── Inner component (necesita acceder al context) ────────────────────────────
 function ContratosInner() {
-  const { activeSubControls, addKey } = useTabsControl();
+  const { activeSubControls, getTabKey } = useTabsControl();
 
   return (
     <>
       <DynamicTabs />
-      {/* <div
-        role="tabpanel"
-        id="tabpanel-contratos"
-        aria-labelledby="tab-btn-contratos"
-        key={`contratos-${addKey("contratos")}`}
-        style={{ display: activeSubControls === "contratos" ? "block" : "none" }}
-      > */}
       <RoleBtn
         role="tabpanel"
         id="tabpanel-contratos"
         ariaLl="contratos"
+        key={`contratos-${getTabKey("contratos")}`}
         style={{ display: activeSubControls === "contratos" ? "block" : "none" }}
       >
         <Contratos />
@@ -37,6 +31,7 @@ function ContratosInner() {
         role="tabpanel"
         id="tabpanel-busqueda"
         ariaLl="busqueda"
+        key={`busqueda-${getTabKey("busqueda")}`}
         style={{ display: activeSubControls === "busqueda" ? "block" : "none" }}
       >
         <BusquedaContratos enabled={activeSubControls === "busqueda" ? true : false} />
@@ -45,6 +40,7 @@ function ContratosInner() {
         role="tabpanel"
         id="tabpanel-add-plans"
         ariaLl="add-plans"
+        key={`add-plans-${getTabKey("add-plans")}`}
         style={{ display: activeSubControls === "add-plans" ? "block" : "none" }}
       >
         <AddPlans />
@@ -53,7 +49,7 @@ function ContratosInner() {
         role="tabpanel"
         id="tabpanel-soporte"
         aria-labelledby="tab-btn-soporte"
-        key={`soporte-${addKey("soporte")}`}
+        key={`soporte-${getTabKey("soporte")}`}
         style={{ display: activeSubControls === "soporte" ? "block" : "none" }}
       >
         <SoporteContratos />
@@ -62,6 +58,7 @@ function ContratosInner() {
         role="tabpanel"
         id="tabpanel-new-client"
         ariaLl="new-client"
+        key={`new-client-${getTabKey("new-client")}`}
         style={{ display: activeSubControls === "new-client" ? "block" : "none" }}
       >
         <NewClienteProvider enabled={activeSubControls === "new-client" ? true : false}>

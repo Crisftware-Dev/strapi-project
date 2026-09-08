@@ -20,7 +20,7 @@ const TAB_ICONS: Record<string, JSX.Element> = {
 };
 
 export default function DynamicTabs() {
-  const { openTabs, activeSubControls, setActiveSubControls, closeTab, removeKey } =
+  const { openTabs, activeSubControls, setActiveSubControls, closeTab } =
     useTabsControl();
 
   return (
@@ -71,7 +71,6 @@ export default function DynamicTabs() {
                   onClick={(e) => {
                     e.stopPropagation();
                     closeTab(tab.id);
-                    removeKey(tab.id);
                   }}
                   // onKeyDown={(e) => {
                   //   if (e.key === "Enter" || e.key === " ") {

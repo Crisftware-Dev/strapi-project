@@ -20,8 +20,8 @@ interface ControlContextType {
   activeControls: string;
   activeSubControls: string;
   openTabs: Tab[];
-  addKey: (key: string) => void;
-  removeKey: (key: string) => void;
+  getTabKey: (key: string) => number;
+  resetTab: (key: string) => void;
   openTab: (id: string, label: string, closable?: boolean) => void;
   closeTab: (id: string) => void;
   setActiveControls: (id: string) => void;
@@ -40,9 +40,9 @@ export function ControlProvider({ children }: { children: ReactNode }) {
   const [activeSubControls, setActiveSubControls] = useState("");
   const [tabKeys, setTabKeys] = useState<Record<string, number>>({});
 
-  const addKey = (key: string) => tabKeys[key] || 0;
+  const getTabKey = (key: string) => tabKeys[key] || 0;
 
-  const removeKey = (key: string) => {
+  const resetTab = (key: string) => {
     setTabKeys((prev) => ({ ...prev, [key]: (prev[key] ?? 0) + 1 }));
   };
 
@@ -62,6 +62,7 @@ export function ControlProvider({ children }: { children: ReactNode }) {
   };
 
   const closeTab = (id: string) => {
+    resetTab(id);
     setOpenTabs((prev) => {
       const remaining = prev.filter((t) => t.id !== id);
       if (id === activeSubControls) {
@@ -81,8 +82,8 @@ export function ControlProvider({ children }: { children: ReactNode }) {
         openTabs,
         activeControls,
         activeSubControls,
-        addKey,
-        removeKey,
+        getTabKey,
+        resetTab,
         openTab,
         closeTab,
         setActiveControls,

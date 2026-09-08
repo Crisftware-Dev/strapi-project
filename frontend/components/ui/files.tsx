@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FileItem } from "@/types/typesDB";
 import { styles } from "@/app/styles/styles";
 import { Button } from "./button";
@@ -51,6 +51,15 @@ export const Files: FileItem[] = [
   { name: "AUDIO ZONA MESH", filename: "AUDIO_ZONA_MESH.mp3" },
 ] as const;
 
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
+
+function validateFile(file: File): string | null {
+  if (file.size > MAX_FILE_SIZE) {
+    return "El archivo excede el tamaño máximo de 5 MB.";
+  }
+  return null;
+}
+
 function getFileViewUrl(fileItem: FileItem): string | null {
   if (fileItem.pendingFile) {
     return URL.createObjectURL(fileItem.pendingFile);
@@ -81,6 +90,17 @@ export default function FileUploader({
 }: FileUploaderProps) {
   const [selectedFile, setSelectedFile] = useState<FileItem | null>(null);
   const [viewingIndex, setViewingIndex] = useState<number | null>(null);
+  const [validationError, setValidationError] = useState<string | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const blobUrlRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (blobUrlRef.current) {
+        URL.revokeObjectURL(blobUrlRef.current);
+      }
+    };
+  }, []);
 
   const handleLoadFile = (fileItem: FileItem) => {
     if (!fileItem || !isEditing) return;
@@ -99,6 +119,13 @@ export default function FileUploader({
       const file = target.files?.[0];
 
       if (file) {
+        const error = validateFile(file);
+        if (error) {
+          setValidationError(error);
+          return;
+        }
+        setValidationError(null);
+
         const renamedFile = new File([file], fileItem.name, {
           type: file.type,
           lastModified: file.lastModified,
@@ -125,11 +152,35 @@ export default function FileUploader({
     onFilesChange((prev) => prev.filter((_, i) => i !== index));
     if (viewingIndex === index) {
       setViewingIndex(null);
+      setPreviewUrl(null);
+      if (blobUrlRef.current) {
+        URL.revokeObjectURL(blobUrlRef.current);
+        blobUrlRef.current = null;
+      }
     }
   };
 
   const handleToggleView = (index: number) => {
-    setViewingIndex((prev) => (prev === index ? null : index));
+    if (viewingIndex === index) {
+      setViewingIndex(null);
+      setPreviewUrl(null);
+      if (blobUrlRef.current) {
+        URL.revokeObjectURL(blobUrlRef.current);
+        blobUrlRef.current = null;
+      }
+    } else {
+      const file = files[index];
+      const url = file ? getFileViewUrl(file) : null;
+      if (blobUrlRef.current) {
+        URL.revokeObjectURL(blobUrlRef.current);
+        blobUrlRef.current = null;
+      }
+      setPreviewUrl(url);
+      if (url && url.startsWith("blob:")) {
+        blobUrlRef.current = url;
+      }
+      setViewingIndex(index);
+    }
   };
 
   return (
@@ -140,11 +191,12 @@ export default function FileUploader({
         </label>
         <div className="flex gap-2">
           <Select
-            onChange={(e) =>
+            onChange={(e) => {
+              setValidationError(null);
               setSelectedFile(
                 filesList.find((file) => file.name === e.target.value) || null,
-              )
-            }
+              );
+            }}
           >
             {filesList.map((file, index) => (
               <option key={index} value={file.name}>
@@ -160,6 +212,9 @@ export default function FileUploader({
             CARGAR
           </Button>
         </div>
+        {validationError && (
+          <p className="text-xs text-red-500 mt-1">{validationError}</p>
+        )}
       </div>
 
       <div className="border border-indigo-100 dark:border-indigo-900/30 rounded-lg bg-white dark:bg-gray-950 flex-1 overflow-hidden shadow-sm flex flex-col min-h-80">
@@ -174,8 +229,9 @@ export default function FileUploader({
               const isAudio =
                 file.filename?.endsWith(".mp3") ||
                 file.filename?.endsWith(".wav");
-              const viewUrl =
-                viewingIndex === index ? getFileViewUrl(file) : null;
+              const viewUrl = viewingIndex === index ? previewUrl : null;
+              // const viewUrl =
+              //   viewingIndex === index ? getFileViewUrl(file) : null;
 
               return (
                 <PaymentRow
