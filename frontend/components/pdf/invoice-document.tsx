@@ -8,7 +8,7 @@ import {
   renderToBuffer,
 } from "@react-pdf/renderer";
 import type {
-  InvoiceData,
+  Invoice,
   InvoiceItem,
   InvoicePayment,
 } from "@/types/invoice";
@@ -47,10 +47,15 @@ const formatDate = (value?: string) => {
 };
 
 const itemSubtotal = (item: InvoiceItem) =>
-  item.cantidad * item.precioUnitario;
+  round2(Number(item.amount ?? 0) * Number(item.unit_price ?? 0));
 
-const sumPagos = (pagos?: InvoicePayment[]) =>
-  (pagos ?? []).reduce((acc, p) => acc + p.monto, 0);
+const sumPayments = (payments?: InvoicePayment[]) =>
+  round2(
+    (payments ?? []).reduce((acc, p) => acc + Number(p.amount ?? 0), 0),
+  );
+
+const round2 = (value: number) =>
+  Math.round((value + Number.EPSILON) * 100) / 100;
 
 const styles = StyleSheet.create({
   page: {
@@ -246,11 +251,27 @@ const getAbsoluteLogoUrl = (url?: string): string | null => {
   return `${baseUrl}${url.startsWith("/") ? "" : "/"}${url}`;
 };
 
-function InvoiceDocument({ data }: { data: InvoiceData }) {
+function InvoiceDocument({ data }: { data: Invoice }) {
   const currency = data.currency ?? "USD";
-  const totalPagado = sumPagos(data.paid);
-  const saldoPendiente = Math.max(data.total - totalPagado, 0);
-  const logoUrl = getAbsoluteLogoUrl(data.issuer_data.logoUrl);
+  const totalPagado = round2(
+    Number(data.paid ?? sumPayments(data.payments)),
+  );
+  const saldoPendiente = Math.max(round2(Number(data.total ?? 0)) - totalPagado, 0);
+  const logoUrl = getAbsoluteLogoUrl(data.issuer_data?.logoUrl);
+
+  const issuerName =
+    data.issuer_data?.fullname ||
+    data.issuer_data?.username ||
+    "CONNECTION INTERNET F.O.";
+
+  const clientName =
+    [data.cliente?.nombres, data.cliente?.apellidos]
+      .filter(Boolean)
+      .join(" ")
+      .replace(/\s+/g, " ")
+      .trim() || "Cliente";
+
+  const clientDireccion = data.cliente?.direccion || data.cliente?.ciudad;
 
   return (
     <Document title={`Factura ${data.invoice_nro}`}>
@@ -258,18 +279,14 @@ function InvoiceDocument({ data }: { data: InvoiceData }) {
         {/* Cabecera emisor + logo */}
         <View style={styles.header}>
           <View style={styles.emisor}>
-            <Text style={styles.emisorName}>{data.issuer_data.nombre}</Text>
-            <Text style={styles.metaLine}>
-              {data.issuer_data.identificacion}
-            </Text>
-            {data.issuer_data.direccion && (
-              <Text style={styles.metaLine}>{data.issuer_data.direccion}</Text>
+            <Text style={styles.emisorName}>{issuerName}</Text>
+            {data.issuer_data?.identificacion && (
+              <Text style={styles.metaLine}>
+                {data.issuer_data.identificacion}
+              </Text>
             )}
-            {data.issuer_data.email && (
+            {data.issuer_data?.email && (
               <Text style={styles.metaLine}>{data.issuer_data.email}</Text>
-            )}
-            {data.issuer_data.telefono && (
-              <Text style={styles.metaLine}>{data.issuer_data.telefono}</Text>
             )}
           </View>
           {logoUrl ? (
@@ -298,18 +315,17 @@ function InvoiceDocument({ data }: { data: InvoiceData }) {
         <View style={styles.parties}>
           <View style={styles.partyBox}>
             <Text style={styles.partyLabel}>Facturar a</Text>
-            <Text style={styles.partyName}>{data.cliente.nombre}</Text>
-            <Text style={styles.partyLine}>
-              {data.cliente.identificacion}
-            </Text>
-            {data.cliente.direccion && (
-              <Text style={styles.partyLine}>{data.cliente.direccion}</Text>
+            <Text style={styles.partyName}>{clientName}</Text>
+            {data.cliente?.identificacion && (
+              <Text style={styles.partyLine}>
+                {data.cliente.identificacion}
+              </Text>
             )}
-            {data.cliente.email && (
+            {clientDireccion && (
+              <Text style={styles.partyLine}>{clientDireccion}</Text>
+            )}
+            {data.cliente?.email && (
               <Text style={styles.partyLine}>{data.cliente.email}</Text>
-            )}
-            {data.cliente.telefono && (
-              <Text style={styles.partyLine}>{data.cliente.telefono}</Text>
             )}
           </View>
           <View style={styles.partyBox}>
@@ -317,11 +333,6 @@ function InvoiceDocument({ data }: { data: InvoiceData }) {
             <Text style={styles.partyLine}>
               Emisión: {formatDate(data.issue_date)}
             </Text>
-            {data.fechaVencimiento && (
-              <Text style={styles.partyLine}>
-                Vencimiento: {formatDate(data.fechaVencimiento)}
-              </Text>
-            )}
             <Text style={styles.partyLine}>Moneda: {currency}</Text>
           </View>
         </View>
@@ -333,7 +344,7 @@ function InvoiceDocument({ data }: { data: InvoiceData }) {
           <Text style={styles.colPrice}>P. Unit.</Text>
           <Text style={styles.colTotal}>Subtotal</Text>
         </View>
-        {data.invoice_item.map((item, i) => (
+        {(data.invoice_item ?? []).map((item, i) => (
           <View
             key={i}
             style={[
@@ -341,10 +352,10 @@ function InvoiceDocument({ data }: { data: InvoiceData }) {
               i % 2 === 1 ? styles.tableRowAlt : undefined,
             ]}
           >
-            <Text style={styles.colDesc}>{item.descripcion}</Text>
-            <Text style={styles.colQty}>{item.cantidad}</Text>
+            <Text style={styles.colDesc}>{item.description}</Text>
+            <Text style={styles.colQty}>{item.amount}</Text>
             <Text style={styles.colPrice}>
-              {formatCurrency(item.precioUnitario, currency)}
+              {formatCurrency(item.unit_price, currency)}
             </Text>
             <Text style={styles.colTotal}>
               {formatCurrency(itemSubtotal(item), currency)}
@@ -377,12 +388,12 @@ function InvoiceDocument({ data }: { data: InvoiceData }) {
         </View>
 
         {/* Pagos / Abonos parciales */}
-        {data.paid && data.paid.length > 0 && (
+        {data.payments && data.payments.length > 0 && (
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>
               Pagos / Abonos
             </Text>
-            {data.paid.map((p, i) => (
+            {data.payments.map((p, i) => (
               <View
                 key={i}
                 style={[
@@ -390,12 +401,12 @@ function InvoiceDocument({ data }: { data: InvoiceData }) {
                   i % 2 === 1 ? styles.payRowAlt : undefined,
                 ]}
               >
-                <Text style={styles.payDate}>{formatDate(p.fechaPago)}</Text>
+                <Text style={styles.payDate}>{formatDate(p.payment_date)}</Text>
                 <Text style={styles.payMethod}>
-                  <Text style={styles.methodChip}>{p.metodoPago}</Text>
+                  <Text style={styles.methodChip}>{p.method_payment}</Text>
                 </Text>
                 <Text style={styles.payAmount}>
-                  {formatCurrency(p.monto, currency)}
+                  {formatCurrency(p.amount, currency)}
                 </Text>
               </View>
             ))}
@@ -416,7 +427,7 @@ function InvoiceDocument({ data }: { data: InvoiceData }) {
 
         <View style={styles.footer} fixed>
           <Text>
-            {data.issuer_data.nombre} · {data.invoice_nro} · Generado
+            {issuerName} · {data.invoice_nro} · Generado
             electrónicamente
           </Text>
         </View>
@@ -426,7 +437,7 @@ function InvoiceDocument({ data }: { data: InvoiceData }) {
 }
 
 export async function generateInvoicePdf(
-  data: InvoiceData,
+  data: Invoice,
 ): Promise<Buffer> {
   return renderToBuffer(<InvoiceDocument data={data} />);
 }

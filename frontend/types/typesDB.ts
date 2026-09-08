@@ -1,3 +1,5 @@
+import { Invoice } from "./invoice";
+
 export interface Client {
   // Identificación y datos personales
   documentId: string;
@@ -40,6 +42,9 @@ export interface Client {
   seller_user: User;
   assigned_installer: User;
   location: Location;
+
+  // Invoices
+  invoice: Invoice[];
 }
 
 // Geolocalización

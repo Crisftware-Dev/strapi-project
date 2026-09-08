@@ -51,6 +51,14 @@ const CLIENT_SEARCH_FIELDS = [
   "populate[plans][fields][0]=plan",
 ].join("&");
 
+
+const CLIENT_INVOICE_POPULATE = [
+  "populate[invoices][fields][0]=issuer_data",
+  "populate[invoices][fields][1]=cliente",
+  "populate[invoices][fields][2]=invoice_item",
+  "populate[invoices][fields][3]=paid",
+].join("&");
+
 const SEARCH_PAGE_SIZE = 20;
 
 export async function fetchClients(): Promise<{ data: Client[] }> {
@@ -175,6 +183,14 @@ export async function fetchAppliedDiscount() {
     data: AppliedDiscount[];
     meta: Record<string, unknown>;
   }>("/api/applied-discounts");
+
+  return { data: response.data };
+}
+
+export async function fecthInvoicesByClient(documentId: string) {
+  const response = await strapiJson<{ data: Client[] }>(
+    `/api/clientes/${documentId}?${CLIENT_INVOICE_POPULATE}`,
+  );
 
   return { data: response.data };
 }

@@ -1,36 +1,50 @@
-export type MetodoPago = "TRANSFERENCIA" | "EFECTIVO" | "TARJETA";
+export type MethodPayment = "TRANSFERENCIA" | "EFECTIVO" | "TARJETA";
 
-export interface InvoiceParty {
-  nombre: string;
-  identificacion: string;
-  direccion?: string;
-  email?: string;
-  telefono?: string;
-}
+export type InvoiceState = "PENDIENTE" | "PAGADA" | "PARCIAL";
 
 export interface InvoiceItem {
-  descripcion: string;
-  cantidad: number;
-  precioUnitario: number;
+  id?: number;
+  description: string;
+  amount: number;
+  unit_price: number;
 }
 
 export interface InvoicePayment {
-  monto: number;
-  fechaPago: string;
-  metodoPago: MetodoPago;
+  id?: number;
+  amount: number;
+  payment_date: string;
+  method_payment: MethodPayment;
 }
 
-export interface InvoiceData {
+export interface InvoicePersona {
+  fullname?: string;
+  username?: string;
+  lastname?: string;
+  nombres?: string;
+  apellidos?: string;
+  identificacion?: string;
+  email?: string;
+  direccion?: string;
+  ciudad?: string;
+  logoUrl?: string;
+}
+
+export interface Invoice {
+  id: number;
+  documentId: string;
   invoice_nro: string;
   issue_date: string;
-  fechaVencimiento?: string;
-  currency?: string;
-  issuer_data: InvoiceParty & { logoUrl?: string };
-  cliente: InvoiceParty;
-  invoice_item: InvoiceItem[];
   subtotal: number;
   taxes?: number;
   total: number;
-  paid?: InvoicePayment[];
+  currency?: string;
+  paid?: number;
+  payments?: InvoicePayment[];
+  discounts?: number;
   detail?: string;
+  state: InvoiceState;
+  payment_date?: string;
+  issuer_data?: InvoicePersona | null;
+  invoice_item?: InvoiceItem[];
+  cliente?: InvoicePersona | null;
 }
