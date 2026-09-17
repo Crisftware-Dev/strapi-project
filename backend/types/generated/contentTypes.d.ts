@@ -604,9 +604,6 @@ export interface ApiInvoiceInvoice extends Struct.CollectionTypeSchema {
     payment_date: Schema.Attribute.DateTime;
     payments: Schema.Attribute.Component<'component.payment', true>;
     publishedAt: Schema.Attribute.DateTime;
-    state: Schema.Attribute.Enumeration<['PENDIENTE', 'PAGADA', 'PARCIAL']> &
-      Schema.Attribute.Required &
-      Schema.Attribute.DefaultTo<'PENDIENTE'>;
     subtotal: Schema.Attribute.Decimal & Schema.Attribute.Required;
     taxes: Schema.Attribute.Decimal;
     total: Schema.Attribute.Decimal & Schema.Attribute.Required;

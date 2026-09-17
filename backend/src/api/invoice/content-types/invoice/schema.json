@@ -54,16 +54,6 @@
     "detail": {
       "type": "string"
     },
-    "state": {
-      "type": "enumeration",
-      "required": true,
-      "default": "PENDIENTE",
-      "enum": [
-        "PENDIENTE",
-        "PAGADA",
-        "PARCIAL"
-      ]
-    },
     "payment_date": {
       "type": "datetime",
       "required": false
