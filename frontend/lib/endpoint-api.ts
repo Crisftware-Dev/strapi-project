@@ -8,6 +8,7 @@ import type {
   ClientSearchFilters,
   ClientSearchResponse,
 } from "@/types/typesDB";
+import type { Invoice } from "@/types/invoice";
 import { strapiJson } from "./api";
 
 const CLIENT_POPULATE = [
@@ -52,11 +53,13 @@ const CLIENT_SEARCH_FIELDS = [
 ].join("&");
 
 
-const CLIENT_INVOICE_POPULATE = [
-  "populate[invoices][fields][0]=issuer_data",
-  "populate[invoices][fields][1]=cliente",
-  "populate[invoices][fields][2]=invoice_item",
-  "populate[invoices][fields][3]=paid",
+
+const INVOICE_PDF_POPULATE = [
+  "populate[cliente][fields][0]=nombres",
+  "populate[cliente][fields][1]=apellidos",
+  "populate[cliente][fields][2]=identificacion",
+  "populate[cliente][fields][3]=email",
+  "populate[cliente][fields][4]=ciudad",
 ].join("&");
 
 const SEARCH_PAGE_SIZE = 20;
@@ -187,10 +190,16 @@ export async function fetchAppliedDiscount() {
   return { data: response.data };
 }
 
-export async function fecthInvoicesByClient(documentId: string) {
-  const response = await strapiJson<{ data: Client[] }>(
-    `/api/clientes/${documentId}?${CLIENT_INVOICE_POPULATE}`,
-  );
+
+export async function fetchInvoiceById(documentId: string): Promise<{ data: Invoice }> {
+  if (!documentId) {
+    throw new Error("El documentId es requerido para obtener la factura");
+  }
+
+  const response = await strapiJson<{
+    data: Invoice;
+    meta: Record<string, unknown>;
+  }>(`/api/invoices/${documentId}?${INVOICE_PDF_POPULATE}`);
 
   return { data: response.data };
 }
