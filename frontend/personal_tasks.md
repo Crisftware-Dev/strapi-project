@@ -1,104 +1,14 @@
-# 📝 Lista de Tareas Personal para Mejorar el Proyecto
+1. Crear los saldos pendientes de la siguiente manera:
+ - Los saldos pendientes se van a asignar de forma automática  el 1 de cada mes, y van a salir de cada plan que tiene asignado su valor correspondiente reducido por algún descuento que mantenga. por ejemplo, si un cliente tiene un plan de 50 dólares y tiene un descuento del 10%, se le asignará un saldo pendiente de 45 dólares.
+ - El saldo pendiente se mostrará cada saldo de asignado por fila con el valor y una descripción ejemplo: "Saldo $25 Plan Pro" y así sucesivamente.
+ - Se podrá asignar saldos pendientes de forma manual, estos saldos se mostrarán como "Saldo Manual" y se les puede agregar la descripción de igual forma.
+ - Se podrá eliminar saldos pendientes de forma manual.
+ - Para poder asignar la factura automática se debe tomar en cuenta que el cliente esté activo, pero si el cliente se activa el 10 de ese mes, debe hacerce un calculo del valor de cada plan asignado, para los dias faltantes, es decir del 10 al 30 faltan 20 dias, de esta forma se calculara el saldo correspondiente a esos dias.
+ - Una vez los valores hayan sido cancelados o correspondan a $0 ese saldo pendiente se eliminará
 
-Este archivo es solo para tu uso personal y no se subirá al repositorio. Ve marcando las tareas a medida que las completes.
-
----
-
-## 🟢 Nivel Fácil (Easy)
-
-Estas tareas son para calentar motores y mejorar la UX básica.
-
-- [ ] **1. Títulos de Página Dinámicos**
-      _Objetivo:_ Que la pestaña del navegador muestre el nombre de la página actual (ej. "Dashboard | Mi App" en lugar de solo "Mi App").
-  <details>
-  <summary>💡 Opciones / Pistas</summary>
-  - **Opción A (Recomendada):** Usa la API `generateMetadata` de Next.js 16 en cada `page.tsx` o `layout.tsx`.
-  - **Opción B:** Configura un `template` en el `metadata` del `layout.tsx` raíz para que añada un sufijo automáticamente.
-  - **Recurso:** [Next.js Metadata Docs](https://nextjs.org/docs/app/building-your-application/optimizing/metadata)
-  </details>
-
-- [ ] **2. Skeletons de Carga**
-      _Objetivo:_ Mostrar una estructura de "esqueleto" gris mientras cargan los datos de los clientes, en lugar de un spinner o nada.
-  <details>
-  <summary>💡 Opciones / Pistas</summary>
-  - **Opción A:** Crea un componente `UsersSkeleton` con `div`s grises animados usando Tailwind (`animate-pulse`).
-  - **Opción B:** Usa `shadcn/ui` (si está instalado o puedes instalarlo) que ya tiene un componente `Skeleton`.
-  - **Implementación:** Muestra este componente condicionalmente en `useClients` cuando `isLoading` es `true`.
-  </details>
-
-- [ ] **3. Botón "Volver Arriba"**
-      _Objetivo:_ Un botón flotante que aparezca cuando haces scroll hacia abajo y te lleve al inicio de la página suavemente.
-  <details>
-  <summary>💡 Opciones / Pistas</summary>
-  - **Lógica:** Usa un `useEffect` para escuchar el evento `scroll` del `window`.
-  - **Estilo:** `position: fixed`, `bottom: 4`, `right: 4`.
-  - **Acción:** `window.scrollTo({ top: 0, behavior: 'smooth' })`.
-  </details>
-
----
-
-## 🟡 Nivel Medio (Medium)
-
-Tareas que requieren un poco más de lógica y manejo de estado.
-
-- [ ] **4. Debounce en el Buscador**
-      _Objetivo:_ Que el buscador de clientes no haga una petición a la API por cada letra que escribes, sino que espere unos 300-500ms a que termines de escribir.
-  <details>
-  <summary>💡 Opciones / Pistas</summary>
-  - **Opción A:** Usa un hook personalizado `useDebounce` que reciba el valor del input y el retardo.
-  - **Opción B:** Usa una librería como `lodash.debounce` (o implementa una función simple de debounce).
-  - **Beneficio:** Reduce drásticamente las llamadas innecesarias al backend.
-  </details>
-
-- [ ] **5. Paginación de Clientes**
-      _Objetivo:_ Si tienes 100 clientes, no mostrarlos todos de golpe. Mostrar de 10 en 10.
-  <details>
-  <summary>💡 Opciones / Pistas</summary>
-  - **Backend:** Strapi ya soporta paginación por defecto (`page` y `pageSize`).
-  - **Frontend:** Necesitas guardar el número de página actual en un estado (`useState`).
-  - **UI:** Botones "Anterior" y "Siguiente" que actualicen ese estado y vuelvan a llamar al hook `useClients` (pasándole el número de página).
-  </details>
-
-- [ ] **6. Ordenamiento de Tablas**
-      _Objetivo:_ Poder hacer clic en "Nombre" o "Ciudad" en la tabla y que ordene ascendente/descendente.
-  <details>
-  <summary>💡 Opciones / Pistas</summary>
-  - **Backend:** Strapi soporta `sort` (ej. `sort=nombres:asc`).
-  - **Frontend:** Estado para `sortField` y `sortOrder`.
-  - **UI:** Iconos de flechas en los headers de la tabla que cambien el estado y disparen el fetch.
-  </details>
-
----
-
-## 🔴 Nivel Difícil (Hard)
-
-Retos complejos que tocan backend, frontend avanzado o nuevas librerías.
-
-- [ ] **7. Exportar Clientes a CSV/Excel**
-      _Objetivo:_ Un botón que descargue la lista actual de clientes (o todos) en un archivo `.csv` o `.xlsx`.
-  <details>
-  <summary>💡 Opciones / Pistas</summary>
-  - **Opción A (Frontend puro):** Traer todos los datos al cliente y usar una librería como `xlsx` o crear un Blob de texto con formato CSV y forzar la descarga.
-  - **Opción B (Backend):** Crear un endpoint personalizado en Strapi que genere el archivo y lo devuelva como stream.
-  </details>
-
-- [ ] **8. Dashboard de Estadísticas (Gráficos)**
-      _Objetivo:_ Una página nueva `/dashboard/stats` que muestre gráficos: Clientes por Ciudad, Clientes Activos vs Inactivos.
-  <details>
-  <summary>💡 Opciones / Pistas</summary>
-  - **Librería de Gráficos:** `Recharts` es muy popular en React y fácil de usar.
-  - **Datos:** Necesitarás procesar los datos de los clientes para agruparlos (ej. contar cuántos hay por cada ciudad) o pedirle a Strapi que te de esos conteos (posiblemente requiera un controller custom en Strapi).
-  </details>
-
-- [ ] **9. Modo Oscuro / Claro (Persistente)**
-      _Objetivo:_ Implementar un toggle de tema que cambie toda la UI y recuerde la preferencia del usuario.
-  <details>
-  <summary>💡 Opciones / Pistas</summary>
-  - **Herramienta:** `next-themes` es el estándar para esto en Next.js.
-  - **Tailwind:** Asegúrate de que `darkMode: 'class'` esté configurado (o por defecto en v4) y usa las clases `dark:bg-slate-900`, etc.
-  - **Reto:** Evitar el "flash of unstyled content" (FOUC) al recargar la página.
-  </details>
-
----
-
-¡Ánimo! Completar estas tareas llevará tu proyecto al siguiente nivel profesional. 🚀
+2. Crear las facturas de los saldos cancelados de la siguiente manera:
+ - Crear las facturas después de que el cliente haya pagado un valor correspondiente a su saldo pendiente. 
+ - La factura puede ser pagada como un abono y ese valor se debe hacer un resta automática al saldo pendiente mas antiguo que tenga, es decir: Si tiene dos saldos pendientes de "Pago Servicio Plan 1" y "Pago Servicio Plan 2" y "Pago Servicio Plan 3", se debe hacer un resta automática al saldo pendiente de "Pago Servicio Plan 1", y si sobra dinero se debe hacer un resta automática al saldo pendiente de "Pago Servicio Plan 2" y así sucesivamente. o En caso de que solo se pague un parte de un saldo pendiente, se debe hacer un resta automática al saldo pendiente mas antiguo que tenga, y el saldo pendiente restante se actualizará en el mismo saldo pendiente que había solo que menos valor a pagar.
+ - Por cada valor pagado se debe crear una factura individual con todos los detalles correspondientes sobre todo el valor pagado y la descripción sacado del Saldo Pendiente.
+ - Por cada factura debe crearse un PDF, y el PDF puede ser visualizado desde la ventana de Historial de Pagos y también descargar.
+ 
