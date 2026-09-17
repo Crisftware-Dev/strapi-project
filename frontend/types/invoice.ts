@@ -1,7 +1,5 @@
 export type MethodPayment = "TRANSFERENCIA" | "EFECTIVO" | "TARJETA";
 
-export type InvoiceState = "PENDIENTE" | "PAGADA" | "PARCIAL";
-
 export interface InvoiceItem {
   id?: number;
   description: string;
@@ -42,7 +40,6 @@ export interface Invoice {
   payments?: InvoicePayment[];
   discounts?: number;
   detail?: string;
-  state: InvoiceState;
   payment_date?: string;
   issuer_data?: InvoicePersona | null;
   invoice_item?: InvoiceItem[];
