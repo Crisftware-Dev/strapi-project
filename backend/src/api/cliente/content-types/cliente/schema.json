@@ -177,6 +177,12 @@
       "relation": "oneToMany",
       "target": "api::invoice.invoice",
       "mappedBy": "cliente"
+    },
+    "balances": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::balance.balance",
+      "mappedBy": "cliente"
     }
   }
 }

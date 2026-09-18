@@ -474,6 +474,42 @@ export interface ApiAppliedDiscountAppliedDiscount
   };
 }
 
+export interface ApiBalanceBalance extends Struct.CollectionTypeSchema {
+  collectionName: 'balances';
+  info: {
+    displayName: 'balance';
+    pluralName: 'balances';
+    singularName: 'balance';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    balance: Schema.Attribute.Decimal & Schema.Attribute.Required;
+    cliente: Schema.Attribute.Relation<'manyToOne', 'api::cliente.cliente'>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    discounts: Schema.Attribute.Decimal & Schema.Attribute.DefaultTo<0>;
+    id_balance: Schema.Attribute.UID & Schema.Attribute.Required;
+    issued: Schema.Attribute.Date & Schema.Attribute.Required;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::balance.balance'
+    > &
+      Schema.Attribute.Private;
+    paid: Schema.Attribute.Decimal &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<0>;
+    publishedAt: Schema.Attribute.DateTime;
+    total: Schema.Attribute.Decimal & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiClienteCliente extends Struct.CollectionTypeSchema {
   collectionName: 'clientes';
   info: {
@@ -497,6 +533,7 @@ export interface ApiClienteCliente extends Struct.CollectionTypeSchema {
     automaticCut: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
     automaticInvoice: Schema.Attribute.Boolean &
       Schema.Attribute.DefaultTo<true>;
+    balances: Schema.Attribute.Relation<'oneToMany', 'api::balance.balance'>;
     ciudad: Schema.Attribute.String;
     contact: Schema.Attribute.Component<'component.contact', false>;
     contrato: Schema.Attribute.BigInteger & Schema.Attribute.Unique;
@@ -1190,6 +1227,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
       'api::applied-discount.applied-discount': ApiAppliedDiscountAppliedDiscount;
+      'api::balance.balance': ApiBalanceBalance;
       'api::cliente.cliente': ApiClienteCliente;
       'api::invoice.invoice': ApiInvoiceInvoice;
       'api::login-page.login-page': ApiLoginPageLoginPage;

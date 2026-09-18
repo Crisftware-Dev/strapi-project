@@ -1,0 +1,46 @@
+{
+  "kind": "collectionType",
+  "collectionName": "balances",
+  "info": {
+    "singularName": "balance",
+    "pluralName": "balances",
+    "displayName": "balance"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "id_balance": {
+      "type": "uid",
+      "required": true
+    },
+    "total": {
+      "type": "decimal",
+      "required": true
+    },
+    "paid": {
+      "type": "decimal",
+      "required": true,
+      "default": 0
+    },
+    "balance": {
+      "type": "decimal",
+      "required": true
+    },
+    "issued": {
+      "type": "date",
+      "required": true
+    },
+    "discounts": {
+      "type": "decimal",
+      "default": 0
+    },
+    "cliente": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::cliente.cliente",
+      "inversedBy": "balances"
+    }
+  }
+}
