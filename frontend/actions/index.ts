@@ -4,6 +4,9 @@ import {
   updateClientAction,
   uploadFileAction,
   createPlanAction,
+  createBalanceAction,
+  updateBalanceAction,
+  deleteBalanceAction,
 } from "./mutations";
 
 export const actions = {
@@ -17,5 +20,8 @@ export const actions = {
     updateClientAction,
     uploadFileAction,
     createPlanAction,
+    createBalanceAction,
+    updateBalanceAction,
+    deleteBalanceAction,
   },
 };
