@@ -10,6 +10,7 @@ import type {
 } from "@/types/typesDB";
 import type { Invoice } from "@/types/invoice";
 import { strapiJson } from "./api";
+import { Balance } from "@/types/balance";
 
 const CLIENT_POPULATE = [
   "populate[plans]=true",
@@ -51,8 +52,6 @@ const CLIENT_SEARCH_FIELDS = [
   "populate[contact][fields][2]=phoneTwo",
   "populate[plans][fields][0]=plan",
 ].join("&");
-
-
 
 const INVOICE_PDF_POPULATE = [
   "populate[cliente][fields][0]=nombres",
@@ -190,8 +189,9 @@ export async function fetchAppliedDiscount() {
   return { data: response.data };
 }
 
-
-export async function fetchInvoiceById(documentId: string): Promise<{ data: Invoice }> {
+export async function fetchInvoiceById(
+  documentId: string,
+): Promise<{ data: Invoice }> {
   if (!documentId) {
     throw new Error("El documentId es requerido para obtener la factura");
   }
@@ -200,6 +200,19 @@ export async function fetchInvoiceById(documentId: string): Promise<{ data: Invo
     data: Invoice;
     meta: Record<string, unknown>;
   }>(`/api/invoices/${documentId}?${INVOICE_PDF_POPULATE}`);
+
+  return { data: response.data };
+}
+
+export async function fecthBalancesById(documentId: string) {
+  if (!documentId) {
+    throw new Error("El documentId es requerido para obtener los saldos pendientes");
+  }
+
+  const response = await strapiJson<{
+    data: Balance[];
+    meta: Record<string, unknown>;
+  }>(`/api/balances/${documentId}`);
 
   return { data: response.data };
 }
