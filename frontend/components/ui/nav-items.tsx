@@ -34,13 +34,13 @@ export function LiControlHeader({
   const isMenuOpen = isActive ?? activeControls;
 
   return (
-    <li ref={menuRef} key={id} className={`relative ${LI_STYLE}`}>
+    <li ref={menuRef} key={id} onClick={(e) => onClick(e, id)} className={`relative ${LI_STYLE}`}>
       <button
         type="button"
         aria-controls={id + "-dropdown"}
         aria-expanded={Boolean(isMenuOpen)}
         aria-haspopup="true"
-        onClick={(e) => onClick(e, id)}
+        
         className="flex items-center gap-1 w-full focus:outline-none cursor-pointer"
       >
 

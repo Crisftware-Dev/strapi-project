@@ -5,6 +5,7 @@ import {
   EditableClientData,
 } from "@/contexts/client-context";
 import { useClientById } from "@/hooks/useClientById";
+import { useAppliedDiscount } from "@/hooks/useAppliedDiscount";
 import { useState, useCallback } from "react";
 import { SearchI, UserI } from "@/components/icons/Icons";
 import { ClientDataRow } from "@/components/ui/client-data-row";
@@ -31,7 +32,6 @@ import { Contact, DiscountLaw, Plan } from "@/types/typesDB";
 import { SearchPlans } from "@/components/ui/search";
 import CurrentAge from "@/components/pages/control/contracts/current-age";
 import FileUploader from "@/components/ui/files";
-import { useAppliedDiscount } from "@/hooks/useAppliedDiscount";
 
 export default function RenderClient() {
   const { selectedClientId, isEditing, formData, setFormData } =
