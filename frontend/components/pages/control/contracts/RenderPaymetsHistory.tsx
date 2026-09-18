@@ -1,13 +1,14 @@
 import { useClientContext } from "@/contexts/client-context";
 import { useClientById } from "@/hooks/useClientById";
 import { styles } from "@/app/styles/styles";
-import { CompactTable, Headers, PaymentRow } from "@/components/ui/compact-table";
+import {
+  CompactTable,
+  Headers,
+} from "@/components/ui/compact-table";
 import { Label } from "@/components/ui/label";
 import { useUser } from "@/hooks/useUser";
-import { LiControlHeader } from "@/components/ui/nav-items";
 import { useState } from "react";
-import { ArrowRigthI, CircleI, DeleteI, DetailsI, DocumentI, PrintI, XMLI } from "@/components/icons/Icons";
-import { Li } from "@/components/ui/list";
+import Payments from "@/components/ui/payments";
 
 export default function RenderPaymentsHistory() {
   const [active, setActive] = useState("");
@@ -64,60 +65,7 @@ export default function RenderPaymentsHistory() {
           <Label className="col-span-full p-2 bg-indigo-50/20 dark:bg-indigo-900/10 border-b border-indigo-100 dark:border-indigo-900/30">
             Contrato No.: {client.contrato}
           </Label>
-          <PaymentRow
-            cells={[
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              usuario,
-              <div key="options">
-                <LiControlHeader
-                  id="opciones"
-                  text="Opciones"
-                  isActive={active === "opciones"}
-                  icon={<CircleI className={styles.icon} />}
-                  caret={
-                    <ArrowRigthI
-                      className={` ${styles.caret} ${active === "opciones" ? "rotate-90" : "rotate-0"}`}
-                    />
-                  }
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setActive((prev) =>
-                      prev === "opciones" ? "" : "opciones",
-                    );
-                  }}
-                >
-                  <Li>
-                    <DeleteI className={styles.icon} />
-                    <span>Eliminar</span>
-                  </Li>
-                  <Li>
-                    <DetailsI className={styles.icon} />
-                    <span>Detalles</span>
-                  </Li>
-                  <Li>
-                    <PrintI className={styles.icon} />
-                    <span>Imprimir</span>
-                  </Li>
-                  <Li>
-                    <DocumentI className={styles.icon} />
-                    <span>Descargar RIDE</span>
-                  </Li>
-                  <Li>
-                    <XMLI className={styles.icon} />
-                    <span>Descargar XML</span>
-                  </Li>
-                </LiControlHeader>
-              </div>,
-            ]}
-          />
+          <Payments />
         </CompactTable>
       </main>
     </article>

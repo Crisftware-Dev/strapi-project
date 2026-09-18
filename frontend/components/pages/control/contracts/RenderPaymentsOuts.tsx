@@ -1,21 +1,56 @@
+import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { useClientContext } from "@/contexts/client-context";
 import { useClientById } from "@/hooks/useClientById";
 import { styles } from "@/app/styles/styles";
-import { CompactTable, Headers, PaymentRow } from "@/components/ui/compact-table";
+import { CompactTable, Headers } from "@/components/ui/compact-table";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
-import { LiControlHeader } from "@/components/ui/nav-items";
-import { ArrowRigthI, CircleI, DeleteI, DetailsI, HandsI, MoneyI, PercentI } from "@/components/icons/Icons";
-import { Li } from "@/components/ui/list";
+import Payments from "@/components/ui/payments";
+import { useBalanceById } from "@/hooks/useBalanceById";
+import { createBalanceAction } from "@/actions/mutations";
 
 export default function RenderPaymentsOuts() {
-  const [active, setActive] = useState("");
   const { selectedClientId } = useClientContext();
+  const queryClient = useQueryClient();
+  const [isCreatingBalance, setIsCreatingBalance] = useState(false);
+
   const {
     data: client,
     isLoading,
     error,
   } = useClientById(selectedClientId || "");
+
+  const { data: balances } = useBalanceById(selectedClientId || "");
+
+  // ─── Prototipo base para crear un saldo manualmente ─────────────────────────
+  const handleCreateBalance = async () => {
+    if (!selectedClientId) return;
+
+    setIsCreatingBalance(true);
+    try {
+      const newBalance = {
+        id_balance: `BAL-${Date.now()}`,
+        total: 0,
+        paid: 0,
+        balance: 0,
+        issued: new Date().toISOString().split("T")[0],
+        discounts: 0,
+      };
+
+      await createBalanceAction(newBalance);
+
+      // Refrescar caché de React Query para actualizar la UI
+      await queryClient.invalidateQueries({
+        queryKey: ["balances", selectedClientId],
+      });
+
+      console.log("Saldo creado exitosamente");
+    } catch (err) {
+      console.error("Error al crear el saldo:", err);
+    } finally {
+      setIsCreatingBalance(false);
+    }
+  };
 
   if (isLoading)
     return <div className="p-8 text-center text-xs">Cargando datos...</div>;
@@ -28,24 +63,32 @@ export default function RenderPaymentsOuts() {
 
   return (
     <article className={styles.container} key={selectedClientId}>
+      <header className="flex justify-between items-center mb-3">
+        <h2 className="text-sm font-semibold">Saldos pendientes</h2>
+      </header>
+
       <main className={styles.mainGrid}>
         <CompactTable
           className="min-w-300"
-          gridCols="repeat(10, minmax(max-content, 1fr)) 120px"
+          gridCols="repeat(8, minmax(max-content, 1fr)) 120px"
         >
           <Headers
             headers={[
               "No.",
-              "Obligación",
               "Total",
               "Pagado",
               "Saldo",
-              "Ref",
               "No. Factura",
               "Emitida",
               "Dsctos",
-              "Detalle",
               "Acción",
+              <button
+                onClick={handleCreateBalance}
+                disabled={isCreatingBalance}
+                className="px-3 py-1 text-xs bg-indigo-600 hover:bg-indigo-700 text-white rounded transition-colors disabled:opacity-50"
+              >
+                {isCreatingBalance ? "Creando..." : "+ Crear Saldo"}
+              </button>,
             ]}
           />
           <Label className="col-span-full p-2 bg-indigo-50/20 dark:bg-indigo-900/10 border-b border-indigo-100 dark:border-indigo-900/30">
@@ -53,60 +96,7 @@ export default function RenderPaymentsOuts() {
             {"PLAN RESIDENCIAL ONE CONNECTION 600 MBPS / CORTE 15"}- ESTADO{" "}
             {client.estado}
           </Label>
-          <PaymentRow
-            cells={[
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              <div key="options">
-                <LiControlHeader
-                  id="opciones"
-                  text="Opciones"
-                  isActive={active === "opciones"}
-                  icon={<CircleI className={styles.icon} />}
-                  caret={
-                    <ArrowRigthI
-                      className={` ${styles.caret} ${active === "opciones" ? "rotate-90" : "rotate-0"}`}
-                    />
-                  }
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setActive((prev) =>
-                      prev === "opciones" ? "" : "opciones",
-                    );
-                  }}
-                >
-                  <Li>
-                    <MoneyI className={styles.icon} />
-                    <span>Cobrar</span>
-                  </Li>
-                  <Li>
-                    <DetailsI className={styles.icon} />
-                    <span>Detalles</span>
-                  </Li>
-                  <Li>
-                    <HandsI className={styles.icon} />
-                    <span>Diferir</span>
-                  </Li>
-                  <Li>
-                    <PercentI className={styles.icon} />
-                    <span>Descuentos</span>
-                  </Li>
-                  <Li>
-                    <DeleteI className={styles.icon} />
-                    <span>Eliminar</span>
-                  </Li>
-                </LiControlHeader>
-              </div>,
-            ]}
-          />
+          <Payments balances={balances} />
         </CompactTable>
       </main>
     </article>
