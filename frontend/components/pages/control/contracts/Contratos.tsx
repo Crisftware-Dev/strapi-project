@@ -6,6 +6,7 @@ import ClientDataDisplay from "@/components/pages/control/contracts/RenderClient
 import RenderPaymentsOuts from "@/components/pages/control/contracts/RenderPaymentsOuts";
 import RenderPaymentsHistory from "@/components/pages/control/contracts/RenderPaymetsHistory";
 import { ClientProvider, useClientContext } from "@/contexts/client-context";
+import { BalanceProvider } from "@/contexts/balance-context";
 import FooterControl from "./FooterControl";
 
 function DashboardRoute() {
@@ -28,7 +29,9 @@ function DashboardRoute() {
 export default function Contratos() {
   return (
     <ClientProvider>
-      <DashboardRoute />
+      <BalanceProvider>
+        <DashboardRoute />
+      </BalanceProvider>
     </ClientProvider>
   );
 }

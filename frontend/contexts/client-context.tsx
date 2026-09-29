@@ -32,7 +32,7 @@ interface ClientContextType {
   trySelectClient: (id: string) => boolean;
 }
 
-const ClientContext = createContext<ClientContextType | undefined>(undefined);
+export const ClientContext = createContext<ClientContextType | undefined>(undefined);
 
 export function ClientProvider({ children }: { children: ReactNode }) {
   const [selectedClientId, setSelectedClientId] = useState<string | null>(null);

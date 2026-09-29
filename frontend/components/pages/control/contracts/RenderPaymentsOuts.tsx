@@ -1,18 +1,15 @@
-import { useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
 import { useClientContext } from "@/contexts/client-context";
 import { useClientById } from "@/hooks/useClientById";
 import { styles } from "@/app/styles/styles";
 import { CompactTable, Headers } from "@/components/ui/compact-table";
 import { Label } from "@/components/ui/label";
 import Payments from "@/components/ui/payments";
-import { useBalanceById } from "@/hooks/useBalanceById";
-import { createBalanceAction } from "@/actions/mutations";
+import { useBalanceContext } from "@/contexts/balance-context";
 
 export default function RenderPaymentsOuts() {
   const { selectedClientId } = useClientContext();
-  const queryClient = useQueryClient();
-  const [isCreatingBalance, setIsCreatingBalance] = useState(false);
+  const { balances, handleCreateBalance, isCreatingBalance } =
+    useBalanceContext();
 
   const {
     data: client,
@@ -20,36 +17,8 @@ export default function RenderPaymentsOuts() {
     error,
   } = useClientById(selectedClientId || "");
 
-  const { data: balances } = useBalanceById(selectedClientId || "");
-
-  // ─── Prototipo base para crear un saldo manualmente ─────────────────────────
-  const handleCreateBalance = async () => {
-    if (!selectedClientId) return;
-
-    setIsCreatingBalance(true);
-    try {
-      const newBalance = {
-        id_balance: `BAL-${Date.now()}`,
-        total: 0,
-        paid: 0,
-        balance: 0,
-        issued: new Date().toISOString().split("T")[0],
-        discounts: 0,
-      };
-
-      await createBalanceAction(newBalance);
-
-      // Refrescar caché de React Query para actualizar la UI
-      await queryClient.invalidateQueries({
-        queryKey: ["balances", selectedClientId],
-      });
-
-      console.log("Saldo creado exitosamente");
-    } catch (err) {
-      console.error("Error al crear el saldo:", err);
-    } finally {
-      setIsCreatingBalance(false);
-    }
+  const onManualCreateBalance = () => {
+    handleCreateBalance();
   };
 
   if (isLoading)
@@ -83,7 +52,7 @@ export default function RenderPaymentsOuts() {
               "Dsctos",
               "Acción",
               <button
-                onClick={handleCreateBalance}
+                onClick={onManualCreateBalance}
                 disabled={isCreatingBalance}
                 className="px-3 py-1 text-xs bg-indigo-600 hover:bg-indigo-700 text-white rounded transition-colors disabled:opacity-50"
               >
