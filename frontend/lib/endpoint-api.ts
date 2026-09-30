@@ -61,6 +61,14 @@ const INVOICE_PDF_POPULATE = [
   "populate[cliente][fields][4]=ciudad",
 ].join("&");
 
+const BALANCE_FILTERS = [
+  "filters[cliente][documentId][$eq]={documentId}",
+  "sort[0]=issued:desc",
+  "sort[1]=id_balance:desc",
+  "status=preview",
+  "pagination[pageSize]=500",
+].join("&");
+
 const SEARCH_PAGE_SIZE = 20;
 
 export async function fetchClients(): Promise<{ data: Client[] }> {
@@ -209,10 +217,15 @@ export async function fecthBalancesById(documentId: string) {
     throw new Error("El documentId es requerido para obtener los saldos pendientes");
   }
 
+  const params = BALANCE_FILTERS.replace(
+    "{documentId}",
+    encodeURIComponent(documentId),
+  );
+
   const response = await strapiJson<{
     data: Balance[];
     meta: Record<string, unknown>;
-  }>(`/api/balances/${documentId}`);
+  }>(`/api/balances?${params}`);
 
   return { data: response.data };
 }

@@ -1,13 +1,13 @@
 export interface Balance {
-  id?: number;
   documentId?: string;
   id_balance: string;
   total: number;
-  paid: number;
+  paid?: number;
   balance: number;
+  description: string;
   issued: string;
   discounts: number;
-  cliente?: unknown;
-  createdAt?: string;
+  cliente: string;
+  createdAt: string;
   updatedAt?: string;
 }
