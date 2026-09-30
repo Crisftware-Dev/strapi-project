@@ -18,20 +18,20 @@ export default function ModalIdentificator({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
+    <div className="modal-overlay">
       <div
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-contratos-title"
-        className="bg-white rounded-2xl w-4xl max-h-[85vh] flex flex-col shadow-2xl"
+        className="modal-container w-4xl"
       >
-        <div className="p-6 border-b">
-          <h2 id="modal-contratos-title" className="text-2xl font-semibold">
+        <div className="modal-header">
+          <h2 id="modal-contratos-title" className="modal-title">
             El cliente tiene varios contratos
           </h2>
         </div>
 
-        <div className="overflow-auto flex-1 p-4 space-y-2">
+        <div className="modal-body space-y-2">
           {resultados.map((client) => (
             <button
               key={client.documentId}
@@ -82,7 +82,7 @@ export default function ModalIdentificator({
           ))}
         </div>
 
-        <div className="p-4 border-t flex justify-end">
+        <div className="modal-footer">
           <button
             onClick={onClose}
             className="px-8 py-3 text-gray-700 hover:bg-gray-100 rounded-xl font-medium"
