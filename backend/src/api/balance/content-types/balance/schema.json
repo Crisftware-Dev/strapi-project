@@ -21,7 +21,7 @@
     },
     "paid": {
       "type": "decimal",
-      "required": true,
+      "required": false,
       "default": 0
     },
     "balance": {
@@ -41,6 +41,10 @@
       "relation": "manyToOne",
       "target": "api::cliente.cliente",
       "inversedBy": "balances"
+    },
+    "description": {
+      "type": "string",
+      "required": true
     }
   }
 }

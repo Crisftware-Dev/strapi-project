@@ -490,6 +490,7 @@ export interface ApiBalanceBalance extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    description: Schema.Attribute.String & Schema.Attribute.Required;
     discounts: Schema.Attribute.Decimal & Schema.Attribute.DefaultTo<0>;
     id_balance: Schema.Attribute.UID & Schema.Attribute.Required;
     issued: Schema.Attribute.Date & Schema.Attribute.Required;
@@ -499,9 +500,7 @@ export interface ApiBalanceBalance extends Struct.CollectionTypeSchema {
       'api::balance.balance'
     > &
       Schema.Attribute.Private;
-    paid: Schema.Attribute.Decimal &
-      Schema.Attribute.Required &
-      Schema.Attribute.DefaultTo<0>;
+    paid: Schema.Attribute.Decimal & Schema.Attribute.DefaultTo<0>;
     publishedAt: Schema.Attribute.DateTime;
     total: Schema.Attribute.Decimal & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
