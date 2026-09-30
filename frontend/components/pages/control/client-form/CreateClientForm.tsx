@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { createClientAction, uploadFileAction } from "@/actions/mutations";
 import { styles } from "@/app/styles/styles";
+import { toNumber } from "@/lib/form-value";
 import { Select } from "@/components/ui/primitives";
 import { useNewClienteContext } from "@/contexts/new-cliente-context";
 import { useQueryClient } from "@tanstack/react-query";
@@ -122,6 +123,8 @@ export default function NewClient({ onSuccess }: { onSuccess?: () => void }) {
 
       const payload = {
         ...formData,
+        valores: toNumber(formData.valores),
+        scoreCredit: toNumber(formData.scoreCredit),
         files,
         installationDate: formData.installationDate || TODAY,
       };
@@ -362,8 +365,8 @@ export default function NewClient({ onSuccess }: { onSuccess?: () => void }) {
             type="number"
             step="0.01"
             className={styles.input}
-            value={formData.valores || ""}
-            onChange={(e) => handleField("valores", Number(e.target.value))}
+            value={formData.valores ?? ""}
+            onChange={(e) => handleField("valores", e.target.value)}
           />
         </div>
 
@@ -422,8 +425,8 @@ export default function NewClient({ onSuccess }: { onSuccess?: () => void }) {
             required
             type="number"
             className={styles.input}
-            value={formData.scoreCredit || ""}
-            onChange={(e) => handleField("scoreCredit", Number(e.target.value))}
+            value={formData.scoreCredit ?? ""}
+            onChange={(e) => handleField("scoreCredit", e.target.value)}
           />
         </div>
 

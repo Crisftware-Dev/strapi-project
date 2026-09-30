@@ -2,13 +2,8 @@
 
 import { useClients } from "@/hooks/useClients";
 import { usePlans } from "@/hooks/usePlans";
-import {
-  Client,
-  Contact,
-  DiscountLaw,
-  Location,
-  Plan,
-} from "@/types/typesDB";
+import { Client, Contact, DiscountLaw, Location, Plan } from "@/types/typesDB";
+import { NumericInput } from "@/lib/form-value";
 import {
   ReactNode,
   createContext,
@@ -19,7 +14,12 @@ import {
   useState,
 } from "react";
 
-export type NewClientData = Partial<Omit<Client, "documentId" | "contrato">>;
+export type NewClientData = Partial<
+  Omit<Client, "documentId" | "contrato" | "valores" | "scoreCredit">
+> & {
+  valores?: NumericInput;
+  scoreCredit?: NumericInput;
+};
 
 export type FieldValue = string | number | boolean | null;
 
@@ -57,8 +57,8 @@ const DEFAULT_FORM_DATA: NewClientData = {
   discardButt: false,
   hasDucts: false,
   planPrincipal: true,
-  valores: 0,
-  scoreCredit: 0,
+  valores: "",
+  scoreCredit: "",
   contact: { telephone: "", phoneSms: "", phoneTwo: "" },
   location: { latitude: "", longitude: "" },
   discountLaw: { disability: false, oldAge: false },
@@ -72,13 +72,19 @@ const LOCKED_FIELDS_FOR_EXISTING_CLIENT: ReadonlySet<string> = new Set([
   "apellidos",
 ]);
 
-export function NewClienteProvider({ children, enabled = false }: { children: ReactNode; enabled?: boolean }) {
+export function NewClienteProvider({
+  children,
+  enabled = false,
+}: {
+  children: ReactNode;
+  enabled?: boolean;
+}) {
   const [formData, setFormData] = useState<NewClientData>(DEFAULT_FORM_DATA);
   const [existingClient, setExistingClient] = useState<Client | null>(null);
   const [plansEnabled, setPlansEnabled] = useState(true);
   const [plansResults, setPlansResults] = useState<Plan[] | undefined>([]);
 
-  const { data: clients } = useClients(enabled); 
+  const { data: clients } = useClients(enabled);
   const { data: plans } = usePlans(plansEnabled && enabled);
 
   // SI LA IDENTIFICACIÓN YA EXISTE, DETECTAR AL CLIENTE.
@@ -102,9 +108,9 @@ export function NewClienteProvider({ children, enabled = false }: { children: Re
         nombres: "",
         apellidos: "",
       }));
-      
+
       return;
-    };
+    }
 
     setFormData((prev) => {
       if (
@@ -161,11 +167,10 @@ export function NewClienteProvider({ children, enabled = false }: { children: Re
 
         // Si cambia el plan contratado, actualizamos el valor y el array de plans.
         if (field === "plans") {
-          const selectedPlan = plans?.find(
-            (plan) => plan.documentId === value,
-          );
+          const selectedPlan = plans?.find((plan) => plan.documentId === value);
           if (selectedPlan) {
-            updated.valores = selectedPlan.valor || 0;
+            updated.valores =
+              selectedPlan.valor != null ? String(selectedPlan.valor) : "";
             updated.plans = [selectedPlan];
           } else {
             updated.plans = [];
@@ -175,7 +180,7 @@ export function NewClienteProvider({ children, enabled = false }: { children: Re
         // Si cambia el tipoPlan, reseteamos el plan contratado y sus valores.
         if (field === "tipoPlan") {
           updated.plans = [];
-          updated.valores = 0;
+          updated.valores = "";
         }
 
         return updated;
@@ -184,25 +189,19 @@ export function NewClienteProvider({ children, enabled = false }: { children: Re
     [plans, lockedFields],
   );
 
-  const handleContact = useCallback(
-    (field: keyof Contact, value: string) => {
-      setFormData((prev) => ({
-        ...prev,
-        contact: { ...prev.contact, [field]: value } as Contact,
-      }));
-    },
-    [],
-  );
+  const handleContact = useCallback((field: keyof Contact, value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      contact: { ...prev.contact, [field]: value } as Contact,
+    }));
+  }, []);
 
-  const handleLocation = useCallback(
-    (field: keyof Location, value: string) => {
-      setFormData((prev) => ({
-        ...prev,
-        location: { ...prev.location, [field]: value } as Location,
-      }));
-    },
-    [],
-  );
+  const handleLocation = useCallback((field: keyof Location, value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      location: { ...prev.location, [field]: value } as Location,
+    }));
+  }, []);
 
   const handleDiscountLaw = useCallback(
     (field: keyof DiscountLaw, value: boolean) => {
