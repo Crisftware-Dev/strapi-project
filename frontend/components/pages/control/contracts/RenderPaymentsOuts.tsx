@@ -5,21 +5,18 @@ import { CompactTable, Headers } from "@/components/ui/compact-table";
 import { Label } from "@/components/ui/label";
 import Payments from "@/components/ui/payments";
 import { useBalanceContext } from "@/contexts/balance-context";
+import { useState } from "react";
+import { Input } from "@/components/ui/input";
 
 export default function RenderPaymentsOuts() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { selectedClientId } = useClientContext();
-  const { balances, handleCreateBalance, isCreatingBalance } =
-    useBalanceContext();
 
   const {
     data: client,
     isLoading,
     error,
   } = useClientById(selectedClientId || "");
-
-  const onManualCreateBalance = () => {
-    handleCreateBalance();
-  };
 
   if (isLoading)
     return <div className="p-8 text-center text-xs">Cargando datos...</div>;
@@ -52,11 +49,10 @@ export default function RenderPaymentsOuts() {
               "Dsctos",
               "Acción",
               <button
-                onClick={onManualCreateBalance}
-                disabled={isCreatingBalance}
+                onClick={() => setIsModalOpen(true)}
                 className="px-3 py-1 text-xs bg-indigo-600 hover:bg-indigo-700 text-white rounded transition-colors disabled:opacity-50"
               >
-                {isCreatingBalance ? "Creando..." : "+ Crear Saldo"}
+                + Crear Saldo
               </button>,
             ]}
           />
@@ -65,10 +61,108 @@ export default function RenderPaymentsOuts() {
             {"PLAN RESIDENCIAL ONE CONNECTION 600 MBPS / CORTE 15"}- ESTADO{" "}
             {client.estado}
           </Label>
-          <Payments balances={balances} />
+          <Payments />
         </CompactTable>
       </main>
+
+      <ModalPaymentsOuts
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        selectedClientId={selectedClientId}
+      />
     </article>
+  );
+}
+
+interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  selectedClientId: string | null;
+}
+
+function ModalPaymentsOuts({ isOpen, onClose, selectedClientId }: ModalProps) {
+  if (!isOpen) return null;
+
+  const {
+    formData,
+    handleCreateBalance,
+    handleField,
+    resetFormData,
+    isCreatingBalance,
+  } = useBalanceContext();
+
+  const handleSubmit = async () => {
+    const created = await handleCreateBalance();
+    if (!created) return;
+    resetFormData();
+    onClose();
+  };
+
+  return (
+    <div className="modal-overlay">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-payments-outs-title"
+        className="modal-container w-full max-w-lg"
+      >
+        <div className="modal-header">
+          <h2 id="modal-payments-outs-title" className="modal-title">
+            Nueva Deuda
+          </h2>
+        </div>
+
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            void handleSubmit();
+          }}
+          className="flex flex-col flex-1 overflow-hidden"
+        >
+          <div className="modal-body">
+            <div className="flex flex-col gap-1">
+              <Label className={styles.inputLabel}>Saldo *</Label>
+              <Input
+                required
+                step="0.01"
+                type="number"
+                className={styles.input}
+                value={formData.balance ?? ""}
+                onChange={(e) => handleField("balance", e.target.value)}
+              />
+            </div>
+            <div className="flex flex-col gap-1">
+              <Label className={styles.inputLabel}>Descripción *</Label>
+              <Input
+                required
+                type="text"
+                className={styles.input}
+                value={formData.description ?? ""}
+                onChange={(e) => handleField("description", e.target.value)}
+                placeholder="Descripción de la deuda"
+              />
+            </div>
+          </div>
+
+          <div className="modal-footer">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-8 py-3 text-gray-700 hover:bg-gray-100 rounded-xl font-medium"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              disabled={isCreatingBalance}
+              className="px-8 py-3 text-indigo-600 hover:bg-indigo-100 rounded-xl font-medium"
+            >
+              {isCreatingBalance ? "Creando..." : "Crear"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   );
 }
 

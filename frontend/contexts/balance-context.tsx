@@ -7,8 +7,8 @@ import {
   useCallback,
   ReactNode,
 } from "react";
-import { useQueryClient } from "@tanstack/react-query";
 import { Balance } from "@/types/balance";
+import { NumericInput, toNumber } from "@/lib/form-value";
 import { useBalanceById } from "@/hooks/useBalanceById";
 import {
   createBalanceAction,
@@ -16,6 +16,7 @@ import {
   deleteBalanceAction,
 } from "@/actions/mutations";
 import { ClientContext } from "@/contexts/client-context";
+import { useQueryClient } from "@tanstack/react-query";
 
 // ─── Tipos ───────────────────────────────────────────────────────────────────
 
@@ -24,27 +25,47 @@ export interface BalanceNotification {
   type: "success" | "error";
 }
 
+export type BalanceData = {
+  total?: NumericInput;
+  paid?: NumericInput;
+  balance?: NumericInput;
+  issued?: string;
+  discounts?: NumericInput;
+  description?: string;
+};
+
+export type FieldValue = string | number | boolean | null;
+
 interface BalanceContextType {
+  // ─── Shared / Common ───
   balances: Balance[] | undefined;
   isLoading: boolean;
   error: Error | null;
-  selectedBalance: Balance | null;
-  setSelectedBalance: (balance: Balance | null) => void;
-  isCreatingBalance: boolean;
-  isUpdatingBalance: boolean;
-  isDeletingBalance: boolean;
   isPending: boolean;
   notification: BalanceNotification | null;
   showNotification: (message: string, type: "success" | "error") => void;
-  handleCreateBalance: (
-    customData?: Partial<Balance>,
-  ) => Promise<Balance | undefined>;
+  refetchBalances: () => Promise<unknown>;
+
+  // ─── Create ───
+  formData: BalanceData;
+  setFormData: React.Dispatch<React.SetStateAction<BalanceData>>;
+  handleField: (field: keyof BalanceData, value: FieldValue) => void;
+  resetFormData: () => void;
+  isCreatingBalance: boolean;
+  handleCreateBalance: () => Promise<boolean>;
+
+  // ─── Update ───
+  selectedBalance: Balance | null;
+  setSelectedBalance: (balance: Balance | null) => void;
+  isUpdatingBalance: boolean;
   handleUpdateBalance: (
     documentId: string,
     data: Partial<Omit<Balance, "documentId" | "id_balance">>,
   ) => Promise<Balance | undefined>;
+
+  // ─── Delete ───
+  isDeletingBalance: boolean;
   handleDeleteBalance: (documentId: string) => Promise<void>;
-  refetchBalances: () => Promise<unknown>;
 }
 
 // ─── Context ─────────────────────────────────────────────────────────────────
@@ -53,16 +74,25 @@ const BalanceContext = createContext<BalanceContextType | undefined>(undefined);
 
 // ─── Provider ────────────────────────────────────────────────────────────────
 
+const initialData: BalanceData = {
+  total: "",
+  paid: "",
+  balance: "",
+  issued: "",
+  discounts: "",
+  description: "",
+};
+
 interface BalanceProviderProps {
   children: ReactNode;
-  clientId?: string;
+  clientId: string;
 }
 
 export function BalanceProvider({ children, clientId }: BalanceProviderProps) {
-  const queryClient = useQueryClient();
   const clientContext = useContext(ClientContext);
 
-  const effectiveClientId = clientId ?? clientContext?.selectedClientId ?? null;
+  const effectiveClientId: string | null =
+    clientContext?.selectedClientId ?? clientId ?? null;
 
   const {
     data: balances,
@@ -71,12 +101,23 @@ export function BalanceProvider({ children, clientId }: BalanceProviderProps) {
     refetch: refetchBalances,
   } = useBalanceById(effectiveClientId || "");
 
-  const [selectedBalance, setSelectedBalance] = useState<Balance | null>(null);
+  const queryClient = useQueryClient();
+
   const [isCreatingBalance, setIsCreatingBalance] = useState(false);
+  const [formData, setFormData] = useState<BalanceData>(initialData);
+
+  const [selectedBalance, setSelectedBalance] = useState<Balance | null>(null);
   const [isUpdatingBalance, setIsUpdatingBalance] = useState(false);
   const [isDeletingBalance, setIsDeletingBalance] = useState(false);
   const [notification, setNotification] = useState<BalanceNotification | null>(
     null,
+  );
+
+  const handleField = useCallback(
+    (field: keyof BalanceData, value: FieldValue) => {
+      setFormData((prev) => ({ ...prev, [field]: value }));
+    },
+    [],
   );
 
   const showNotification = useCallback(
@@ -87,48 +128,59 @@ export function BalanceProvider({ children, clientId }: BalanceProviderProps) {
     [],
   );
 
-  const handleCreateBalance = useCallback(
-    async (customData?: Partial<Balance>): Promise<Balance | undefined> => {
-      if (!effectiveClientId) {
-        showNotification(
-          "No hay un cliente seleccionado para registrar el saldo.",
-          "error",
-        );
-        return;
-      }
+  const handleCreateBalance = useCallback(async (): Promise<boolean> => {
+    const amount = toNumber(formData.balance);
+    const description = (formData.description ?? "").trim();
 
-      setIsCreatingBalance(true);
-      try {
-        const newBalance: Partial<Balance> = {
-          id_balance: `BAL-${Date.now()}`,
-          total: 0,
-          paid: 0,
-          balance: 0,
-          issued: new Date().toISOString().split("T")[0],
-          discounts: 0,
-          ...(effectiveClientId ? { cliente: effectiveClientId } : {}),
-          ...customData,
-        };
+    if (!Number.isFinite(amount) || amount <= 0) {
+      showNotification("El saldo debe ser un monto mayor a cero.", "error");
+      return false;
+    }
 
-        const response = await createBalanceAction(newBalance);
+    if (!description) {
+      showNotification("La descripción es requerida.", "error");
+      return false;
+    }
 
-        await queryClient.invalidateQueries({
-          queryKey: ["balances", effectiveClientId],
-        });
+    setIsCreatingBalance(true);
+    try {
+      await createBalanceAction({
+        id_balance: `BAL-${Date.now()}`,
+        total: amount,
+        paid: 0,
+        balance: amount,
+        description,
+        issued: new Date().toISOString().split("T")[0],
+        discounts: toNumber(formData.discounts),
+        cliente: effectiveClientId,
+      });
 
-        showNotification("Saldo creado exitosamente.", "success");
-        return response.data;
-      } catch (err) {
-        const message =
-          err instanceof Error ? err.message : "Error al crear el saldo.";
-        showNotification(message, "error");
-        throw err;
-      } finally {
-        setIsCreatingBalance(false);
-      }
-    },
-    [effectiveClientId, queryClient, showNotification],
-  );
+      await refetchBalances();
+      await queryClient.invalidateQueries({ queryKey: ["balances"] });
+
+      showNotification("Saldo creado exitosamente.", "success");
+      return true;
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "Error al crear el saldo.";
+      showNotification(message, "error");
+      return false;
+    } finally {
+      setIsCreatingBalance(false);
+    }
+  }, [
+    effectiveClientId,
+    formData.balance,
+    formData.description,
+    formData.discounts,
+    queryClient,
+    refetchBalances,
+    showNotification,
+  ]);
+
+  const resetFormData = useCallback(() => {
+    setFormData(initialData);
+  }, []);
 
   const handleUpdateBalance = useCallback(
     async (
@@ -148,9 +200,7 @@ export function BalanceProvider({ children, clientId }: BalanceProviderProps) {
         const response = await updateBalanceAction(documentId, data);
 
         if (effectiveClientId) {
-          await queryClient.invalidateQueries({
-            queryKey: ["balances", effectiveClientId],
-          });
+          await refetchBalances();
         }
 
         showNotification("Saldo actualizado exitosamente.", "success");
@@ -164,7 +214,7 @@ export function BalanceProvider({ children, clientId }: BalanceProviderProps) {
         setIsUpdatingBalance(false);
       }
     },
-    [effectiveClientId, queryClient, showNotification],
+    [effectiveClientId, showNotification, refetchBalances],
   );
 
   const handleDeleteBalance = useCallback(
@@ -182,9 +232,7 @@ export function BalanceProvider({ children, clientId }: BalanceProviderProps) {
         await deleteBalanceAction(documentId);
 
         if (effectiveClientId) {
-          await queryClient.invalidateQueries({
-            queryKey: ["balances", effectiveClientId],
-          });
+          await refetchBalances();
         }
 
         if (selectedBalance?.documentId === documentId) {
@@ -203,9 +251,9 @@ export function BalanceProvider({ children, clientId }: BalanceProviderProps) {
     },
     [
       effectiveClientId,
-      queryClient,
       selectedBalance?.documentId,
       showNotification,
+      refetchBalances,
     ],
   );
 
@@ -214,21 +262,32 @@ export function BalanceProvider({ children, clientId }: BalanceProviderProps) {
   return (
     <BalanceContext.Provider
       value={{
+        // ─── Shared / Common ───
         balances,
         isLoading,
         error: (error as Error) || null,
-        selectedBalance,
-        setSelectedBalance,
-        isCreatingBalance,
-        isUpdatingBalance,
-        isDeletingBalance,
         isPending,
         notification,
         showNotification,
-        handleCreateBalance,
-        handleUpdateBalance,
-        handleDeleteBalance,
         refetchBalances,
+
+        // ─── Create ───
+        formData,
+        setFormData,
+        handleField,
+        resetFormData,
+        isCreatingBalance,
+        handleCreateBalance,
+
+        // ─── Update ───
+        selectedBalance,
+        setSelectedBalance,
+        isUpdatingBalance,
+        handleUpdateBalance,
+
+        // ─── Delete ───
+        isDeletingBalance,
+        handleDeleteBalance,
       }}
     >
       {children}
