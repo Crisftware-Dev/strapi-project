@@ -13,26 +13,65 @@ import { Li } from "./list";
 import { LiControlHeader } from "./nav-items";
 import { styles } from "@/app/styles/styles";
 import { Balance } from "@/types/balance";
+import { useBalanceContext } from "@/contexts/balance-context";
 
-interface BalanceProps {
-  balances?: Balance[];
-}
+const currency = new Intl.NumberFormat("es-CO", {
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 2,
+});
 
-export default function Payments({ balances }: BalanceProps) {
-  const [active, setActive] = useState("");
+const formatDate = (value?: string) => {
+  if (!value) return "-";
+  const [year, month, day] = value.split("T")[0].split("-");
+  if (!year || !month || !day) return "-";
+  return `${day}/${month}/${year}`;
+};
+
+export default function Payments() {
+  const { balances } = useBalanceContext();
+
+  if (!balances) return null;
+
+  if (!balances.length) {
+    return (
+      <div className="col-span-full p-4 text-center text-xs text-gray-500 dark:text-gray-400">
+        No hay saldos pendientes
+      </div>
+    );
+  }
 
   return (
-    <PaymentRow
+    <>
+      {balances.map((balance, index) => (
+        <BalanceRow key={balance.documentId ?? balance.id_balance} balance={balance} index={index} />
+      ))}
+    </>
+  );
+}
+
+function BalanceRow({ balance, index }: { balance: Balance; index: number }) {
+  const [active, setActive] = useState("");
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+
+  const detailBalance = (id_balance: string) => {
+    if(id_balance) {
+      // Crear el componente para ver el detalle
+    }
+  }
+
+  return (
+      <PaymentRow
       cells={[
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
+        <span key="no">{index + 1}</span>,
+        <span key="total">{currency.format(balance.total)}</span>,
+        <span key="pagado">{currency.format(balance.paid ?? 0)}</span>,
+        <span key="saldo">{currency.format(balance.balance)}</span>,
+        <span key="factura">{balance.id_balance}</span>,
+        <span key="emitida">{formatDate(balance.issued)}</span>,
+        <span key="dsctos">{currency.format(balance.discounts ?? 0)}</span>,
         <LiControlHeader
-          id="opciones"
+          key="opciones"
+          id={`opciones-${balance.documentId ?? index}`}
           text="Opciones"
           isActive={active === "opciones"}
           icon={<CircleI className={styles.icon} />}
@@ -50,7 +89,7 @@ export default function Payments({ balances }: BalanceProps) {
             <MoneyI className={styles.icon} />
             <span>Cobrar</span>
           </Li>
-          <Li>
+          <Li onClick={() => detailBalance(balance.id_balance)}>
             <DetailsI className={styles.icon} />
             <span>Detalles</span>
           </Li>
