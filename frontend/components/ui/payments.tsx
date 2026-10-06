@@ -2,6 +2,7 @@ import { useState } from "react";
 import {
   ArrowRigthI,
   CircleI,
+  CloseI,
   DeleteI,
   DetailsI,
   HandsI,
@@ -14,6 +15,8 @@ import { LiControlHeader } from "./nav-items";
 import { styles } from "@/app/styles/styles";
 import { Balance } from "@/types/balance";
 import { useBalanceContext } from "@/contexts/balance-context";
+import { ClientDataRow } from "./client-data-row";
+import ModalGeneral from "./ModalGeneral";
 
 const currency = new Intl.NumberFormat("es-CO", {
   minimumFractionDigits: 0,
@@ -43,7 +46,11 @@ export default function Payments() {
   return (
     <>
       {balances.map((balance, index) => (
-        <BalanceRow key={balance.documentId ?? balance.id_balance} balance={balance} index={index} />
+        <BalanceRow
+          key={balance.documentId ?? balance.id_balance}
+          balance={balance}
+          index={index}
+        />
       ))}
     </>
   );
@@ -51,62 +58,99 @@ export default function Payments() {
 
 function BalanceRow({ balance, index }: { balance: Balance; index: number }) {
   const [active, setActive] = useState("");
-  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
-
-  const detailBalance = (id_balance: string) => {
-    if(id_balance) {
-      // Crear el componente para ver el detalle
-    }
-  }
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
+    <>
       <PaymentRow
-      cells={[
-        <span key="no">{index + 1}</span>,
-        <span key="total">{currency.format(balance.total)}</span>,
-        <span key="pagado">{currency.format(balance.paid ?? 0)}</span>,
-        <span key="saldo">{currency.format(balance.balance)}</span>,
-        <span key="factura">{balance.id_balance}</span>,
-        <span key="emitida">{formatDate(balance.issued)}</span>,
-        <span key="dsctos">{currency.format(balance.discounts ?? 0)}</span>,
-        <LiControlHeader
-          key="opciones"
-          id={`opciones-${balance.documentId ?? index}`}
-          text="Opciones"
-          isActive={active === "opciones"}
-          icon={<CircleI className={styles.icon} />}
-          caret={
-            <ArrowRigthI
-              className={` ${styles.caret} ${active === "opciones" ? "rotate-90" : "rotate-0"}`}
-            />
-          }
-          onClick={(e) => {
-            e.stopPropagation();
-            setActive((prev) => (prev === "opciones" ? "" : "opciones"));
-          }}
-        >
-          <Li>
-            <MoneyI className={styles.icon} />
-            <span>Cobrar</span>
-          </Li>
-          <Li onClick={() => detailBalance(balance.id_balance)}>
-            <DetailsI className={styles.icon} />
-            <span>Detalles</span>
-          </Li>
-          <Li>
-            <HandsI className={styles.icon} />
-            <span>Diferir</span>
-          </Li>
-          <Li>
-            <PercentI className={styles.icon} />
-            <span>Descuentos</span>
-          </Li>
-          <Li>
-            <DeleteI className={styles.icon} />
-            <span>Eliminar</span>
-          </Li>
-        </LiControlHeader>,
-      ]}
-    />
+        cells={[
+          <span key="no">{index + 1}</span>,
+          <span key="total">{currency.format(balance.total)}</span>,
+          <span key="pagado">{currency.format(balance.paid ?? 0)}</span>,
+          <span key="saldo">{currency.format(balance.balance)}</span>,
+          <span key="factura">{balance.id_balance}</span>,
+          <span key="emitida">{formatDate(balance.issued)}</span>,
+          <span key="dsctos">{currency.format(balance.discounts ?? 0)}</span>,
+          <LiControlHeader
+            key="opciones"
+            id={`opciones-${balance.documentId ?? index}`}
+            text="Opciones"
+            isActive={active === "opciones"}
+            icon={<CircleI className={styles.icon} />}
+            caret={
+              <ArrowRigthI
+                className={` ${styles.caret} ${active === "opciones" ? "rotate-90" : "rotate-0"}`}
+              />
+            }
+            onClick={(e) => {
+              e.stopPropagation();
+              setActive((prev) => (prev === "opciones" ? "" : "opciones"));
+            }}
+          >
+            <Li>
+              <MoneyI className={styles.icon} />
+              <span>Cobrar</span>
+            </Li>
+            <Li onClick={() => setIsModalOpen(true)}>
+              <DetailsI className={styles.icon} />
+              <span>Detalles</span>
+            </Li>
+            <Li>
+              <HandsI className={styles.icon} />
+              <span>Diferir</span>
+            </Li>
+            <Li>
+              <PercentI className={styles.icon} />
+              <span>Descuentos</span>
+            </Li>
+            <Li>
+              <DeleteI className={styles.icon} />
+              <span>Eliminar</span>
+            </Li>
+          </LiControlHeader>,
+        ]}
+      />
+      <ModalGeneral
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title="Detalles del saldo"
+      >
+        <DetailPanel balance={balance} />
+      </ModalGeneral>
+    </>
+  );
+}
+
+function DetailPanel({ balance }: { balance: Balance }) {
+  const description = balance.description?.trim();
+
+  return (
+    <div className="col-span-full bg-indigo-50/20 dark:bg-indigo-900/10 border-b border-indigo-100 dark:border-indigo-900/30 px-3 py-4">
+      <div className="flex flex-col rounded-lg border border-indigo-100 dark:border-indigo-900/30 bg-white dark:bg-card overflow-hidden">
+        <ClientDataRow label="ID del saldo">
+          <span className="font-mono text-xs text-indigo-700 dark:text-indigo-300">
+            {balance.id_balance}
+          </span>
+        </ClientDataRow>
+
+        <ClientDataRow label="Saldo">
+          <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+            {currency.format(balance.balance)}
+          </span>
+        </ClientDataRow>
+
+        <ClientDataRow label="Descripción" className="border-b-0">
+          {description ? (
+            <span className="text-xs text-gray-700 dark:text-gray-300">
+              {description}
+            </span>
+          ) : (
+            <span className="text-xs text-gray-400 dark:text-gray-500 italic">
+              Sin descripción
+            </span>
+          )}
+        </ClientDataRow>
+      </div>
+    </div>
   );
 }
