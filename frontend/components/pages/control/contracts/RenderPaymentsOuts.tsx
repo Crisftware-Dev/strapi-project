@@ -29,9 +29,6 @@ export default function RenderPaymentsOuts() {
 
   return (
     <article className={styles.container} key={selectedClientId}>
-      <header className="flex justify-between items-center mb-3">
-        <h2 className="text-sm font-semibold">Saldos pendientes</h2>
-      </header>
 
       <main className={styles.mainGrid}>
         <CompactTable
