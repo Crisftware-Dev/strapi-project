@@ -74,6 +74,11 @@ export async function strapiJson<T>(endpoint: string, options: RequestInit = {})
     throw new Error(errorText || 'Error al obtener datos');
   }
 
+  if (res.status === 204 || res.headers.get('content-length') === '0') {
+    return null as T;
+  }
+
+
   return res.json() as Promise<T>;
 }
 
