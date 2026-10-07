@@ -92,6 +92,7 @@ function CreateBalance({
     const created = await handleCreateBalance();
     if (!created) return;
     resetFormData();
+    setIsModalOpen(false);
   };
 
   return (
@@ -139,5 +140,3 @@ function CreateBalance({
     </ModalGeneral>
   );
 }
-
-// REALIZAR LA SECCIÓN DE PAGOS, DEBE CONTENER UN FORMULARIO PARA REGISTRAR PAGOS, UN BOTÓN PARA AGREGAR UN PAGO Y UNA TABLA PARA MOSTRAR LOS PAGOS PENDIENTES.
