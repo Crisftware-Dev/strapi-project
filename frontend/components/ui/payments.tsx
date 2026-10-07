@@ -2,7 +2,6 @@ import { useState } from "react";
 import {
   ArrowRigthI,
   CircleI,
-  CloseI,
   DeleteI,
   DetailsI,
   HandsI,
@@ -31,7 +30,8 @@ const formatDate = (value?: string) => {
 };
 
 export default function Payments() {
-  const { balances } = useBalanceContext();
+  const { balances, handleDeleteBalance, isDeletingBalance } =
+    useBalanceContext();
 
   if (!balances) return null;
 
@@ -43,22 +43,39 @@ export default function Payments() {
     );
   }
 
+  const deleteBalance = async (id: string) => {
+    if (id) await handleDeleteBalance(id);
+  };
+
   return (
     <>
       {balances.map((balance, index) => (
         <BalanceRow
+          isDeletingBalance={isDeletingBalance}
           key={balance.documentId ?? balance.id_balance}
           balance={balance}
           index={index}
+          deleteBalance={deleteBalance}
         />
       ))}
     </>
   );
 }
 
-function BalanceRow({ balance, index }: { balance: Balance; index: number }) {
+function BalanceRow({
+  balance,
+  index,
+  deleteBalance,
+  isDeletingBalance,
+}: {
+  balance: Balance;
+  index: number;
+  deleteBalance: (id: string) => Promise<void>;
+  isDeletingBalance: boolean;
+}) {
   const [active, setActive] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+
 
   return (
     <>
@@ -103,9 +120,9 @@ function BalanceRow({ balance, index }: { balance: Balance; index: number }) {
               <PercentI className={styles.icon} />
               <span>Descuentos</span>
             </Li>
-            <Li>
+            <Li onClick={() => deleteBalance(balance.documentId!)}>
               <DeleteI className={styles.icon} />
-              <span>Eliminar</span>
+              {isDeletingBalance ? "Eliminando..." : <span>Eliminar</span>}
             </Li>
           </LiControlHeader>,
         ]}
