@@ -85,7 +85,7 @@ const initialData: BalanceData = {
 
 interface BalanceProviderProps {
   children: ReactNode;
-  clientId: string;
+  clientId?: string | null;
 }
 
 export function BalanceProvider({ children, clientId }: BalanceProviderProps) {
@@ -152,7 +152,7 @@ export function BalanceProvider({ children, clientId }: BalanceProviderProps) {
         description,
         issued: new Date().toISOString().split("T")[0],
         discounts: toNumber(formData.discounts),
-        cliente: effectiveClientId,
+        cliente: effectiveClientId!,
       });
 
       await refetchBalances();

@@ -8,6 +8,7 @@ import RenderPaymentsHistory from "@/components/pages/control/contracts/RenderPa
 import { ClientProvider, useClientContext } from "@/contexts/client-context";
 import { BalanceProvider } from "@/contexts/balance-context";
 import FooterControl from "./FooterControl";
+import { InvoiceProvider } from "@/contexts/invoice-context";
 
 function DashboardRoute() {
   const { activeTab } = useClientContext();
@@ -30,7 +31,9 @@ export default function Contratos() {
   return (
     <ClientProvider>
       <BalanceProvider>
-        <DashboardRoute />
+        <InvoiceProvider>
+          <DashboardRoute />
+        </InvoiceProvider>
       </BalanceProvider>
     </ClientProvider>
   );
