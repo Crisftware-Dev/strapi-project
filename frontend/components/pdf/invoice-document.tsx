@@ -257,12 +257,7 @@ function InvoiceDocument({ data }: { data: Invoice }) {
     Number(data.paid ?? sumPayments(data.payments)),
   );
   const saldoPendiente = Math.max(round2(Number(data.total ?? 0)) - totalPagado, 0);
-  const logoUrl = getAbsoluteLogoUrl(data.issuer_data?.logoUrl);
-
-  const issuerName =
-    data.issuer_data?.fullname ||
-    data.issuer_data?.username ||
-    "CONNECTION INTERNET F.O.";
+  const logoUrl = getAbsoluteLogoUrl();
 
   const clientName =
     [data.cliente?.nombres, data.cliente?.apellidos]
@@ -279,18 +274,14 @@ function InvoiceDocument({ data }: { data: Invoice }) {
         {/* Cabecera emisor + logo */}
         <View style={styles.header}>
           <View style={styles.emisor}>
-            <Text style={styles.emisorName}>{issuerName}</Text>
-            {data.issuer_data?.identificacion && (
+            <Text style={styles.emisorName}>Crisftware-Dev</Text>
               <Text style={styles.metaLine}>
-                {data.issuer_data.identificacion}
+                {1000000000001}
               </Text>
-            )}
-            {data.issuer_data?.email && (
-              <Text style={styles.metaLine}>{data.issuer_data.email}</Text>
-            )}
+              <Text style={styles.metaLine}>{data.users_permissions_user?.email}</Text>
           </View>
           {logoUrl ? (
-            <Image style={styles.logo} src={logoUrl} />
+            <Image style={styles.logo} src={"./assets/logo.jpg"} />
           ) : (
             <View style={styles.logoPlaceholder}>
               <Text>LOGO</Text>
@@ -427,7 +418,7 @@ function InvoiceDocument({ data }: { data: Invoice }) {
 
         <View style={styles.footer} fixed>
           <Text>
-            {issuerName} · {data.invoice_nro} · Generado
+            Crisftware · {data.invoice_nro} · Generado
             electrónicamente
           </Text>
         </View>
