@@ -627,7 +627,6 @@ export interface ApiInvoiceInvoice extends Struct.CollectionTypeSchema {
       Schema.Attribute.Required &
       Schema.Attribute.Unique;
     issue_date: Schema.Attribute.DateTime & Schema.Attribute.Required;
-    issuer_data: Schema.Attribute.Component<'component.issuer-data', false>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -639,6 +638,7 @@ export interface ApiInvoiceInvoice extends Struct.CollectionTypeSchema {
       Schema.Attribute.DefaultTo<0>;
     payment_date: Schema.Attribute.DateTime;
     payments: Schema.Attribute.Component<'component.payment', true>;
+    pdf: Schema.Attribute.Media<'files'>;
     publishedAt: Schema.Attribute.DateTime;
     subtotal: Schema.Attribute.Decimal & Schema.Attribute.Required;
     taxes: Schema.Attribute.Decimal;
@@ -646,6 +646,10 @@ export interface ApiInvoiceInvoice extends Struct.CollectionTypeSchema {
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    users_permissions_user: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
   };
 }
 
@@ -1183,6 +1187,7 @@ export interface PluginUsersPermissionsUser
         minLength: 6;
       }>;
     fullname: Schema.Attribute.String & Schema.Attribute.Required;
+    invoices: Schema.Attribute.Relation<'oneToMany', 'api::invoice.invoice'>;
     lastname: Schema.Attribute.String & Schema.Attribute.Required;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<

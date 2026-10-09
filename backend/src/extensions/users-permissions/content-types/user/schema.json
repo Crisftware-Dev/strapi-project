@@ -73,6 +73,12 @@
     "lastname": {
       "type": "string",
       "required": true
+    },
+    "invoices": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::invoice.invoice",
+      "mappedBy": "users_permissions_user"
     }
   }
 }

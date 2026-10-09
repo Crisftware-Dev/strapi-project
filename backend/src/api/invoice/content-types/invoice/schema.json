@@ -58,12 +58,6 @@
       "type": "datetime",
       "required": false
     },
-    "issuer_data": {
-      "type": "component",
-      "component": "component.issuer-data",
-      "repeatable": false,
-      "required": false
-    },
     "invoice_item": {
       "type": "component",
       "component": "component.invoice-item",
@@ -73,6 +67,20 @@
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::cliente.cliente",
+      "inversedBy": "invoices"
+    },
+    "pdf": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "files"
+      ]
+    },
+    "users_permissions_user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
       "inversedBy": "invoices"
     }
   }
