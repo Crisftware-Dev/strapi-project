@@ -5,28 +5,17 @@ import { CompactTable, Headers } from "@/components/ui/compact-table";
 import { Label } from "@/components/ui/label";
 import { useUser } from "@/hooks/useUser";
 import { useState } from "react";
-import Payments from "@/components/ui/balances";
+import Invoices from "@/components/ui/payments";
 
 export default function RenderPaymentsHistory() {
   const [active, setActive] = useState("");
   const { selectedClientId } = useClientContext();
-  const { data: user } = useUser();
   const {
     data: client,
     isLoading,
     error,
   } = useClientById(selectedClientId || "");
 
-  const firstChar = user?.fullname
-    ?.split(" ")[0]
-    .split("")
-    .map((n) => n[0])
-    .join("")
-    .toUpperCase();
-
-  const lastname = user?.lastname?.split(" ")[0]?.toUpperCase();
-
-  const usuario = firstChar?.concat(lastname || "");
 
   if (isLoading)
     return <div className="p-8 text-center text-xs">Cargando datos...</div>;
@@ -59,10 +48,16 @@ export default function RenderPaymentsHistory() {
               "Acción",
             ]}
           />
-          <Label className="col-span-full p-2 bg-indigo-50/20 dark:bg-indigo-900/10 border-b border-indigo-100 dark:border-indigo-900/30">
+          <Label className="col-span-full p-2 bg-indigo-50/20 dark:bg-indigo-900/10 border-b border-indigo-100 dark:border-indigo-900/30 flex items-center justify-between">
             Contrato No.: {client.contrato}
+            <button
+              onClick={() => true}
+              className="px-3 py-1 text-xs bg-indigo-600 hover:bg-indigo-700 text-white rounded transition-colors disabled:opacity-50"
+            >
+              + Crear Factura
+            </button>
           </Label>
-          <Payments />
+          <Invoices />
         </CompactTable>
       </main>
     </article>
