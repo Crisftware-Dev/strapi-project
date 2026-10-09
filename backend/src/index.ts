@@ -2,11 +2,33 @@ import type { Core } from '@strapi/strapi';
 import sharp from 'sharp';
 import path from 'path';
 import fs from 'fs';
+import { attachInvoicePdf } from './api/invoice/services/invoice-document';
 
 const UPLOADS_FOLDER = 'uploads';
 
 export default {
-  register(/* { strapi }: { strapi: Core.Strapi } */) {},
+  register({ strapi }: { strapi: Core.Strapi }) {
+    strapi.documents.use(async (context, next) => {
+      const result = await next();
+
+      if (
+        context.uid === 'api::invoice.invoice' &&
+        context.action === 'create' &&
+        result &&
+        (result as { documentId?: string }).documentId
+      ) {
+        try {
+          await attachInvoicePdf(strapi, (result as { documentId?: string }).documentId as string);
+        } catch (error) {
+          strapi.log.error(
+            `[invoice] No se pudo generar el PDF de la factura: ${error}`,
+          );
+        }
+      }
+
+      return result;
+    });
+  },
 
   bootstrap({ strapi }: { strapi: Core.Strapi }) {
     strapi.db.lifecycles.subscribe({
