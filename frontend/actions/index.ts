@@ -7,6 +7,7 @@ import {
   createBalanceAction,
   updateBalanceAction,
   deleteBalanceAction,
+  createInvoiceAction,
 } from "./mutations";
 
 export const actions = {
@@ -23,5 +24,6 @@ export const actions = {
     createBalanceAction,
     updateBalanceAction,
     deleteBalanceAction,
+    createInvoiceAction,
   },
 };

@@ -5,6 +5,7 @@ import { strapiJson } from "@/lib/api";
 import { isRedirectError } from "@/lib/jwt";
 import { sanitizeClientPayload } from "@/lib/utils";
 import { Balance } from "@/types/balance";
+import { Invoice } from "@/types/invoice";
 
 export async function createClientAction(
   data: Partial<Omit<Client, "documentId" | "contrato">>,
@@ -162,3 +163,21 @@ export async function deleteBalanceAction(
   }
 }
 
+export async function createInvoiceAction(
+  data: Partial<Invoice>,
+): Promise<{ data: Invoice }> {
+  try {
+    return await strapiJson<{ data: Invoice }>("/api/invoices", {
+      method: "POST",
+      body: JSON.stringify({ data }),
+    });
+  } catch (error) {
+    if (isRedirectError(error)) throw error;
+    console.error("Error creating invoice:", error);
+    throw new Error(
+      error instanceof Error
+        ? `Error al crear la factura: ${error.message}`
+        : "Error al crear la factura",
+    );
+  }
+}
