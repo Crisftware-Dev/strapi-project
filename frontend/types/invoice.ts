@@ -14,6 +14,14 @@ export interface InvoicePayment {
   method_payment: MethodPayment;
 }
 
+export interface InvoicePdf {
+  id?: number;
+  documentId?: string;
+  url: string;
+  name?: string;
+  mime?: string;
+}
+
 export interface InvoicePersona {
   fullname?: string;
   username?: string;
@@ -25,6 +33,13 @@ export interface InvoicePersona {
   direccion?: string;
   ciudad?: string;
   logoUrl?: string;
+}
+
+export interface InvoiceUser {
+  fullname?: string;
+  username?: string;
+  lastname?: string;
+  email?: string;
 }
 
 export interface Invoice {
@@ -41,7 +56,8 @@ export interface Invoice {
   discounts?: number;
   detail?: string;
   payment_date?: string;
-  issuer_data?: InvoicePersona | null;
   invoice_item?: InvoiceItem[];
-  cliente?: InvoicePersona | null;
+  users_permissions_user: InvoiceUser | null;
+  cliente: InvoicePersona | null;
+  pdf?: InvoicePdf | null;
 }
