@@ -1,14 +1,11 @@
 import { useClientContext } from "@/contexts/client-context";
 import { useClientById } from "@/hooks/useClientById";
 import { styles } from "@/app/styles/styles";
-import {
-  CompactTable,
-  Headers,
-} from "@/components/ui/compact-table";
+import { CompactTable, Headers } from "@/components/ui/compact-table";
 import { Label } from "@/components/ui/label";
 import { useUser } from "@/hooks/useUser";
 import { useState } from "react";
-import Payments from "@/components/ui/payments";
+import Payments from "@/components/ui/balances";
 
 export default function RenderPaymentsHistory() {
   const [active, setActive] = useState("");

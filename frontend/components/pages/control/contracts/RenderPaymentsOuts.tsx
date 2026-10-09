@@ -3,7 +3,7 @@ import { useClientById } from "@/hooks/useClientById";
 import { styles } from "@/app/styles/styles";
 import { CompactTable, Headers } from "@/components/ui/compact-table";
 import { Label } from "@/components/ui/label";
-import Payments from "@/components/ui/payments";
+import Payments from "@/components/ui/balances";
 import { useBalanceContext } from "@/contexts/balance-context";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
@@ -63,7 +63,6 @@ export default function RenderPaymentsOuts() {
       </main>
 
       <CreateBalance
-        selectedClientId={selectedClientId}
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
       />
@@ -72,11 +71,9 @@ export default function RenderPaymentsOuts() {
 }
 
 function CreateBalance({
-  selectedClientId,
   isModalOpen,
   setIsModalOpen,
 }: {
-  selectedClientId: string | null;
   isModalOpen: boolean;
   setIsModalOpen: (value: boolean) => void;
 }) {

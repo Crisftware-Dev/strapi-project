@@ -29,7 +29,7 @@ const formatDate = (value?: string) => {
   return `${day}/${month}/${year}`;
 };
 
-export default function Payments() {
+export default function Balances() {
   const { balances, handleDeleteBalance, isDeletingBalance } =
     useBalanceContext();
 
