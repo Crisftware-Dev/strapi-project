@@ -59,6 +59,10 @@ const INVOICE_PDF_POPULATE = [
   "populate[cliente][fields][2]=identificacion",
   "populate[cliente][fields][3]=email",
   "populate[cliente][fields][4]=ciudad",
+  "populate[invoice_item]=true",
+  "populate[payments]=true",
+  "populate[issuer_data]=true",
+  "populate[pdf]=true",
 ].join("&");
 
 const BALANCE_FILTERS = [
@@ -66,7 +70,14 @@ const BALANCE_FILTERS = [
   "sort[0]=issued:desc",
   "sort[1]=id_balance:desc",
   "status=preview",
-  "pagination[pageSize]=500",
+  "pagination[pageSize]=50",
+].join("&");
+
+const INVOICES_FILTERS = [
+  "filters[cliente][documentId][$eq]={documentId}",
+  "sort[0]=issued:desc",
+  "sort[1]=id_invoice:desc",
+  "pagination[pageSize]=50",
 ].join("&");
 
 const SEARCH_PAGE_SIZE = 20;
@@ -226,6 +237,24 @@ export async function fecthBalancesById(documentId: string) {
     data: Balance[];
     meta: Record<string, unknown>;
   }>(`/api/balances?${params}`);
+
+  return { data: response.data };
+}
+
+export async function fecthInvoicesById(documentId: string) {
+  if (!documentId) {
+    throw new Error("El documentId es requerido para obtener las facturas");
+  }
+
+  const params = INVOICES_FILTERS.replace(
+    "{documentId}",
+    encodeURIComponent(documentId),
+  );
+
+  const response = await strapiJson<{
+    data: Invoice[];
+    meta: Record<string, unknown>;
+  }>(`/api/invoices?${params}`);
 
   return { data: response.data };
 }
