@@ -2,10 +2,60 @@
 
 import type { Client, Plan, StrapiMedia } from "@/types/typesDB";
 import { strapiJson } from "@/lib/api";
+import { STRAPI_BASE_URL } from "@/lib/login-register";
 import { isRedirectError } from "@/lib/jwt";
 import { sanitizeClientPayload } from "@/lib/utils";
 import { Balance } from "@/types/balance";
 import { Invoice } from "@/types/invoice";
+
+export interface InvoicePdfResult {
+  base64: string;
+  filename: string;
+  mime: string;
+}
+
+export async function downloadInvoicePdfAction(
+  documentId: string,
+): Promise<InvoicePdfResult> {
+  if (!documentId) {
+    throw new Error("El documentId es requerido para descargar el PDF");
+  }
+
+  try {
+    const { data } = await strapiJson<{ data: Invoice }>(
+      `/api/invoices/${documentId}?populate[pdf]=true`,
+    );
+
+    if (!data?.pdf?.url) {
+      throw new Error("La factura no tiene un PDF adjunto.");
+    }
+
+    const pdfUrl = data.pdf.url.startsWith("http")
+      ? data.pdf.url
+      : `${STRAPI_BASE_URL}${data.pdf.url}`;
+
+    const response = await fetch(pdfUrl, { cache: "no-store" });
+    if (!response.ok) {
+      throw new Error("No se pudo obtener el PDF desde el servidor.");
+    }
+
+    const buffer = Buffer.from(await response.arrayBuffer());
+
+    return {
+      base64: buffer.toString("base64"),
+      filename: data.pdf.name || `factura-${data.invoice_nro}.pdf`,
+      mime: data.pdf.mime || "application/pdf",
+    };
+  } catch (error) {
+    if (isRedirectError(error)) throw error;
+    console.error("Error downloading invoice PDF:", error);
+    throw new Error(
+      error instanceof Error
+        ? error.message
+        : "Error al descargar el PDF de la factura",
+    );
+  }
+}
 
 export async function createClientAction(
   data: Partial<Omit<Client, "documentId" | "contrato">>,
