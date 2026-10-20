@@ -40,6 +40,8 @@ interface InvoicePersona {
   username?: string;
   fullname?: string;
   lastname?: string;
+  nombres?: string;
+  apellidos?: string;
   identificacion?: string;
   email?: string;
   ciudad?: string;
@@ -56,7 +58,6 @@ export interface InvoicePdfData {
   paid?: number;
   discounts?: number;
   detail?: string;
-  issuer_data?: InvoicePersona | null;
   invoice_item?: InvoiceItem[];
   payments?: InvoicePayment[];
   cliente?: InvoicePersona | null;
@@ -304,10 +305,14 @@ function InvoiceDocument({ data, logo }: { data: InvoicePdfData; logo: Buffer | 
   const totalPagado = round2(Number(data.paid ?? sumPayments(data.payments)));
   const saldoPendiente = Math.max(round2(Number(data.total ?? 0)) - totalPagado, 0);
 
-  const issuerName =
-    data.issuer_data?.fullname || data.issuer_data?.username || COMPANY_NAME;
+  const issuerName = COMPANY_NAME;
 
   const clientName =
+    [data.cliente?.nombres, data.cliente?.apellidos]
+      .filter(Boolean)
+      .join(' ')
+      .replace(/\s+/g, ' ')
+      .trim() ||
     [data.cliente?.fullname, data.cliente?.lastname]
       .filter(Boolean)
       .join(' ')
@@ -323,12 +328,6 @@ function InvoiceDocument({ data, logo }: { data: InvoicePdfData; logo: Buffer | 
         <View style={styles.header}>
           <View style={styles.emisor}>
             <Text style={styles.emisorName}>{issuerName}</Text>
-            {data.issuer_data?.identificacion && (
-              <Text style={styles.metaLine}>{data.issuer_data.identificacion}</Text>
-            )}
-            {data.issuer_data?.email && (
-              <Text style={styles.metaLine}>{data.issuer_data.email}</Text>
-            )}
           </View>
           {logo ? (
             <Image style={styles.logo} src={logo} />
@@ -478,7 +477,6 @@ export async function attachInvoicePdf(strapi: any, documentId: string): Promise
       cliente: true,
       invoice_item: true,
       payments: true,
-      issuer_data: true,
       pdf: true,
     },
   });
