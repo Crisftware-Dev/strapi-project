@@ -61,7 +61,6 @@ const INVOICE_PDF_POPULATE = [
   "populate[cliente][fields][4]=ciudad",
   "populate[invoice_item]=true",
   "populate[payments]=true",
-  "populate[issuer_data]=true",
   "populate[pdf]=true",
 ].join("&");
 
@@ -75,8 +74,7 @@ const BALANCE_FILTERS = [
 
 const INVOICES_FILTERS = [
   "filters[cliente][documentId][$eq]={documentId}",
-  "sort[0]=issued:desc",
-  "sort[1]=id_invoice:desc",
+  "sort[0]=issue_date:desc",
   "pagination[pageSize]=50",
 ].join("&");
 
@@ -187,7 +185,11 @@ export async function fetchClientById(
 export async function fetchUser() {
   const getUser = await strapiJson<User>("/api/users/me");
 
-  return { fullname: getUser.fullname, lastname: getUser.lastname };
+  return {
+    documentId: getUser.documentId,
+    fullname: getUser.fullname,
+    lastname: getUser.lastname,
+  };
 }
 
 export async function fetchPlans() {

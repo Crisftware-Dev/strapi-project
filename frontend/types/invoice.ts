@@ -57,7 +57,6 @@ export interface Invoice {
   detail?: string;
   payment_date?: string;
   invoice_item?: InvoiceItem[];
-  users_permissions_user: InvoiceUser | null;
-  cliente: InvoicePersona | null;
+  cliente?: string;
   pdf?: InvoicePdf | null;
 }

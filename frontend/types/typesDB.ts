@@ -76,6 +76,7 @@ export interface Contact {
 
 // Usuario (vendedor / instalador)
 export interface User {
+  documentId?: string;
   fullname: string;
   lastname: string;
 }

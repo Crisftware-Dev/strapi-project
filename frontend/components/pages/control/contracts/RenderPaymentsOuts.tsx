@@ -3,11 +3,11 @@ import { useClientById } from "@/hooks/useClientById";
 import { styles } from "@/app/styles/styles";
 import { CompactTable, Headers } from "@/components/ui/compact-table";
 import { Label } from "@/components/ui/label";
-import Payments from "@/components/ui/balances";
 import { useBalanceContext } from "@/contexts/balance-context";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import ModalGeneral from "@/components/ui/ModalGeneral";
+import Balances from "@/components/ui/balances";
 
 export default function RenderPaymentsOuts() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -58,7 +58,7 @@ export default function RenderPaymentsOuts() {
             {"PLAN RESIDENCIAL ONE CONNECTION 600 MBPS / CORTE 15"}- ESTADO{" "}
             {client.estado}
           </Label>
-          <Payments />
+          <Balances />
         </CompactTable>
       </main>
 
