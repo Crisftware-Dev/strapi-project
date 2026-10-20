@@ -1,9 +1,8 @@
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import {
   ArrowRigthI,
   CircleI,
   DetailsI,
-  HandsI,
   MoneyI,
   PercentI,
 } from "../icons/Icons";
@@ -15,6 +14,7 @@ import { styles } from "@/app/styles/styles";
 import { ClientDataRow } from "./client-data-row";
 import ModalGeneral from "./ModalGeneral";
 import { useInvoiceContext } from "@/contexts/invoice-context";
+import { downloadInvoicePdfAction } from "@/actions/mutations";
 import { Invoice } from "@/types/invoice";
 
 const currency = new Intl.NumberFormat("es-CO", {
@@ -64,6 +64,34 @@ function InvoiceRow({
 }) {
   const [active, setActive] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDownloading, startDownload] = useTransition();
+
+  const downloadPdf = () => {
+    if (!invoice.documentId) return;
+    startDownload(async () => {
+      try {
+        const { base64, filename, mime } = await downloadInvoicePdfAction(
+          invoice.documentId,
+        );
+        const bytes = Uint8Array.from(atob(base64), (c) => c.charCodeAt(0));
+        const blob = new Blob([bytes], { type: mime });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      } catch (error) {
+        alert(
+          error instanceof Error
+            ? error.message
+            : "No se pudo descargar el PDF de la factura.",
+        );
+      }
+    });
+  };
 
   return (
     <>
@@ -96,13 +124,13 @@ function InvoiceRow({
               <DetailsI className={styles.icon} />
               <span>Ver Factura</span>
             </Li>
-            <Li>
+            <Li
+              onClick={() => {
+                if (!isDownloading) downloadPdf();
+              }}
+            >
               <MoneyI className={styles.icon} />
-              <span>Descargar RIDE</span>
-            </Li>
-            <Li>
-              <HandsI className={styles.icon} />
-              <span>Descargar XML</span>
+              <span>{isDownloading ? "Descargando..." : "Descargar RIDE"}</span>
             </Li>
             <Li>
               <PercentI className={styles.icon} />
