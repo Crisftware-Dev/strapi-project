@@ -149,9 +149,12 @@ export async function deleteBalanceAction(
   }
 
   try {
-    return await strapiJson<{ data: Balance | null }>(`/api/balances/${documentId}`, {
-      method: "DELETE",
-    });
+    return await strapiJson<{ data: Balance | null }>(
+      `/api/balances/${documentId}`,
+      {
+        method: "DELETE",
+      },
+    );
   } catch (error) {
     if (isRedirectError(error)) throw error;
     console.error("Error deleting balance:", error);
@@ -163,8 +166,16 @@ export async function deleteBalanceAction(
   }
 }
 
+export type InvoiceCreatePayload = Omit<
+  Partial<Invoice>,
+  "cliente" | "users_permissions_user"
+> & {
+  cliente?: string;
+  users_permissions_user?: string;
+};
+
 export async function createInvoiceAction(
-  data: Partial<Invoice>,
+  data: InvoiceCreatePayload,
 ): Promise<{ data: Invoice }> {
   try {
     return await strapiJson<{ data: Invoice }>("/api/invoices", {
