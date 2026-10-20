@@ -8,7 +8,7 @@ import {
   useMemo,
   ReactNode,
 } from "react";
-import { Invoice } from "@/types/invoice";
+import { Invoice, InvoiceItem } from "@/types/invoice";
 import { Balance } from "@/types/balance";
 import { useBalanceContext } from "@/contexts/balance-context";
 import { ClientContext } from "@/contexts/client-context";
@@ -20,22 +20,28 @@ import {
 import { useQueryClient } from "@tanstack/react-query";
 import { useInvoiceById } from "@/hooks/useInvoiceById";
 import { useUser } from "@/hooks/useUser";
+import { NumericInput, toNumber } from "@/lib/form-value";
 
 // ─── Tipos ───────────────────────────────────────────────────────────────────
 
+const IVA_RATE = 0.15;
+
+const round2 = (value: number) =>
+  Math.round((value + Number.EPSILON) * 100) / 100;
+
 export interface InvoiceNotification {
   message: string;
-  type: "success" | "error" | "warning";
+  type: "success" | "error";
 }
 
 export type InvoiceFormData = {
   /** Monto total de la factura a crear */
-  amount: number | "";
+  amount: NumericInput;
   detail?: string;
 };
 
 interface InvoiceContextType {
-  invoices: Invoice[] | null;
+  invoices: Invoice[] | undefined;
 
   // ─── Estado de formulario ───
   formData: InvoiceFormData;
@@ -56,10 +62,7 @@ interface InvoiceContextType {
 
   // ─── Notificaciones ───
   notification: InvoiceNotification | null;
-  showNotification: (
-    message: string,
-    type: "success" | "error" | "warning",
-  ) => void;
+  showNotification: (message: string, type: "success" | "error") => void;
 }
 
 // ─── Context ─────────────────────────────────────────────────────────────────
@@ -79,9 +82,14 @@ interface InvoiceProviderProps {
 
 export function InvoiceProvider({ children }: InvoiceProviderProps) {
   const clientContext = useContext(ClientContext);
+
+  const effectiveClientId: string | null =
+    clientContext?.selectedClientId ?? null;
+
+
   const { data: user } = useUser();
-  const { data: invoices = [] } = useInvoiceById(
-    clientContext?.selectedClientId || "",
+  const { data: invoices } = useInvoiceById(
+    effectiveClientId || "",
   );
   const { balances, refetchBalances } = useBalanceContext();
   const queryClient = useQueryClient();
@@ -91,7 +99,6 @@ export function InvoiceProvider({ children }: InvoiceProviderProps) {
   const [notification, setNotification] = useState<InvoiceNotification | null>(
     null,
   );
-
 
   // ─── Saldos ordenados del más antiguo al más reciente ───────────────────────
   const sortedBalances = useMemo<Balance[]>(() => {
@@ -114,7 +121,7 @@ export function InvoiceProvider({ children }: InvoiceProviderProps) {
   // ─── Helpers ─────────────────────────────────────────────────────────────────
 
   const showNotification = useCallback(
-    (message: string, type: "success" | "error" | "warning") => {
+    (message: string, type: "success" | "error") => {
       setNotification({ message, type });
       setTimeout(() => setNotification(null), 5000);
     },
@@ -132,21 +139,8 @@ export function InvoiceProvider({ children }: InvoiceProviderProps) {
     setFormData(initialFormData);
   }, []);
 
-  // ─── Lógica principal: crear factura y descontar saldos ──────────────────────
-  /**
-   * Algoritmo:
-   * 1. Validar que el monto sea > 0 y <= totalPendingBalance.
-   * 2. Ordenar saldos de más antiguo a más reciente.
-   * 3. Iterar: por cada saldo, restar el monto restante de la factura.
-   *    - Si el saldo queda en 0 → eliminarlo (DELETE).
-   *    - Si el saldo queda con valor parcial → actualizarlo (PUT).
-   *    - Continuar con el siguiente saldo si aún queda monto por cubrir.
-   * 4. Crear la factura en Strapi.
-   * 5. Refrescar cache de balances.
-   */
   const handleCreateInvoice = useCallback(async (): Promise<boolean> => {
-    const invoiceAmount =
-      typeof formData.amount === "number" ? formData.amount : 0;
+    const invoiceAmount = toNumber(formData.amount);
     const detail = (formData.detail ?? "").trim();
 
     // ── Validaciones ────────────────────────────────────────────────────────
@@ -180,6 +174,7 @@ export function InvoiceProvider({ children }: InvoiceProviderProps) {
       // ── Paso 1: Descontar saldos del más antiguo al más reciente ──────────
       let remaining = invoiceAmount;
       const balanceOps: Array<Promise<unknown>> = [];
+      const invoiceItems: InvoiceItem[] = [];
 
       for (const balance of sortedBalances) {
         if (remaining <= 0) break;
@@ -193,6 +188,14 @@ export function InvoiceProvider({ children }: InvoiceProviderProps) {
           );
           continue;
         }
+
+        // Monto de este saldo que cubre la factura (neto, sin IVA)
+        const consumed = Math.min(remaining, currentBalance);
+        invoiceItems.push({
+          description: balance.description || `Saldo ${balance.id_balance}`,
+          amount: 1,
+          unit_price: round2(consumed / (1 + IVA_RATE)),
+        });
 
         if (remaining >= currentBalance) {
           // Este saldo queda en 0 → eliminarlo
@@ -217,17 +220,24 @@ export function InvoiceProvider({ children }: InvoiceProviderProps) {
 
       // ── Paso 2: Crear la factura en Strapi ────────────────────────────────
       const clientId = clientContext?.selectedClientId ?? null;
+      const subtotal = round2(
+        invoiceItems.reduce((sum, item) => sum + (item.unit_price ?? 0), 0),
+      );
+      const taxes = round2(invoiceAmount - subtotal);
+      const year = new Date().getFullYear();
 
       await createInvoiceAction({
-        invoice_nro: `INV-${Date.now()}`,
-        issue_date: new Date().toISOString().split("T")[0],
-        subtotal: invoiceAmount / 1.15,
-        taxes: (invoiceAmount * 0.15),
+        invoice_nro: `F-${year}-${String(Date.now() % 1000000).padStart(6, "0")}`,
+        issue_date: new Date().toISOString(),
+        subtotal,
+        taxes,
         total: invoiceAmount,
+        currency: "USD",
         paid: invoiceAmount,
         detail: detail || undefined,
-        users_permissions_user: user,
-        ...(clientId ? { cliente: { documentId: clientId } as never } : {}),
+        invoice_item: invoiceItems,
+        ...(clientId ? { cliente: clientId } : {}),
+        ...(user?.documentId ? { users_permissions_user: user.documentId } : {}),
       });
 
       // ── Paso 3: Refrescar cache ────────────────────────────────────────────
@@ -252,6 +262,7 @@ export function InvoiceProvider({ children }: InvoiceProviderProps) {
     totalPendingBalance,
     sortedBalances,
     clientContext?.selectedClientId,
+    user?.documentId,
     refetchBalances,
     queryClient,
     showNotification,
