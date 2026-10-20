@@ -108,11 +108,9 @@ export default factories.createCoreService('api::invoice.invoice', ({ strapi }) 
         currency: CURRENCY,
         paid: 0,
         discounts: calculation.discounts,
-        state: 'PENDIENTE',
         detail: `Cuota mensual ${dateLabel} - ${plan.plan}`,
         invoice_item: calculation.invoice_item,
         cliente: { documentId: client.documentId },
-        pagos: [],
       },
     });
   };
@@ -203,17 +201,12 @@ export default factories.createCoreService('api::invoice.invoice', ({ strapi }) 
         : [];
       payments.push({ amount, payment_date, payment_method });
 
-      const remaining = round2(total - newPaid);
-      const state = remaining <= 0.005 ? 'PAGADA' : 'PARCIAL';
-
       const updated = await strapi.documents(invoiceUid).update({
         documentId,
         data: {
           paid: newPaid,
-          state,
           payments,
           payment_date,
-          payment_method,
         },
         populate: {
           cliente: true,

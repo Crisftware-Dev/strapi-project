@@ -21,7 +21,9 @@ export default {
           await attachInvoicePdf(strapi, (result as { documentId?: string }).documentId as string);
         } catch (error) {
           strapi.log.error(
-            `[invoice] No se pudo generar el PDF de la factura: ${error}`,
+            `[invoice] No se pudo generar el PDF de la factura: ${
+              error instanceof Error ? error.stack ?? error.message : error
+            }`,
           );
         }
       }

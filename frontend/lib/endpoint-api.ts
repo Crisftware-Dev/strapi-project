@@ -75,6 +75,7 @@ const BALANCE_FILTERS = [
 const INVOICES_FILTERS = [
   "filters[cliente][documentId][$eq]={documentId}",
   "sort[0]=issue_date:desc",
+  "populate[pdf]=true",
   "pagination[pageSize]=50",
 ].join("&");
 
