@@ -20,6 +20,15 @@ const EMPTY_REFERENCE = {
   phone: "",
 };
 
+const parentescos = [
+  "HIJO/A",
+  "PADRE/MADRE",
+  "ESPOSO/A",
+  "HERMANO/A",
+  "ABUELO/A",
+  "OTRO",
+] as const;
+
 export default function NewClient({ onSuccess }: { onSuccess?: () => void }) {
   const {
     formData,
@@ -460,9 +469,7 @@ export default function NewClient({ onSuccess }: { onSuccess?: () => void }) {
               }))
             }
           />
-          <Input
-            type="text"
-            placeholder="Relación"
+          <Select
             className={styles.input}
             value={reference.relationship}
             onChange={(e) =>
@@ -471,7 +478,13 @@ export default function NewClient({ onSuccess }: { onSuccess?: () => void }) {
                 relationship: e.target.value,
               }))
             }
-          />
+            
+          >
+            <option value="">Seleccione...</option>
+            {parentescos.map((p) => (
+              <option key={p} value={p}>{p}</option>
+            ))}
+          </Select>
           <div className="flex gap-2">
             <Input
               type="number"
