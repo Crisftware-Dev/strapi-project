@@ -159,13 +159,7 @@ export default function RenderAddress() {
               />
             </span>
           </ClientDataRow>
-          <ClientDataRow label="Referencias">
-            <CompactTable>
-              <section
-                className={cn(
-                  "w-full flex flex-col bg-indigo-50/20 dark:bg-indigo-900/10 border-b border-indigo-100 dark:border-indigo-900/30",
-                )}
-              >
+          <ClientDataRow label="Referencias" className="h-auto flex-none">
                 <FormFamily
                   references={
                     isEditing
@@ -173,8 +167,6 @@ export default function RenderAddress() {
                       : client?.reference || []
                   }
                 />
-              </section>
-            </CompactTable>
           </ClientDataRow>
           <ClientDataRow label="Observación">
             <Input type="text" className={styles.input} value={""} readOnly />
