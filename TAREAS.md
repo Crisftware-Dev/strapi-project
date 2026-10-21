@@ -52,11 +52,11 @@ Este documento consolida las tareas clave de optimización, SEO, rendimiento, ge
 ## 📑 4. Funcionalidades del Negocio (Crear Nuevo Cliente)
 
 - [ ] **4.1 Formulario Crear Nuevo Cliente**
-  - [ ] Generación automática e incremental del número de contrato (único). *(REALIZADO)*
-  - [ ] Validar disponibilidad de Cédula e historia de coincidencia de Nombre Completo. *(En progreso)*
-  - [ ] Integrar el campo de subida obligatoria de archivo de contrato PDF/Imagen con el nuevo módulo de gestión de archivos.
-  - [ ] Validar campos obligatorios y soporte para valores por defecto (Corte Automático, Factura Automática, etc.).
-  - [ ] **Bug — Selector de Plan**: `handleField("plans", e.target.value)` recibe un `string` pero `plans` espera `Plan[]`. Corregir la transformación del `documentId` al objeto `Plan` completo antes de guardar en `formData`.
+  - [ ✔️ ] Generación automática e incremental del número de contrato (único).
+  - [ ✔️ ] Validar disponibilidad de Cédula e historia de coincidencia de Nombre Completo.
+  - [ ✔️ ] Integrar el campo de subida obligatoria de archivo de contrato PDF/Imagen con el nuevo módulo de gestión de archivos.
+  - [ ✔️ ] Validar campos obligatorios y soporte para valores por defecto (Corte Automático, Factura Automática, etc.).
+  - [ ✔️ ] **Bug — Selector de Plan**: `handleField("plans", e.target.value)` recibe un `string` pero `plans` espera `Plan[]`. Corregir la transformación del `documentId` al objeto `Plan` completo antes de guardar en `formData`.
 
 ---
 
