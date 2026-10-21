@@ -490,11 +490,17 @@ export async function attachInvoicePdf(strapi: any, documentId: string): Promise
   fs.writeFileSync(tmpPath, buffer);
 
   try {
+    const folder = await strapi.db.query('plugin::upload.folder').findOne({
+      where: { name: 'Invoices' },
+    });
+    if (!folder?.id) throw new Error('Carpeta "Invoices" no encontrada en Uploads');
+
     const uploaded = await strapi.plugin('upload').service('upload').upload({
       data: {
         fileInfo: {
           name: fileName,
           alternativeText: `Factura ${invoice.invoice_nro ?? documentId}`,
+          ...(folder?.id ? { folder: folder.id } : {}),
         },
       },
       files: {
