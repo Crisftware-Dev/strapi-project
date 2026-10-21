@@ -10,3 +10,4 @@ onlyBuiltDependencies:
 minimumReleaseAgeExclude:
   - '@types/node@26.3.0'
   - eslint@10.9.1
+  - lucide-react@1.60.0

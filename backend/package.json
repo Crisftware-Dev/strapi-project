@@ -15,21 +15,21 @@
     "upgrade:dry": "npx @strapi/upgrade latest --dry"
   },
   "dependencies": {
-    "@strapi/plugin-cloud": "5.51.2",
-    "@strapi/plugin-users-permissions": "5.51.2",
-    "@strapi/strapi": "5.51.2",
-    "@react-pdf/renderer": "^4.8.1",
+    "@strapi/plugin-cloud": "5.58.0",
+    "@strapi/plugin-users-permissions": "5.58.0",
+    "@strapi/strapi": "5.58.0",
+    "@react-pdf/renderer": "^4.9.0",
     "better-sqlite3": "13.0.3",
-    "react": "^19.2.8",
-    "react-dom": "^19.2.8",
-    "react-router-dom": "^7.13.0",
-    "sharp": "^0.35.4",
-    "styled-components": "^6.3.10"
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-router-dom": "^7.18.4",
+    "sharp": "^0.35.5",
+    "styled-components": "^6.6.0"
   },
   "devDependencies": {
     "@types/node": "^26.2.0",
     "@types/react": "^19.2.14",
-    "@types/react-dom": "^19.2.3",
+    "@types/react-dom": "^19.3.0",
     "esbuild": "^0.28.1",
     "typescript": "^7.0.2"
   },
@@ -41,5 +41,5 @@
     "uuid": "8d83f189-451d-4f09-9a36-1fbcda08359a",
     "installId": "20f26bac9f27040fcdcc67742a18c425434ee828fa7994d1875808960560dbda"
   },
-  "packageManager": "pnpm@11.20.0"
+  "packageManager": "pnpm@12.14.0"
 }
