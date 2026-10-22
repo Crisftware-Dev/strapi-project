@@ -217,7 +217,7 @@ export default function FileUploader({
         )}
       </div>
 
-      <div className="border border-indigo-100 dark:border-indigo-900/30 rounded-lg bg-white dark:bg-gray-950 flex-1 overflow-hidden shadow-sm flex flex-col min-h-80">
+      <div className="border border-indigo-100 dark:border-indigo-900/30 rounded-lg bg-white dark:bg-gray-950 flex-1 overflow-hidden shadow-sm flex flex-col ">
         <CompactTable className="w-full text-left" gridCols="5fr 1fr 2fr">
           <Headers
             className="h-10 sticky top-0 bg-indigo-50/50 dark:bg-indigo-900/20 z-10"
