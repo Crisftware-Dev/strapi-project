@@ -8,6 +8,7 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import ModalGeneral from "@/components/ui/ModalGeneral";
 import Balances from "@/components/ui/balances";
+import { cn } from "@/lib/utils";
 
 export default function RenderPaymentsOuts() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -29,7 +30,7 @@ export default function RenderPaymentsOuts() {
     );
 
   return (
-    <article className={styles.container} key={selectedClientId}>
+    <article className={cn(styles.container, "min-h-[calc(100dvh-13.5rem)] h-auto")} key={selectedClientId}>
       <main className={styles.mainGrid}>
         <CompactTable
           className="min-w-300"

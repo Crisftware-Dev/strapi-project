@@ -588,7 +588,7 @@ export default function RenderClient() {
             isOn={Boolean(
               isEditing ? formData.withholdingAgent : client.withholdingAgent,
             )}
-            rowClassName="border-none bg-transparent hover:bg-transparent min-h-0 p-0"
+            rowClassName="border-none bg-transparent hover:bg-transparent max-h-5 p-0"
           />
           <FileUploader
             files={isEditing ? formData.files || [] : client.files || []}

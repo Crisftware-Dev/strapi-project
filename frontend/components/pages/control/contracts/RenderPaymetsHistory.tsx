@@ -11,6 +11,7 @@ import { Notification } from "@/components/ui/feedback";
 import { createInvoiceSchema } from "@/validations/invoice";
 import { toNumber } from "@/lib/form-value";
 import { useInvoiceContext } from "@/contexts/invoice-context";
+import { cn } from "@/lib/utils";
 
 export default function RenderPaymentsHistory() {
   const [active, setActive] = useState("");
@@ -33,8 +34,11 @@ export default function RenderPaymentsHistory() {
     );
 
   return (
-    <article className={styles.container} key={selectedClientId}>
-      <main className={styles.mainGrid}>
+    <article
+      className={cn(styles.container, "min-h-[calc(100dvh-13.5rem)] h-auto")}
+      key={selectedClientId}
+    >
+      <main className={cn(styles.mainGrid)}>
         <CompactTable
           className="min-w-300"
           gridCols="repeat(10, minmax(max-content, 1fr)) 120px"

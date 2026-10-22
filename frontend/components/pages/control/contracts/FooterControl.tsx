@@ -97,7 +97,7 @@ export default function FooterControl() {
   const isSaving = updateClient.isPending || uploadFiles.isPending;
 
   return (
-    <footer className="w-full bg-white dark:bg-gray-950 border-t border-indigo-100 dark:border-indigo-900/30 p-3 shadow-sm mt-auto">
+    <footer className=" sticky bottom-0 w-full bg-white dark:bg-gray-950 border-t border-indigo-100 dark:border-indigo-900/30 p-3 shadow-sm mt-auto">
       <div className="flex flex-wrap items-center justify-center gap-3 w-full max-w-7xl mx-auto">
         {isEditing ? (
           <>
