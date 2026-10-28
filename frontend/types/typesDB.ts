@@ -1,4 +1,5 @@
 import { Invoice } from "./invoice";
+import { Ticket } from "./ticket";
 
 export interface Client {
   // Identificación y datos personales
@@ -45,6 +46,9 @@ export interface Client {
 
   // Invoices
   invoice: Invoice[];
+
+  // Ticket
+  ticket: Ticket[];
 }
 
 // Geolocalización
