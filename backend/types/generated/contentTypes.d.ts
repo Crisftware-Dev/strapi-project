@@ -587,6 +587,7 @@ export interface ApiClienteCliente extends Struct.CollectionTypeSchema {
     >;
     sinceCustomer: Schema.Attribute.Date;
     telefono: Schema.Attribute.BigInteger;
+    tickets: Schema.Attribute.Relation<'oneToMany', 'api::ticket.ticket'>;
     tipoCliente: Schema.Attribute.String;
     tipoPlan: Schema.Attribute.String;
     transferDate: Schema.Attribute.DateTime;
@@ -714,6 +715,129 @@ export interface ApiPlanPlan extends Struct.CollectionTypeSchema {
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     valor: Schema.Attribute.Decimal & Schema.Attribute.Required;
+  };
+}
+
+export interface ApiSupportReasonSupportReason
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'support_reasons';
+  info: {
+    displayName: 'support_reason';
+    pluralName: 'support-reasons';
+    singularName: 'support-reason';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    active: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::support-reason.support-reason'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    reason_name: Schema.Attribute.String & Schema.Attribute.Unique;
+    slug: Schema.Attribute.UID<'reason_name'>;
+    tickets: Schema.Attribute.Relation<'oneToMany', 'api::ticket.ticket'>;
+    type_support: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::type-support.type-support'
+    >;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiTicketTicket extends Struct.CollectionTypeSchema {
+  collectionName: 'tickets';
+  info: {
+    displayName: 'ticket';
+    pluralName: 'tickets';
+    singularName: 'ticket';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    cliente: Schema.Attribute.Relation<'manyToOne', 'api::cliente.cliente'>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    description: Schema.Attribute.Text;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::ticket.ticket'
+    > &
+      Schema.Attribute.Private;
+    priority: Schema.Attribute.Enumeration<
+      ['LOW', 'MEDIUM', 'HIGH', 'VERY HIGH']
+    >;
+    publishedAt: Schema.Attribute.DateTime;
+    scaled_to: Schema.Attribute.String;
+    scheduled_date: Schema.Attribute.Date;
+    scheduled_time: Schema.Attribute.Time;
+    support_reason: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::support-reason.support-reason'
+    >;
+    ticket_closure: Schema.Attribute.DateTime;
+    ticket_detail: Schema.Attribute.String;
+    ticket_status: Schema.Attribute.Enumeration<
+      ['AGENDADO', 'RE-AGENDADO', 'PENDIENTE', 'RECHAZADO', 'RESUELTO']
+    >;
+    type_support: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::type-support.type-support'
+    >;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    users_permissions_user: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+  };
+}
+
+export interface ApiTypeSupportTypeSupport extends Struct.CollectionTypeSchema {
+  collectionName: 'type_supports';
+  info: {
+    displayName: 'type_support';
+    pluralName: 'type-supports';
+    singularName: 'type-support';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    active: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::type-support.type-support'
+    > &
+      Schema.Attribute.Private;
+    name_support: Schema.Attribute.String & Schema.Attribute.Unique;
+    publishedAt: Schema.Attribute.DateTime;
+    slug: Schema.Attribute.UID<'name_support'>;
+    support_reasons: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::support-reason.support-reason'
+    >;
+    tickets: Schema.Attribute.Relation<'oneToMany', 'api::ticket.ticket'>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
   };
 }
 
@@ -1207,6 +1331,7 @@ export interface PluginUsersPermissionsUser
       'manyToOne',
       'plugin::users-permissions.role'
     >;
+    tickets: Schema.Attribute.Relation<'oneToMany', 'api::ticket.ticket'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1236,6 +1361,9 @@ declare module '@strapi/strapi' {
       'api::invoice.invoice': ApiInvoiceInvoice;
       'api::login-page.login-page': ApiLoginPageLoginPage;
       'api::plan.plan': ApiPlanPlan;
+      'api::support-reason.support-reason': ApiSupportReasonSupportReason;
+      'api::ticket.ticket': ApiTicketTicket;
+      'api::type-support.type-support': ApiTypeSupportTypeSupport;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;

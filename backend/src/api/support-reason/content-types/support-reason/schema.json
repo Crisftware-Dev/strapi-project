@@ -1,0 +1,39 @@
+{
+  "kind": "collectionType",
+  "collectionName": "support_reasons",
+  "info": {
+    "singularName": "support-reason",
+    "pluralName": "support-reasons",
+    "displayName": "support_reason"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "reason_name": {
+      "type": "string",
+      "unique": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "reason_name"
+    },
+    "active": {
+      "type": "boolean",
+      "default": true
+    },
+    "type_support": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::type-support.type-support",
+      "inversedBy": "support_reasons"
+    },
+    "tickets": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::ticket.ticket",
+      "mappedBy": "support_reason"
+    }
+  }
+}

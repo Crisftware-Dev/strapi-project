@@ -1,0 +1,76 @@
+{
+  "kind": "collectionType",
+  "collectionName": "tickets",
+  "info": {
+    "singularName": "ticket",
+    "pluralName": "tickets",
+    "displayName": "ticket"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "description": {
+      "type": "text"
+    },
+    "ticket_detail": {
+      "type": "string"
+    },
+    "priority": {
+      "type": "enumeration",
+      "enum": [
+        "LOW",
+        "MEDIUM",
+        "HIGH",
+        "VERY HIGH"
+      ]
+    },
+    "ticket_status": {
+      "type": "enumeration",
+      "enum": [
+        "AGENDADO",
+        "RE-AGENDADO",
+        "PENDIENTE",
+        "RECHAZADO",
+        "RESUELTO"
+      ]
+    },
+    "scheduled_date": {
+      "type": "date"
+    },
+    "scheduled_time": {
+      "type": "time"
+    },
+    "ticket_closure": {
+      "type": "datetime"
+    },
+    "scaled_to": {
+      "type": "string"
+    },
+    "type_support": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::type-support.type-support",
+      "inversedBy": "tickets"
+    },
+    "support_reason": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::support-reason.support-reason",
+      "inversedBy": "tickets"
+    },
+    "cliente": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::cliente.cliente",
+      "inversedBy": "tickets"
+    },
+    "users_permissions_user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "tickets"
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "kind": "collectionType",
+  "collectionName": "type_supports",
+  "info": {
+    "singularName": "type-support",
+    "pluralName": "type-supports",
+    "displayName": "type_support"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name_support": {
+      "type": "string",
+      "unique": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "name_support"
+    },
+    "active": {
+      "type": "boolean",
+      "default": false
+    },
+    "tickets": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::ticket.ticket",
+      "mappedBy": "type_support"
+    },
+    "support_reasons": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::support-reason.support-reason",
+      "mappedBy": "type_support"
+    }
+  }
+}
