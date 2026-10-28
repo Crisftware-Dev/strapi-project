@@ -51,7 +51,7 @@ Este documento consolida las tareas clave de optimización, SEO, rendimiento, ge
 
 ## 📑 4. Funcionalidades del Negocio (Crear Nuevo Cliente)
 
-- [ ] **4.1 Formulario Crear Nuevo Cliente**
+- [ ✔️ ] **4.1 Formulario Crear Nuevo Cliente**
   - [ ✔️ ] Generación automática e incremental del número de contrato (único).
   - [ ✔️ ] Validar disponibilidad de Cédula e historia de coincidencia de Nombre Completo.
   - [ ✔️ ] Integrar el campo de subida obligatoria de archivo de contrato PDF/Imagen con el nuevo módulo de gestión de archivos.
@@ -64,10 +64,10 @@ Este documento consolida las tareas clave de optimización, SEO, rendimiento, ge
 
 > **Estado actual:** El componente `SoporteContratos.tsx` existe visualmente pero usa datos mock. No guarda nada en Strapi.
 
-- [ ] **5.1 Backend — Content-Type `Ticket` en Strapi**
-  - [ ] Crear la entidad `Ticket` con los campos: `asunto` (string), `descripcion` (text), `prioridad` (enum: Alta/Media/Baja), `estado` (enum: Abierto/En proceso/Cerrado), `fecha` (date).
-  - [ ] Agregar una relación `Many-to-One` de `Ticket` hacia `Cliente` (un cliente puede tener muchos tickets).
-  - [ ] Configurar permisos de la API en Strapi Admin (`find`, `findOne`, `create`, `update`) para el rol autenticado.
+- [ ✔️ ] **5.1 Backend — Content-Type `Ticket` en Strapi**
+  - [ ✔️ ] Crear la entidad `Ticket` con los campos: `asunto` (string), `descripcion` (text), `prioridad` (enum: Alta/Media/Baja), `estado` (enum: Abierto/En proceso/Cerrado), `fecha` (date).
+  - [ ✔️ ] Agregar una relación `Many-to-One` de `Ticket` hacia `Cliente` (un cliente puede tener muchos tickets).
+  - [ ✔️ ] Configurar permisos de la API en Strapi Admin (`find`, `findOne`, `create`, `update`) para el rol autenticado.
 
 - [ ] **5.2 Frontend — Conectar con Strapi**
   - [ ] Crear el hook `useTickets(clienteDocumentId: string)` en `hooks/useTickets.ts` que llame a `GET /api/tickets?filters[cliente][documentId][$eq]=...`.
