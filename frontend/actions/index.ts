@@ -9,6 +9,8 @@ import {
   deleteBalanceAction,
   createInvoiceAction,
   downloadInvoicePdfAction,
+  createTicketAction,
+  updateTicketAction,
 } from "./mutations";
 
 export const actions = {
@@ -27,5 +29,7 @@ export const actions = {
     deleteBalanceAction,
     createInvoiceAction,
     downloadInvoicePdfAction,
+    createTicketAction,
+    updateTicketAction,
   },
 };

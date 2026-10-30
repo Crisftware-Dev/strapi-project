@@ -7,6 +7,7 @@ import { isRedirectError } from "@/lib/jwt";
 import { sanitizeClientPayload } from "@/lib/utils";
 import { Balance } from "@/types/balance";
 import { Invoice } from "@/types/invoice";
+import { Ticket } from "@/types/ticket";
 
 export interface InvoicePdfResult {
   base64: string;
@@ -239,6 +240,49 @@ export async function createInvoiceAction(
       error instanceof Error
         ? `Error al crear la factura: ${error.message}`
         : "Error al crear la factura",
+    );
+  }
+}
+
+export async function createTicketAction(
+  data: Partial<Ticket>,
+): Promise<{ data: Ticket }> {
+  try {
+    return await strapiJson<{ data: Ticket }>("/api/tickets", {
+      method: "POST",
+      body: JSON.stringify({ data }),
+    });
+  } catch (error) {
+    if (isRedirectError(error)) throw error;
+    console.error("Error creating ticket:", error);
+    throw new Error(
+      error instanceof Error
+        ? `Error al crear el ticket: ${error.message}`
+        : "Error al crear el ticket",
+    );
+  }
+}
+
+export async function updateTicketAction(
+  documentId: string,
+  data: Partial<Ticket>,
+): Promise<{ data: Ticket }> {
+  if (!documentId) {
+    throw new Error("El documentId es requerido para actualizar el ticket");
+  }
+
+  try {
+    return await strapiJson<{ data: Ticket }>(`/api/tickets/${documentId}`, {
+      method: "PUT",
+      body: JSON.stringify({ data }),
+    });
+  } catch (error) {
+    if (isRedirectError(error)) throw error;
+    console.error("Error updating ticket:", error);
+    throw new Error(
+      error instanceof Error
+        ? `Error al actualizar el ticket: ${error.message}`
+        : "Error al actualizar el ticket",
     );
   }
 }
