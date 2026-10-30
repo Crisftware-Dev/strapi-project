@@ -765,6 +765,10 @@ export interface ApiTicketTicket extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
+    assigned_to: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
     cliente: Schema.Attribute.Relation<'manyToOne', 'api::cliente.cliente'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -776,6 +780,9 @@ export interface ApiTicketTicket extends Struct.CollectionTypeSchema {
       'api::ticket.ticket'
     > &
       Schema.Attribute.Private;
+    nro_ticket: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
     priority: Schema.Attribute.Enumeration<
       ['LOW', 'MEDIUM', 'HIGH', 'VERY HIGH']
     >;
@@ -799,10 +806,6 @@ export interface ApiTicketTicket extends Struct.CollectionTypeSchema {
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    users_permissions_user: Schema.Attribute.Relation<
-      'manyToOne',
-      'plugin::users-permissions.user'
-    >;
   };
 }
 

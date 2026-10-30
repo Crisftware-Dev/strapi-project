@@ -84,7 +84,7 @@
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::ticket.ticket",
-      "mappedBy": "users_permissions_user"
+      "mappedBy": "assigned_to"
     }
   }
 }

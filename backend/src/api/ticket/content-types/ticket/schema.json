@@ -11,6 +11,11 @@
   },
   "pluginOptions": {},
   "attributes": {
+    "nro_ticket": {
+      "type": "integer",
+      "required": true,
+      "unique": true
+    },
     "description": {
       "type": "text"
     },
@@ -66,7 +71,7 @@
       "target": "api::cliente.cliente",
       "inversedBy": "tickets"
     },
-    "users_permissions_user": {
+    "assigned_to": {
       "type": "relation",
       "relation": "manyToOne",
       "target": "plugin::users-permissions.user",
