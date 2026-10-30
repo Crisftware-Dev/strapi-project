@@ -11,6 +11,7 @@ import type {
 import type { Invoice } from "@/types/invoice";
 import { strapiJson } from "./api";
 import { Balance } from "@/types/balance";
+import { Ticket } from "@/types/ticket";
 
 const CLIENT_POPULATE = [
   "populate[plans]=true",
@@ -77,6 +78,18 @@ const INVOICES_FILTERS = [
   "sort[0]=issue_date:desc",
   "populate[pdf]=true",
   "pagination[pageSize]=50",
+].join("&");
+
+const TICKETS_FILTERS = [
+  "fields[0]=nro_ticket",
+  "fields[1]=ticket_status",
+  "fields[2]=priority",
+  "fields[3]=scaled_to",
+  "fields[4]=assigned_to",
+  "fields[5]=priority",
+  "populate[client][fields][0]=contrato",
+  "populate[client][fields][1]=nombres",
+  "populate[client][fields][2]=apellidos",
 ].join("&");
 
 const SEARCH_PAGE_SIZE = 20;
@@ -258,6 +271,46 @@ export async function fecthInvoicesById(documentId: string) {
     data: Invoice[];
     meta: Record<string, unknown>;
   }>(`/api/invoices?${params}`);
+
+  return { data: response.data };
+}
+
+export async function fetchTickets() {
+  const response = await strapiJson<{
+    data: Ticket[];
+    meta: Record<string, unknown>;
+  }>(`/api/tickets?${TICKETS_FILTERS}`);
+
+  return { data: response.data };
+}
+
+export async function fetchTicketById(documentId: string) {
+  if (!documentId) {
+    throw new Error("El documentId es requerido para obtener el ticket");
+  }
+
+  const response = await strapiJson<{
+    data: Ticket;
+    meta: Record<string, unknown>;
+  }>(`/api/tickets/${documentId}?populate=*`);
+
+  return { data: response.data };
+}
+
+export async function fetchTicketsById(documentId: string) {
+  if (!documentId) {
+    throw new Error("El documentId es requerido para obtener los tickets");
+  }
+
+  const params = TICKETS_FILTERS.replace(
+    "{documentId}",
+    encodeURIComponent(documentId),
+  );
+
+  const response = await strapiJson<{
+    data: Ticket[];
+    meta: Record<string, unknown>;
+  }>(`/api/tickets?${params}`);
 
   return { data: response.data };
 }

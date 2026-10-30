@@ -1,3 +1,5 @@
+import { Client, User } from "./typesDB";
+
 export interface SupportReason {
   reason_name: string;
   slug: string;
@@ -12,6 +14,7 @@ export interface TypeSupport {
 }
 
 export interface Ticket {
+  nro_ticket: number;
   description: string;
   ticket_detail: string;
   priority: string;
@@ -23,4 +26,6 @@ export interface Ticket {
   scaled_to: string;
   type_support: TypeSupport;
   support_reason: SupportReason;
+  assigned_to: User;
+  client: Client;
 }
