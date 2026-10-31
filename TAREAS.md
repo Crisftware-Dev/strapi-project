@@ -70,8 +70,8 @@ Este documento consolida las tareas clave de optimización, SEO, rendimiento, ge
   - [ ✔️ ] Configurar permisos de la API en Strapi Admin (`find`, `findOne`, `create`, `update`) para el rol autenticado.
 
 - [ ] **5.2 Frontend — Conectar con Strapi**
-  - [ ] Crear el hook `useTickets(clienteDocumentId: string)` en `hooks/useTickets.ts` que llame a `GET /api/tickets?filters[cliente][documentId][$eq]=...`.
-  - [ ] Crear la Server Action `createTicketAction(data)` en `actions/mutations.ts` que llame a `POST /api/tickets`.
+  - [ ✔️ ] Crear el hook `useTickets(clienteDocumentId: string)` en `hooks/useTickets.ts` que llame a `GET /api/tickets?filters[cliente][documentId][$eq]=...`.
+  - [ ✔️ ] Crear la Server Action `createTicketAction(data)` en `actions/mutations.ts` que llame a `POST /api/tickets`.
   - [ ] En `SoporteContratos.tsx`, reemplazar `MOCK_TICKETS` por los datos del hook `useTickets`.
   - [ ] Conectar `handleSubmit` con `createTicketAction` para que el formulario realmente guarde el ticket en Strapi.
   - [ ] Calcular las métricas (Abiertos / En proceso / Cerrados) dinámicamente desde los datos reales del hook.

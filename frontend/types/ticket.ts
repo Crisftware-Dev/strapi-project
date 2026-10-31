@@ -14,6 +14,7 @@ export interface TypeSupport {
 }
 
 export interface Ticket {
+  documentId: string;
   nro_ticket: number;
   description: string;
   ticket_detail: string;
