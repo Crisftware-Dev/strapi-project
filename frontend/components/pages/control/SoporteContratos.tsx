@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { SupportI } from "@/components/icons/Icons";
+import { useTicketContext } from "@/contexts/ticket-context";
+import { EditableClientData } from "@/contexts/client-context";
 
 interface Ticket {
   id: string;
@@ -49,21 +51,27 @@ const ESTADO_COLOR: Record<string, string> = {
   Cerrado: "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400",
 };
 
-export default function SoporteContratos() {
-  const [showForm, setShowForm] = useState(false);
-  const [asunto, setAsunto] = useState("");
-  const [descripcion, setDescripcion] = useState("");
-  const [prioridad, setPrioridad] = useState<"Alta" | "Media" | "Baja">(
-    "Media"
-  );
+export default function Soportes() {
+  const {
+    tickets,
+    isLoadingTickets,
+    selectedTicketId,
+    setSelectedTicketId,
+    refetchTickets,
+    formData,
+    setFormData,
+    canEdit,
+    resetFormData,
+  } = useTicketContext();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setShowForm(false);
-    setAsunto("");
-    setDescripcion("");
-    setPrioridad("Media");
-  };
+  const [showForm, setShowForm] = useState(false);
+
+
+  const createTicket = async () => {
+    const toCreate = { ...formData };
+
+    
+  }
 
   return (
     <div className="max-w-4xl mx-auto p-4 space-y-5">
@@ -92,11 +100,10 @@ export default function SoporteContratos() {
         </button>
       </div>
 
-      {/* ── Formulario nuevo ticket ─────────────────────────────────────────── */}
       {showForm && (
         <form
           id="soporte-ticket-form"
-          onSubmit={handleSubmit}
+          onSubmit={handleCreateTicket}
           className="bg-white dark:bg-gray-900 border border-purple-200 dark:border-purple-700 rounded-xl shadow-sm p-4 space-y-3"
         >
           <p className="text-xs font-semibold text-purple-700 dark:text-purple-400">
